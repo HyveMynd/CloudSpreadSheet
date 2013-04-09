@@ -393,21 +393,6 @@ namespace SS
                     spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
                     colLetter = mycol + 65;
                     
-                   
-                     /*   foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
-                        {
-                            if (!fail)
-                            {
-                                if (mySheet.GetCellValue(s).ToString() == "SpreadsheetUtilities.FormulaError")
-                                {
-                                    MessageBox.Show("Formula Error", "ERROR1", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    mySheet.SetContentsOfCell(GetCellName(mycol, myRow), myVal);
-                                    fail = true;
-                                }
-                            }
-                        }
-                        if (!fail)
-                        {*/
                             foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
                             {
                                 GetRowColoumn(s, out chcol, out chRow);
@@ -482,18 +467,6 @@ namespace SS
                 spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
                 colLetter = mycol + 65;
 
-                   /* foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
-                    {
-
-                        if (mySheet.GetCellValue(s).ToString() == "SpreadsheetUtilities.FormulaError")
-                        {
-                            MessageBox.Show("Formula Error", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            mySheet.SetContentsOfCell(GetCellName(mycol, myRow), myVal);
-                            fail = true;
-                        }
-                    }
-                    if (!fail)
-                    {*/
                         foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
                         {
                             GetRowColoumn(s, out chcol, out chRow);

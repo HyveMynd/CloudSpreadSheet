@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Formula</name>
+    </assembly>
+    <members>
+        <member name="T:SpreadsheetUtilities.Formula">
+            <summary>
+            Represents formulas written in standard infix notation using standard precedence
+            rules.  The allowed symbols are non-negative numbers written using floating-point
+            syntax, variables that consist of one or more letters followed by one or more 
+            digits, parentheses, and the four operator symbols +, -, *, and /.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.#ctor(System.String)">
+            <summary>
+            Creates a Formula from a string that consists of an infix expression written as
+            described in the class comment.  If the expression is syntacticaly invalid,
+            throws a FormulaFormatException with an explanatory Message.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.Evaluate(System.Func{System.String,System.Double})">
+            <summary>
+            Evaluates this Formula, using the lookup delegate to determine the values of
+            variables.  
+            
+            Given a variable symbol as its parameter, lookup returns the
+            variable's value (if it has one) or throws an ArgumentException (otherwise).
+            
+            If no undefined variables or divisions by zero are encountered when evaluating 
+            this Formula, the value is returned.  Otherwise, a FormulaError is returned.  
+            The Reason property of the FormulaError should have a meaningful explanation.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.GetResult(System.String,System.Double,System.Double)">
+            <summary>
+            Gets the result of the math.
+            </summary>
+            <param name="oper"></param>
+            <param name="lastNumber"></param>
+            <param name="firstNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.VariableCheck(System.String)">
+            <summary>
+            Checks for a variable
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.GetVariables">
+            <summary>
+            Enumerates all of the variables that occur in this formula.  No variable
+            may appear more than once in the enumeration, even if it appears more than
+            once in this Formula.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.ToString">
+            <summary>
+            Returns a string containing no spaces which, if passed to the Formula
+            constructor, will produce a Formula f such that this.Equals(f).
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.Equals(System.Object)">
+            <summary>
+            If obj is null or obj is not a Formula, returns false.  Otherwise, reports
+            whether or not this Formula and obj are equal.
+            
+            Two Formulae are considered equal if they consist of the same tokens in the
+            same order.  All tokens are compared as strings except for numeric tokens,
+            which are compared as doubles.
+            
+            Here are some examples.  
+            new Formula("x1+y2").Equals(new Formula("x1  +  y2")) is true
+            new Formula("x1+y2").Equalas(new Formula("y2+x1")) is false
+            new Formula("2.0 + x7").Equals(new Formula("2.000 + x7")) is true
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.op_Equality(SpreadsheetUtilities.Formula,SpreadsheetUtilities.Formula)">
+            <summary>
+            Reports whether f1 == f2, using the notion of equality from the Equals method.
+            Note that if both f1 and f2 are null, this method should return true.  If one is
+            null and one is not, this method should return false.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.op_Inequality(SpreadsheetUtilities.Formula,SpreadsheetUtilities.Formula)">
+            <summary>
+            Reports whether f1 != f2, using the notion of equality from the Equals method.
+            Note that if both f1 and f2 are null, this method should return false.  If one is
+            null and one is not, this method should return true.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.GetHashCode">
+            <summary>
+            Returns a hash code for this Formula.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.Formula.GetTokens(System.String)">
+            <summary>
+            Given a formula, enumerates the tokens that compose it.  Tokens are left paren,
+            right paren, one of the four operator symbols, a string consisting of one or more
+            letters followed by one or more digits, a double literal, and anything that doesn't
+            match one of those patterns.  There are no empty tokens, and no token contains white space.
+            </summary>
+        </member>
+        <member name="T:SpreadsheetUtilities.FormulaFormatException">
+            <summary>
+            Used to report syntactic errors in the argument to the Formula constructor.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.FormulaFormatException.#ctor(System.String)">
+            <summary>
+            Constructs a FormulaFormatException containing the explanatory message.
+            </summary>
+        </member>
+        <member name="T:SpreadsheetUtilities.FormulaError">
+            <summary>
+            Used as a possible return value of the Formula.Evaluate method.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.FormulaError.#ctor(System.String)">
+            <summary>
+            Constructs a FormulaError containing the explanatory reason.
+            </summary>
+            <param name="reason"></param>
+        </member>
+        <member name="P:SpreadsheetUtilities.FormulaError.Reason">
+            <summary>
+             The reason why this FormulaError was created.
+            </summary>
+        </member>
+    </members>
+</doc>

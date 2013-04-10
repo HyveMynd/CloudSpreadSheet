@@ -189,6 +189,12 @@ namespace SS
         /// <param name="e"></param>
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Show dialog to enter password for a specific spreadsheet
+
+
+            // Ask the controller for load the speficied file
+
+            /*
             try
             {
                 openFileDialog1.ShowDialog();
@@ -200,6 +206,7 @@ namespace SS
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            */
         }
         /// <summary>
         /// When close is clicked closes current window

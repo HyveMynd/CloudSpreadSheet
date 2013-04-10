@@ -194,6 +194,8 @@ namespace SS
 
             // Ask the controller for load the speficied file
 
+
+
             /*
             try
             {

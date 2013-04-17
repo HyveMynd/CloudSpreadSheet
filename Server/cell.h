@@ -18,8 +18,12 @@ namespace serverss{
       
     public:
         
+        cell(std::string);
+        cell();
+        
         std::string get_position();
         std::string get_contents();
+        std::string to_string();
         
     private:
         

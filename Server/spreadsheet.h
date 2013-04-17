@@ -24,6 +24,9 @@ namespace serverss {
     
     public:
         
+        // Constructors
+        spreadsheet(std::string, std::string);
+        
         // Spreadsheet functions
         ss_result join(user);
         ss_result change(cell, int);
@@ -36,14 +39,15 @@ namespace serverss {
         void get_user(std::string);
         void get_all_users();
         int get_version_number();
+        std::string get_password();
     
     private:
     
         std::list<std::string> users;
-        std::stack<std::string> undo_list;
+        std::stack<std::string> undo_stack;
         std::string password;
         std::string name;
-        int version_number;
+        int version;
         
         void log();
     

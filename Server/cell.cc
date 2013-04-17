@@ -7,3 +7,14 @@
 //
 
 #include "cell.h"
+
+namespace serverss {
+    cell::cell(std::string data)
+    {
+        
+    }
+    
+    cell::cell(){
+        
+    }
+}

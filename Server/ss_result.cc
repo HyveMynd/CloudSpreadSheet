@@ -7,3 +7,9 @@
 //
 
 #include "ss_result.h"
+
+namespace serverss {
+    ss_result::ss_result(){
+        
+    }
+}

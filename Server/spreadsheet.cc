@@ -11,6 +11,14 @@
 
 namespace serverss{
     
+    /*--------Constructors----------*/
+    spreadsheet::spreadsheet(std::string name, std::string password)
+    {
+        this->name = name;
+        this->password = password;
+        this->version = 1;
+    }
+    
     /*
      * Adds the user to the list of users.
      */
@@ -55,5 +63,8 @@ namespace serverss{
     
     void spreadsheet::log()
     {}
+    
+    
+
     
 }

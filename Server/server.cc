@@ -53,7 +53,7 @@ namespace serverss{
         result.file_password = password;
         
         if (it == spreadsheets.end())
-            return make_error (result, "Could not find the spreadsheet. Try a different file name.");
+            return not_found_error(result);
         
         if (it->second.get_password().compare(password) != 0)
             return make_error (result, "The password for the file is incorrect. Try again."); 
@@ -73,7 +73,7 @@ namespace serverss{
         spreadsheet* ss = find_ss(name);
 
         if (ss == NULL)
-            return make_error(result, "Could not find the spreadsheet");
+            return not_found_error(result);
         
         return ss->change(cell(data), version);
     }
@@ -82,29 +82,72 @@ namespace serverss{
      * Called from the controller. Wraps the changes in a 'cell' object and calls the
      * 'update' method on the correct spreadsheet.
      */
-    ss_result server::do_update(std::string data, int version)
-    {}
+    ss_result server::do_update(std::string name, std::string data, int version)
+    {
+        ss_result result;
+        result.file_name = name;
+        result.command = Update;
+        spreadsheet* ss = find_ss(name);
+        
+        if (ss == NULL)
+            return not_found_error(result);
+        
+        return ss->update(cell(data), version);
+    }
     
     /*
      * Called from the controller. Find the correct spreadsheet and calls the 
      * undo method for that spreadsheet.
      */
     ss_result server::do_undo(std::string name, int version)
-    {}
+    {
+        ss_result result;
+        result.file_name = name;
+        result.command = Undo;
+        spreadsheet* ss = find_ss(name);
+        
+        
+        if (ss == NULL)
+            return not_found_error(result);
+        
+        return ss->undo(version);
+    }
     
     /*
      * Called from the controller. Find the correct spreadsheet and calls the
      * save method for that spreadsheet.
      */
     ss_result server::do_save(std::string name)
-    {}
+    {
+        ss_result result;
+        result.file_name = name;
+        result.command = Save;
+        spreadsheet* ss = find_ss(name);
+        
+        
+        if (ss == NULL)
+            return not_found_error(result);
+        
+        return ss->save();
+    }
     
     /*
      * Called from the controller. Find the correct spreadsheet and calls the
      * leave method for that spreadsheet.
      */
-    ss_result server::do_leave(std::string name)
-    {}
+    ss_result server::do_leave(std::string name, user user_leaving)
+    {
+        ss_result result;
+        result.file_name = name;
+        result.command = Leave;
+        spreadsheet* ss = find_ss(name);
+        
+        
+        if (ss == NULL)
+            return not_found_error(result);
+        
+        return ss->leave(user_leaving);
+    }
 
     ss_result& server::make_error(ss_result& result, std::string message)
     {
@@ -121,5 +164,10 @@ namespace serverss{
         if (it != spreadsheets.end())
             ss = &(it->second);
         return ss;
+    }
+    
+    ss_result& server::not_found_error(ss_result& result)
+    {
+        return make_error(result, "Could not find the spreadsheet");
     }
 }

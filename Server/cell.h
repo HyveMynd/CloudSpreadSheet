@@ -31,6 +31,7 @@ namespace serverss{
         std::string position;
         std::string contents;
         
+        void parse_contents(std::string);
     };
     
 }

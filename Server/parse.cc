@@ -1,20 +1,30 @@
-std::string getword(int n, std::string line, ch : char)
-{
-  int word = 0;
-  int i = 0;
-  string s = "";
-  while (line.length() > 0 && i < line.length() )
-  {
-    while (line[i] != ch && line[i] != '\0') {
-    s = s + line[i];
-    i++;
-    }                                      }
-    word++;
-    if (word == n)
-    {
-       return s;
-    }
-    else s = "";
-  }
+#include "parse.h"
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+// gets the indexed word from the line for parsing the data 
+std::string get_word(int word_index, std::string str, char ch) {
+  int sp_index = 1;
+  std::string word;  
+
+  for (int i = 0; i < str.length(); i++) {
+  
+  if (sp_index > word_index) { 
+    return word; 
+  } // if
+
+  if (str[i] == ch || str[i] == '\r') { 
+    sp_index++;
+  } // if
+  else if (sp_index == word_index) {
+    word.push_back(str[i]);
+  } // else if
+
+  } // for
+  return word;
 }
+
+
 

@@ -6,9 +6,10 @@
 //
 //
 
+#include <iostream>
 #include "controller.h"
 
-int main (int argc, char* argv)
+int main (int argc, char * argv[])
 {
     std::cout << "hello world! Complie success!" << std::endl;
 }

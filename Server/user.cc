@@ -7,3 +7,7 @@
 //
 
 #include "user.h"
+
+namespace serverss {
+    
+}

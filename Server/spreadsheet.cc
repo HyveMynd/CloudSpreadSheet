@@ -29,7 +29,7 @@ namespace serverss{
         
         // Add the xml and length to result
         
-        result.success = true;
+        result.status = OK;
         return result;
     }
     
@@ -47,7 +47,7 @@ namespace serverss{
         
         version++;
         result.version = version;
-        result.success = true;
+        result.status = OK;
         return result;
     }
     
@@ -65,7 +65,7 @@ namespace serverss{
         
         version++;
         result.version = version;
-        result.success = true;
+        result.status = OK;
         return result;
     }
     
@@ -83,7 +83,7 @@ namespace serverss{
         
         version++;
         result.version = version;
-        result.success = true;
+        result.status = OK;
         return result;
     }
     
@@ -94,7 +94,7 @@ namespace serverss{
     {
         //do save
         
-        result.success = true;
+        result.status = OK;
         return result;
     }
     
@@ -103,9 +103,9 @@ namespace serverss{
      */
     ss_result spreadsheet::leave(user user_leaving, ss_result& result)
     {
+        //do leave
         
-        
-        result.success = true;
+        result.status = OK;
         return result;
     }
     
@@ -114,7 +114,7 @@ namespace serverss{
     
     ss_result& spreadsheet::make_error(ss_result& result, std::string message)
     {
-        result.success = false;
+        result.status = FAIL;
         result.message = message;
         return result;
     }

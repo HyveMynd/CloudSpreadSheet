@@ -44,6 +44,7 @@ namespace serverss{
         
     private:
         
+        std::string error_to_string();
         
         
     };

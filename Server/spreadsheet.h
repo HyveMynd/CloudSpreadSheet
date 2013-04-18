@@ -13,6 +13,7 @@
 #include <string>
 #include <list>
 #include <stack>
+#include <fstream>
 #include "ss_result.h"
 #include "cell.h"
 #include "user.h"

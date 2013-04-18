@@ -21,6 +21,13 @@ namespace serverss {
         Save,
         Leave
     };
+    
+    enum Status{
+        OK,
+        FAIL,
+        WAIT,
+        END
+    };
 }
 
 #endif

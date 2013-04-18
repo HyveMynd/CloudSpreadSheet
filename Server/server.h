@@ -11,12 +11,12 @@
 
 #include <map>
 #include <string>
+#include <iostream>
+#include "enums.h"
+#include "user.h"
 #include "spreadsheet.h"
 #include "ss_result.h"
 #include "cell.h"
-#include <iostream>
-#include "commands.h"
-#include "user.h"
 
 namespace serverss {
 

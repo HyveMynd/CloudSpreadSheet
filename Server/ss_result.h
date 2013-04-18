@@ -11,10 +11,11 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <list>
 #include "cell.h"
 #include "user.h"
-#include "commands.h"
+#include "enums.h"
 
 namespace serverss{
     
@@ -35,17 +36,18 @@ namespace serverss{
         std::string file_password;
         std::string message;
         int version;
-        int length;
+        std::string length;
         std::string xml;
         cell cell_result;
         std::string contents;
-        bool success;
+        Status status;
         
         
     private:
         
         std::string error_to_string();
-        
+        std::string ok_to_string();
+        std::string wait_to_string();
         
     };
     

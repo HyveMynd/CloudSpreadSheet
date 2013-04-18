@@ -27,7 +27,7 @@ namespace serverss{
         // return the name and password
         if (it != spreadsheets.end()){
             spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password)));
-            result.success = true;
+            result.status = OK;
             result.command = Create;
             
             return result;
@@ -148,7 +148,7 @@ namespace serverss{
 
     ss_result& server::make_error(ss_result& result, std::string message)
     {
-        result.success = false;
+        result.status = FAIL;
         result.message = message;
         return result;
     }

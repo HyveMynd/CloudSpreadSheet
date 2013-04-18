@@ -23,6 +23,7 @@ namespace serverss{
         
         std::string get_position();
         std::string get_contents();
+        
         std::string to_string();
         
     private:

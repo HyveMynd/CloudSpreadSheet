@@ -33,10 +33,7 @@ namespace serverss{
             return result;
         }
         
-        result.success = false;
-        result.message = "File name already exists. Please choose a different name.";
-        
-        return result;
+        return make_error(result, "File name already exists. Please choose a different name.");
     }
     
     

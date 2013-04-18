@@ -27,7 +27,7 @@ namespace serverss{
         users.push_back(new_user);
         result.version = version;
         
-        // Add the xml and length
+        // Add the xml and length to result
         
         result.success = true;
         return result;
@@ -46,6 +46,7 @@ namespace serverss{
         //do change
         
         version++;
+        result.version = version;
         result.success = true;
         return result;
     }
@@ -63,6 +64,7 @@ namespace serverss{
         //do update
         
         version++;
+        result.version = version;
         result.success = true;
         return result;
     }
@@ -80,6 +82,7 @@ namespace serverss{
         //do undo
         
         version++;
+        result.version = version;
         result.success = true;
         return result;
     }
@@ -100,7 +103,7 @@ namespace serverss{
      */
     ss_result spreadsheet::leave(user user_leaving, ss_result& result)
     {
-        //do leave
+        
         
         result.success = true;
         return result;

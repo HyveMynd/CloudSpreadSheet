@@ -28,12 +28,12 @@ namespace serverss {
         spreadsheet(std::string, std::string);
         
         // Spreadsheet functions
-        ss_result join(user);
-        ss_result change(cell, int);
-        ss_result update(cell, int);
-        ss_result save();
-        ss_result leave(user);
-        ss_result undo(int);
+        ss_result join(user, ss_result&);
+        ss_result change(cell, int, ss_result&);
+        ss_result update(cell, int, ss_result&);
+        ss_result save(ss_result&);
+        ss_result leave(user, ss_result&);
+        ss_result undo(int, ss_result&);
     
         // Accessors
         void get_user(std::string);
@@ -43,14 +43,15 @@ namespace serverss {
     
     private:
     
-        std::list<std::string> users;
-        std::stack<std::string> undo_stack;
+        std::list<user> users;
+        std::stack<cell> undo_stack;
         std::string password;
         std::string name;
         int version;
         
         void log();
-    
+        ss_result& incorrect_version_error(ss_result&);
+        ss_result& make_error(ss_result&, std::string);
     };
 
 }

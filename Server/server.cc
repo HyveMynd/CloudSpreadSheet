@@ -58,7 +58,7 @@ namespace serverss{
         if (it->second.get_password().compare(password) != 0)
             return make_error (result, "The password for the file is incorrect. Try again."); 
         
-        return it->second.join(new_user);
+        return it->second.join(new_user, result);
     }
     
     /*
@@ -75,7 +75,7 @@ namespace serverss{
         if (ss == NULL)
             return not_found_error(result);
         
-        return ss->change(cell(data), version);
+        return ss->change(cell(data), version, result);
     }
     
     /*
@@ -92,7 +92,7 @@ namespace serverss{
         if (ss == NULL)
             return not_found_error(result);
         
-        return ss->update(cell(data), version);
+        return ss->update(cell(data), version, result);
     }
     
     /*
@@ -110,7 +110,7 @@ namespace serverss{
         if (ss == NULL)
             return not_found_error(result);
         
-        return ss->undo(version);
+        return ss->undo(version, result);
     }
     
     /*
@@ -128,7 +128,7 @@ namespace serverss{
         if (ss == NULL)
             return not_found_error(result);
         
-        return ss->save();
+        return ss->save(result);
     }
     
     /*
@@ -146,7 +146,7 @@ namespace serverss{
         if (ss == NULL)
             return not_found_error(result);
         
-        return ss->leave(user_leaving);
+        return ss->leave(user_leaving, result);
     }
 
     ss_result& server::make_error(ss_result& result, std::string message)

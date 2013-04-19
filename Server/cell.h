@@ -21,17 +21,15 @@ namespace serverss{
         cell(std::string);
         cell();
         
-        std::string get_position();
-        std::string get_contents();
+        std::string position;
+        std::string contents;
         
         std::string to_string();
         
     private:
         
-        std::string position;
-        std::string contents;
-        
         void parse_contents(std::string);
+        
     };
     
 }

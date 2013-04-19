@@ -112,6 +112,11 @@ namespace serverss{
     void spreadsheet::log()
     {}
     
+    user* spreadsheet::find_user(&user)
+    {
+        return NULL;
+    }
+    
     ss_result& spreadsheet::make_error(ss_result& result, std::string message)
     {
         result.status = FAIL;

@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SpreadsheetGUI</name>
+    </assembly>
+    <members>
+        <member name="M:SS.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:SS.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SS.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SS.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:SS.Form1">
+            <summary>
+            Makes a spreadsheet with menus
+            </summary>
+        </member>
+        <member name="M:SS.Form1.#ctor">
+            <summary>
+            Creates a new empty spreadsheet
+            </summary>
+        </member>
+        <member name="M:SS.Form1.#ctor(SS.Spreadsheet,System.String)">
+            <summary>
+            Creates a spreadsheet that is populated from a file
+            </summary>
+            <param name="openSheet"></param>
+            <param name="filename"></param>
+        </member>
+        <member name="M:SS.Form1.saveFileDialog1_FileOk(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Puts up a save as file dialog box and makes sure the file name is ok
+            If an overwrite will occor warns the user
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.newToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            When new is clicked creates a new empty spreadsheet
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.saveToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            When save is clicked saves the current spreadsheet
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.openToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            When open is clicked opens a new spreadsheet from a file
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.closeToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            When close is clicked closes current window
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.exitToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            When exit is clicked asks user to close all windows then closes based on users choice
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.Form1_FormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
+            <summary>
+            When a window starts to close figures out if that window needs to be saved and prompts the user
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.spreadsheetPanel1_SelectionChanged(SS.SpreadsheetPanel)">
+            <summary>
+            Detects when user changes the selection and populates the Text boxes
+            </summary>
+            <param name="sender"></param>
+        </member>
+        <member name="M:SS.Form1.GetRowColoumn(System.String,System.Int32@,System.Int32@)">
+            <summary>
+            Takes in the cell name and returns the appropriate rows and coloumns
+            </summary>
+            <param name="cellName"></param>
+            <param name="col"></param>
+            <param name="row"></param>
+        </member>
+        <member name="M:SS.Form1.GetCellName(System.Int32,System.Int32)">
+            <summary>
+            Takes in a column and row and returns a cell name
+            </summary>
+            <param name="col"></param>
+            <param name="row"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SS.Form1.textBox1_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Sets cell after enter is pressed
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.toolStripMenuItem1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Saves when save as is clicked
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Sets cell value when button is pressed
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SS.Form1.helpToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tells the user how to use the program
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:SS.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SS.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SS.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>

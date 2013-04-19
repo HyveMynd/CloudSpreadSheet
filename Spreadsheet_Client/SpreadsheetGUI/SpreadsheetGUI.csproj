@@ -94,6 +94,10 @@
     <Content Include="SpreadsheetPanel.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SpreadsheetModel\SpreadsheetModel.csproj">
+      <Project>{0CACF803-CB7E-4BFE-ADA5-C2EA177C1D9D}</Project>
+      <Name>SpreadsheetModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spreadsheet\Spreadsheet.csproj">
       <Project>{E1C03860-17F4-4A12-B8D7-4350D9E5CE81}</Project>
       <Name>Spreadsheet</Name>

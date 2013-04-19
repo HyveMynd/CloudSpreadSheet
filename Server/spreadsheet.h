@@ -13,7 +13,7 @@
 #include <string>
 #include <list>
 #include <stack>
-#include <fstream>
+#include <map>
 #include "ss_result.h"
 #include "cell.h"
 #include "user.h"
@@ -49,6 +49,7 @@ namespace serverss {
         std::stack<cell> undo_stack;
         std::string password;
         std::string name;
+        std::map<std::string, std::string> ss_contents;
         int version;
         
         void log();

@@ -27,7 +27,7 @@ namespace serverss{
         users.push_back(new_user);
         result.version = version;
         
-        // Add the xml and length to result
+        //do join
         
         result.status = OK;
         return result;

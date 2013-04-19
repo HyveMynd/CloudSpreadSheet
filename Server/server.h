@@ -9,6 +9,7 @@
 #ifndef _server_h
 #define _server_h
 
+#include <sys/stat.h>
 #include <map>
 #include <string>
 #include <iostream>
@@ -43,6 +44,8 @@ namespace serverss {
         ss_result& make_error (ss_result&, std::string);
         spreadsheet* find_ss(std::string);
         ss_result& not_found_error(ss_result&);
+        bool file_exists(std::string&);
+        std::string add_extension(std::string&);
     };
     
 }

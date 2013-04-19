@@ -18,6 +18,7 @@ namespace serverss{
      */
     ss_result server::do_create(std::string name, std::string password)
     {
+        name = add_extension(name);
         ss_result result;
         result.file_name = name;
         result.file_password = password;
@@ -25,7 +26,7 @@ namespace serverss{
 
         // If the spreadsheet does not exist, create one and insert into the map.
         // return the name and password
-        if (it != spreadsheets.end()){
+        if (it == spreadsheets.end() && !file_exists(name)){
             spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password)));
             result.status = OK;
             result.command = Create;
@@ -43,13 +44,14 @@ namespace serverss{
      */
     ss_result server::do_join(std::string name, std::string password, user new_user)
     {
+        name = add_extension(name);
         std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
         ss_result result;
         result.command = Join;
         result.file_name = name;
         result.file_password = password;
         
-        if (it == spreadsheets.end())
+        if (it == spreadsheets.end() && !file_exists(name) )
             return not_found_error(result);
         
         if (it->second.get_password().compare(password) != 0)
@@ -170,5 +172,31 @@ namespace serverss{
     
     void server::log()
     {}
+    
+    
+    // Function: fileExists
+    /**
+     Check if a file exists
+     @param[in] filename - the name of the file to check
+     
+     @return    true if the file exists, else false
+     
+     */
+    bool server::file_exists(std::string& filename)
+    {
+        std::string fn;
+        struct stat buf;
+        fn = add_extension(filename);
+
+        return stat(fn.c_str(), &buf) != 1;
+    }
+    
+    std::string server::add_extension(std::string& filename)
+    {
+        if(filename.substr(filename.find_last_of(".") + 1) == "ss")
+            return filename;
+        else
+            return filename + ".ss";
+    }
     
 }

@@ -52,7 +52,7 @@ namespace serverss {
         int version;
         
         void log();
-        user* find_user(&user);
+        user* find_user(user&);
         ss_result& incorrect_version_error(ss_result&);
         ss_result& make_error(ss_result&, std::string);
     };

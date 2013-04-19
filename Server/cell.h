@@ -21,8 +21,8 @@ namespace serverss{
         cell(std::string);
         cell();
         
-        std::string position;
-        std::string contents;
+        std::string cell_name;
+        std::string value;
         
         std::string to_string();
         

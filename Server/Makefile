@@ -23,7 +23,7 @@ ss_result.o: ss_result.cc ss_result.h enums.h
 	g++ -c ss_result.cc enums.h
 
 spreadsheetServer2: spreadsheetServer2.cc parse.h ss_result.h
-	g++ -c spreadsheetServer2.cc parse.o ss_result.o 
+	g++ -c spreadsheetServer2.cc parse.o ss_result.o -lboost_system -lpthread
 
 clean: 
 	rm -f *.o 

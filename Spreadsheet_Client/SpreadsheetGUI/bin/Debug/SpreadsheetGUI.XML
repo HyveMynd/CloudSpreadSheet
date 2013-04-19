@@ -42,21 +42,6 @@
             <param name="openSheet"></param>
             <param name="filename"></param>
         </member>
-        <member name="M:SS.Form1.saveFileDialog1_FileOk(System.Object,System.ComponentModel.CancelEventArgs)">
-            <summary>
-            Puts up a save as file dialog box and makes sure the file name is ok
-            If an overwrite will occor warns the user
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SS.Form1.newToolStripMenuItem_Click(System.Object,System.EventArgs)">
-            <summary>
-            When new is clicked creates a new empty spreadsheet
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
         <member name="M:SS.Form1.saveToolStripMenuItem_Click(System.Object,System.EventArgs)">
             <summary>
             When save is clicked saves the current spreadsheet
@@ -64,30 +49,9 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
-        <member name="M:SS.Form1.openToolStripMenuItem_Click(System.Object,System.EventArgs)">
-            <summary>
-            When open is clicked opens a new spreadsheet from a file
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
         <member name="M:SS.Form1.closeToolStripMenuItem_Click(System.Object,System.EventArgs)">
             <summary>
             When close is clicked closes current window
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SS.Form1.exitToolStripMenuItem_Click(System.Object,System.EventArgs)">
-            <summary>
-            When exit is clicked asks user to close all windows then closes based on users choice
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SS.Form1.Form1_FormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
-            <summary>
-            When a window starts to close figures out if that window needs to be saved and prompts the user
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
@@ -117,13 +81,6 @@
         <member name="M:SS.Form1.textBox1_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
             <summary>
             Sets cell after enter is pressed
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SS.Form1.toolStripMenuItem1_Click(System.Object,System.EventArgs)">
-            <summary>
-            Saves when save as is clicked
             </summary>
             <param name="sender"></param>
             <param name="e"></param>

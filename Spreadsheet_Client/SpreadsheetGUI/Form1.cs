@@ -21,8 +21,6 @@ namespace SS
     {
         private int numWindows = 0;
         private Spreadsheet mySheet;
-        private bool saveOnClose = false;
-        private bool closeNow = false;
         private string myFileName = null;
         private string myVersion = null;
         private string myLength = null;

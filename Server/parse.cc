@@ -28,19 +28,26 @@ namespace serverss {
     return word;
   }
 
+  // returns a hash map of cells read from
+  // filename on disk
   map<string,string> get_map(string fname)
   {
     map<string, string> result;
     return result;
   }
+
+  // returns a xml formatted string of cells
   string get_xml(string fname)
   {
     string result = "";
     return result;
   }
-  string put_xml(map<string, string> xml)
+
+  // creates an xml formatted string and saves it to disk
+  bool put_xml(string fname, map<string, string> xml)
   { 
-    string result = "";
+    
+    bool result = false;
     return result;
   }
 }

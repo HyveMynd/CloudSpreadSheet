@@ -5,8 +5,14 @@ namespace serverss {
 
   // gets the indexed word from the line for parsing the data
   std::string get_word(int word_index, std::string str, char ch);
+
+  // returns a hashmap of the spreadsheet
   std::map<std::string,std::string> get_map(std::string fname);
+
+  // returns a xml string of a spreadsheet
   std::string get_xml(std::string fname);
-  std::string put_xml(std::map<std::string, std::string> xml);
+
+  // saves a file to disk in xml format
+  bool put_xml(std::string fname, std::map<std::string, std::string> xml);
 
 } 

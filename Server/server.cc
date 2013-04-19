@@ -62,7 +62,7 @@ namespace serverss{
      * Called from the controller. Wraps the changes in a 'cell' object and calls the 
      * 'change' method on the correct spreadsheet.
      */
-    ss_result server::do_change(std::string name, std::string data, int version)
+    ss_result server::do_change(std::string name, int version, cell new_cell)
     {
         ss_result result;
         result.file_name = name;
@@ -72,14 +72,14 @@ namespace serverss{
         if (ss == NULL)
             return not_found_error(result);
         
-        return ss->change(cell(data), version, result);
+        return ss->change(new_cell, version, result);
     }
     
     /*
      * Called from the controller. Wraps the changes in a 'cell' object and calls the
      * 'update' method on the correct spreadsheet.
      */
-    ss_result server::do_update(std::string name, std::string data, int version)
+    ss_result server::do_update(std::string name, int version, cell new_cell)
     {
         ss_result result;
         result.file_name = name;
@@ -89,7 +89,7 @@ namespace serverss{
         if (ss == NULL)
             return not_found_error(result);
         
-        return ss->update(cell(data), version, result);
+        return ss->update(new_cell, version, result);
     }
     
     /*

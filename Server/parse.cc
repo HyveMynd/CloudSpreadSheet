@@ -27,6 +27,22 @@ namespace serverss {
     } // for
     return word;
   }
+
+  map<string,string> get_map(string fname)
+  {
+    map<string, string> result;
+    return result;
+  }
+  string get_xml(string fname)
+  {
+    string result = "";
+    return result;
+  }
+  string put_xml(map<string, string> xml)
+  { 
+    string result = "";
+    return result;
+  }
 }
 
 

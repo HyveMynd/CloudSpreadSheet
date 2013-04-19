@@ -112,7 +112,7 @@ namespace serverss{
     void spreadsheet::log()
     {}
     
-    user* spreadsheet::find_user(&user)
+    user* spreadsheet::find_user(user& this_user)
     {
         return NULL;
     }

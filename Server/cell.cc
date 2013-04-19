@@ -16,4 +16,14 @@ namespace serverss {
     cell::cell(){
         
     }
+    
+    std::string cell::to_string()
+    {
+        return "";
+    }
+    
+    void cell::parse_contents(std::string data)
+    {
+    
+    }
 }

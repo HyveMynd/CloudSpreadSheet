@@ -167,4 +167,8 @@ namespace serverss{
     {
         return make_error(result, "Could not find the spreadsheet");
     }
+    
+    void server::log()
+    {}
+    
 }

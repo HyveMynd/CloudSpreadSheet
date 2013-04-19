@@ -18,11 +18,11 @@ namespace serverss{
       
     public:
         
-        cell(std::string);
+        cell(std::string, std::string);
         cell();
         
         std::string cell_name;
-        std::string value;
+        std::string contents;
         
         std::string to_string();
         

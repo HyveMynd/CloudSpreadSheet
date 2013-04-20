@@ -74,11 +74,11 @@ namespace serverss{
             
             result.cell_result = changes;
             
-            //update all users
-            for (std::list<user>::iterator it = users.begin(); it != users.end(); ++it)
-            {
-                update(result, (*it));
-            }
+//            //update all users
+//            for (std::list<user>::iterator it = users.begin(); it != users.end(); ++it)
+//            {
+//                update(result, (*it));
+//            }
         }
         
         return result;
@@ -87,7 +87,7 @@ namespace serverss{
     void spreadsheet::update(ss_result result, user* user_to_update)
     {
         result.Status = Update;
-        sendUpdate(user->user_socket, result.to_string());
+//        sendUpdate(user->user_socket, result.to_string());
     }
     
     /*
@@ -171,21 +171,21 @@ namespace serverss{
     
     
     
-    void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_)
-    {
-     
-         boost::asio::async_write((*socket_),
-                                  boost::asio::buffer(message_),
-                                  boost::bind(&socketConnection::connectionEstablished, this,
-                                              boost::asio::placeholders::error));
-     
-    }
+//    void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_)
+//    {
+//     
+//         boost::asio::async_write((*socket_),
+//                                  boost::asio::buffer(message_),
+//                                  boost::bind(&socketConnection::connectionEstablished, this,
+//                                              boost::asio::placeholders::error));
+//     
+//    }
+//    
+//    void updateConfirmation(const boost::system::error_code& error,
+//                             size_t bytes_transferred)
+//    {
+//         cout << "update Sent" << endl;
+//    }
     
-    void updateConfirmation(const boost::system::error_code& error,
-                             size_t bytes_transferred)
-    {
-         cout << "update Sent" << endl;
-    }
-     
     
 }

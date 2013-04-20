@@ -14,8 +14,8 @@
 #include <list>
 #include <stack>
 #include <map>
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
+//#include <boost/bind.hpp>
+//#include <boost/asio.hpp>
 #include "ss_result.h"
 #include "cell.h"
 #include "user.h"
@@ -60,9 +60,9 @@ namespace serverss {
         ss_result& incorrect_version_error(ss_result&);
         ss_result& make_error(ss_result&, std::string);
         
-        void updateConfirmation(const boost::system::error_code& error,
-                                size_t bytes_transferred);
-        void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_);
+//        void updateConfirmation(const boost::system::error_code& error,
+//                                size_t bytes_transferred);
+//        void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_);
     };
 
 }

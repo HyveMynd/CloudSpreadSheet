@@ -34,6 +34,8 @@ namespace serverss{
         // Add user to the list of users
         users.push_back(new_user);
         
+        ss_contents = get_map(name);
+        
         result.xml = get_xml(name);
         result.status = OK;
         return result;
@@ -50,20 +52,21 @@ namespace serverss{
             return incorrect_version_error(result);
         
         
-        std::map<std::string, std::string>::iterator it = ss_contents.find(changes.cell_name);
-        
-        if (cll == NULL)
+        std::map<std::string, std::string>::iterator cll = ss_contents.find(changes.cell_name);
+        cell old;
+
+        if (cll == ss_contents.end())
         {
-            cell old;
             old.cell_name = changes.cell_name;
             undo_stack.push(old);
             ss_contents.insert(std::pair<std::string, std::string>(changes.cell_name, changes.contents));
         }
         else
         {
-            cell old = (*cll);
+            old.cell_name = cll->first;
+            old.contents = cll->second;
             undo_stack.push(old);
-            cll->contents = changes.contents;
+            cll->second = changes.contents;
         }
         
         version++;
@@ -107,12 +110,12 @@ namespace serverss{
             return result;
         }
         
-//        cell undo_cell = undo_stack.top();
-//        undo_stack.pop();
-//        
-//        cell* cll = find_cell(undo_cell.cell_name);
-//        
-//        cll->contents = undo_cell.contents;
+        cell undo_cell = undo_stack.top();
+        undo_stack.pop();
+        
+        std::map<std::string, std::string>::iterator cll = ss_contents.find(undo_cell.cell_name);
+        
+        cll->second = undo_cell.contents;
         
         version++;
         result.version = version;
@@ -134,10 +137,14 @@ namespace serverss{
     /*
      * Removes the user from the user list
      */
-    void spreadsheet::leave(user user_leaving)
+    void spreadsheet::leave(user* user_leaving)
     {
-        //do leave
+        user* leave = find_user(user_leaving);
         
+        if (leave == NULL)
+            return;
+        
+        users.remove(user_leaving);
     }
     
     void spreadsheet::log()

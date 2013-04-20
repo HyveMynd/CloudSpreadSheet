@@ -1,7 +1,7 @@
 all: controller 
 
 controller: controller.cc controller.h parse.o cell.o user.o ss_result.o server.o
-	g++ controller.cc -L server.o parse.o cell.o user.o ss_result.o -o controller
+	g++ controller.cc -o controller
 
 server.o: server.cc enums.h user.o spreadsheet.o ss_result.o cell.o
 	g++ -c server.cc  

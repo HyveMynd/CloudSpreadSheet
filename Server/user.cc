@@ -10,7 +10,7 @@
 
 namespace serverss {
     
-    user::user(socket* user_socket)
+    user::user(tcp::socket* user_socket)
     {
         this->user_socket = user_socket;
     }

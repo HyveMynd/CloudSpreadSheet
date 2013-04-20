@@ -34,6 +34,7 @@ namespace serverss{
         // Add user to the list of users
         users.push_back(new_user);
         
+        result.xml = get_xml(name);
         result.status = OK;
         return result;
     }
@@ -48,7 +49,12 @@ namespace serverss{
         if (user_version != version)
             return incorrect_version_error(result);
         
-        //do change
+        cell* cll = find_cell(changes.cell_name);
+        
+        if (cll == NULL)
+            ss_contents.insert(changes.cell_name, changes);
+        else
+            ss_contents.find(cll)
         
         version++;
         result.version = version;
@@ -114,6 +120,17 @@ namespace serverss{
     
     void spreadsheet::log()
     {}
+    
+    cell* spreadsheet::find_cell(std::string cell_name)
+    {
+        std::map<std::string, cell>::iterator it = ss_contents.find(cell_name);
+        cell* ss = NULL;
+        
+        if (it != ss_contents.end())
+            ss = &(it->second);
+        return ss;
+
+    }
     
     user* spreadsheet::find_user(user* this_user)
     {

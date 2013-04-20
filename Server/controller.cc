@@ -13,18 +13,20 @@
 
 using boost::asio::ip::tcp;
 using namespace std;
+
 namespace serverss
 {
 	//global variable
-	serverss::server my_server;
     
 	class socketConnection
 	{
     public:
-        
-        socketConnection(boost::asio::io_service& io_service)
-        : socket_(io_service), newUser(&socket_)
-        {}
+	  server* my_server;
+	  socketConnection(boost::asio::io_service& io_service, server* my_server)
+	    : socket_(io_service), newUser(&socket_)
+        {
+	  this->my_server = my_server;
+	}
         
         tcp::socket& socket()
         {
@@ -37,7 +39,7 @@ namespace serverss
 			std::string message_ = "Connection Established!\n";
 			boost::asio::async_write(socket_,
                                      boost::asio::buffer(message_),
-                                     boost::bind(&socketConnection::connectionEstablished, this,
+						 boost::bind((&serverss::socketConnection::connectionEstablished), this,
                                                  boost::asio::placeholders::error));
 		}
         // * method was originally handle write* this method is the callback to all writes
@@ -126,7 +128,7 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {
-                        message = (my_server.do_join(name,password, &newUser)).to_string();
+                        message = (my_server->do_join(name,password, &newUser)).to_string();
                     }
                     
                     boost::asio::async_write(socket_,
@@ -177,7 +179,7 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {
-                        message = (my_server.do_change(name,atoi(version.c_str()), serverss::cell(cellPos,content))).to_string();
+                        message = (my_server->do_change(name,atoi(version.c_str()), cell(cellPos,content))).to_string();
                     }
                     
                     boost::asio::async_write(socket_,
@@ -212,7 +214,7 @@ namespace serverss
 					
                     else
                     {
-                        message = (my_server.do_undo(name,atoi(version.c_str()))).to_string();
+                        message = (my_server->do_undo(name,atoi(version.c_str()))).to_string();
                     }
                     
                     boost::asio::async_write(socket_,
@@ -236,7 +238,7 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {
-                        message = (my_server.do_save(name)).to_string();
+                        message = (my_server->do_save(name)).to_string();
                     }
                     
                     boost::asio::async_write(socket_,
@@ -260,7 +262,7 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {	
-                        my_server.do_leave(name, &newUser);
+                        my_server->do_leave(name, &newUser);
                     }
                 }
             }
@@ -275,7 +277,7 @@ namespace serverss
         enum { max_length = 1024 };
         char data_[max_length];
         // a user object 
-        serverss::user newUser;
+        user newUser;
 	};
     /*
      void sendUpdate(socket *socket_, string message_)
@@ -296,12 +298,14 @@ namespace serverss
 	class begin
 	{
 	public:
+	  server* my_server;
 		// constructor, starts the server running on port 1984
-		begin(boost::asio::io_service& io_service, short port)
+	  begin(boost::asio::io_service& io_service, short port, server* my_server)
 		: io_service_(io_service),
         acceptor_(io_service, tcp::endpoint(tcp::v4(), port))
         {
-            socketConnection* new_socketConnection = new socketConnection(io_service_);
+	  this->my_server = my_server;
+	  socketConnection* new_socketConnection = new socketConnection(io_service_, my_server);
             acceptor_.async_accept(new_socketConnection->socket(),
                                    boost::bind(&begin::handle_accept, this, new_socketConnection,
                                                boost::asio::placeholders::error));
@@ -314,7 +318,7 @@ namespace serverss
             {
                 // start a new socketConnection
                 new_socketConnection->start();
-                new_socketConnection = new socketConnection(io_service_);
+                new_socketConnection = new socketConnection(io_service_, my_server);
                 // continue waiting for connections
                 acceptor_.async_accept(new_socketConnection->socket(),
                                        boost::bind(&begin::handle_accept, this, new_socketConnection,
@@ -333,21 +337,20 @@ namespace serverss
 }
 int main()
 {
+      serverss::server* my_server = new serverss::server();
+
     try
     {
-        
-        
 		boost::asio::io_service io_service;
-        
-		serverss::begin s(io_service, 1984);
-        
+
+		serverss::begin s(io_service, 1984, my_server);
 		io_service.run();
     }
     catch (std::exception& e)
     {
 		std::cerr << "Exception: " << e.what() << "\n";
     }
-    
+    delete my_server;
     return 0;
 }
 

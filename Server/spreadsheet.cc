@@ -185,6 +185,25 @@ namespace serverss{
                                   updateConfirmation);
      
     }
+    
+    /*-------Accesors--------*/
+    void spreadsheet::get_user(std::string)
+    {
+        
+    }
+    void spreadsheet:get_all_users()
+    {
+        
+    }
+    int spreadsheet::get_version_number()
+    {
+        return version;
+    }
+    std::string spreadsheet::get_password()
+    {
+        return password;
+    }
+
 
     
 }

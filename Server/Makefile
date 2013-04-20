@@ -1,7 +1,10 @@
 all: controller 
 
-controller: controller.cc parse.o cell.o user.o ss_result.o server.o
-	g++ controller.cc -lboost_system -lpthread -o barj_server
+controller: controller.o parse.o cell.o user.o ss_result.o server.o
+	g++ *.o -lboost_system -lpthread -o barj_server
+
+controller.o: controller.cc parse.h ss_result.h server.h user.h cell.h
+	g++ -c controller.cc -lboost_system -lpthread 
 
 server.o: server.cc enums.h user.o spreadsheet.o ss_result.o cell.o
 	g++ -c server.cc  

@@ -20,6 +20,7 @@ namespace serverss{
         
         cell(std::string, std::string);
         cell();
+        cell(const cell& other);
         
         std::string cell_name;
         std::string contents;

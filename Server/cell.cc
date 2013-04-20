@@ -14,6 +14,14 @@ namespace serverss {
         this->contents = contents;
     }
     
+    cell::cell(const cell& other)
+    {
+        this->cell_name = other.cell_name;
+        this->contents = other.contents;
+        
+        *this = other;
+    }
+    
     cell::cell(){
         
     }

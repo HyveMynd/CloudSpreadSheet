@@ -16,19 +16,27 @@ namespace serverss{
     {
         this->name = name;
         this->password = password;
-        this->version = 1;
+        this->version = 0;
     }
     
     /*
      * Adds the user to the list of users.
      */
-    ss_result spreadsheet::join(user new_user, ss_result& result)
+    ss_result spreadsheet::join(user* new_user, ss_result& result)
     {
         users.push_back(new_user);
         result.version = version;
         
-        //do join
+        // Check the list to see if the user is already joined
+        if (find_user(new_user) == NULL)
+            return make_error(result, "User has already joined the editing session.");
         
+        // Add user to the list of users
+        users.push_back(new_user);
+        
+        ss_contents = get_map(name);
+        
+        result.xml = get_xml(name);
         result.status = OK;
         return result;
     }
@@ -43,30 +51,43 @@ namespace serverss{
         if (user_version != version)
             return incorrect_version_error(result);
         
-        //do change
         
-        version++;
-        result.version = version;
-        result.status = OK;
+        std::map<std::string, std::string>::iterator cll = ss_contents.find(changes.cell_name);
+        cell old;
+
+        if (cll == ss_contents.end())
+        {
+            old.cell_name = changes.cell_name;
+            undo_stack.push(old);
+            ss_contents.insert(std::pair<std::string, std::string>(changes.cell_name, changes.contents));
+        }
+        else
+        {
+            version++;
+            result.status = OK;
+            result.version = version;
+
+            old.cell_name = cll->first;
+            old.contents = cll->second;
+            undo_stack.push(old);
+            cll->second = changes.contents;
+            
+            result.cell_result = changes;
+            
+//            //update all users
+//            for (std::list<user>::iterator it = users.begin(); it != users.end(); ++it)
+//            {
+//                update(result, (*it));
+//            }
+        }
+        
         return result;
     }
     
-    /*
-     * Checks the user version against the spreadsheet version. If
-     * equal the updates will go through and the version increases. 
-     * Otherwise fail.
-     */
-    ss_result spreadsheet::update(cell updates, int user_version, ss_result& result)
+    void spreadsheet::update(ss_result result, user* user_to_update)
     {
-        if (user_version != version)
-            return incorrect_version_error(result);
-        
-        //do update
-        
-        version++;
-        result.version = version;
-        result.status = OK;
-        return result;
+        result.command = Update;
+//        sendUpdate(user->user_socket, result.to_string());
     }
     
     /*
@@ -79,7 +100,19 @@ namespace serverss{
         if (user_version != version)
             return incorrect_version_error(result);
         
-        //do undo
+        // Nothing to undo
+        if (undo_stack.size() == 0)
+        {
+            result.status = END;
+            return result;
+        }
+        
+        cell undo_cell = undo_stack.top();
+        undo_stack.pop();
+        
+        std::map<std::string, std::string>::iterator cll = ss_contents.find(undo_cell.cell_name);
+        
+        cll->second = undo_cell.contents;
         
         version++;
         result.version = version;
@@ -92,7 +125,7 @@ namespace serverss{
      */
     ss_result spreadsheet::save(ss_result& result)
     {
-        //do save
+        put_xml(name, ss_contents);
         
         result.status = OK;
         return result;
@@ -101,19 +134,26 @@ namespace serverss{
     /*
      * Removes the user from the user list
      */
-    ss_result spreadsheet::leave(user user_leaving, ss_result& result)
+    void spreadsheet::leave(user* user_leaving)
     {
-        //do leave
+        user* leave = find_user(user_leaving);
         
-        result.status = OK;
-        return result;
+        if (leave == NULL)
+            return;
+        
+        users.remove(user_leaving);
     }
     
     void spreadsheet::log()
     {}
     
-    user* spreadsheet::find_user(user& this_user)
+    user* spreadsheet::find_user(user* this_user)
     {
+        for (std::list<user*>::iterator it = users.begin(); it != users.end(); it++)
+        {
+            if ((*it) == this_user)
+                return (*it);
+        }
         return NULL;
     }
     
@@ -128,5 +168,42 @@ namespace serverss{
     {
         return make_error(result, "Incorrect Version Number");
     }
+    
+    
+    
+    void updateConfirmation(const boost::system::error_code& error,
+                            size_t bytes_transferred)
+    {
+        std::cout << "update Sent" << std::endl;
+    }
+    
+    void sendUpdate(boost::asio::ip::tcp::socket *socket_, std::string message_)
+    {
+     
+         boost::asio::async_write((*socket_),
+                                  boost::asio::buffer(message_),
+                                  updateConfirmation);
+     
+    }
+    
+    /*-------Accesors--------*/
+    void spreadsheet::get_user(std::string)
+    {
+        
+    }
+  void spreadsheet::get_all_users()
+    {
+        
+    }
+    int spreadsheet::get_version_number()
+    {
+        return version;
+    }
+    std::string spreadsheet::get_password()
+    {
+        return password;
+    }
+
+
     
 }

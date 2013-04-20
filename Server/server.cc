@@ -18,6 +18,7 @@ namespace serverss{
      */
     ss_result server::do_create(std::string name, std::string password)
     {
+        // TODO check for spaces
         name = add_extension(name);
         ss_result result;
         result.file_name = name;
@@ -42,7 +43,7 @@ namespace serverss{
      * Called from the controller. Will find the correct spreadsheet and 
      * ensure the user can join the spreadsheet.
      */
-    ss_result server::do_join(std::string name, std::string password, user new_user)
+    ss_result server::do_join(std::string name, std::string password, user* new_user)
     {
         name = add_extension(name);
         std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
@@ -50,6 +51,8 @@ namespace serverss{
         result.command = Join;
         result.file_name = name;
         result.file_password = password;
+        
+        // TODO Add to map if necesary
         
         if (it == spreadsheets.end() && !file_exists(name) )
             return not_found_error(result);
@@ -75,23 +78,6 @@ namespace serverss{
             return not_found_error(result);
         
         return ss->change(new_cell, version, result);
-    }
-    
-    /*
-     * Called from the controller. Wraps the changes in a 'cell' object and calls the
-     * 'update' method on the correct spreadsheet.
-     */
-    ss_result server::do_update(std::string name, int version, cell new_cell)
-    {
-        ss_result result;
-        result.file_name = name;
-        result.command = Update;
-        spreadsheet* ss = find_ss(name);
-        
-        if (ss == NULL)
-            return not_found_error(result);
-        
-        return ss->update(new_cell, version, result);
     }
     
     /*
@@ -134,18 +120,14 @@ namespace serverss{
      * Called from the controller. Find the correct spreadsheet and calls the
      * leave method for that spreadsheet.
      */
-    ss_result server::do_leave(std::string name, user user_leaving)
+    void server::do_leave(std::string name, user* user_leaving)
     {
         ss_result result;
         result.file_name = name;
         result.command = Leave;
         spreadsheet* ss = find_ss(name);
         
-        
-        if (ss == NULL)
-            return not_found_error(result);
-        
-        return ss->leave(user_leaving, result);
+        ss->leave(user_leaving);
     }
 
     ss_result& server::make_error(ss_result& result, std::string message)

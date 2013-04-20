@@ -171,21 +171,20 @@ namespace serverss{
     
     
     
-//    void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_)
-//    {
-//     
-//         boost::asio::async_write((*socket_),
-//                                  boost::asio::buffer(message_),
-//                                  boost::bind(&socketConnection::connectionEstablished, this,
-//                                              boost::asio::placeholders::error));
-//     
-//    }
-//    
-//    void updateConfirmation(const boost::system::error_code& error,
-//                             size_t bytes_transferred)
-//    {
-//         cout << "update Sent" << endl;
-//    }
+    void updateConfirmation(const boost::system::error_code& error,
+                            size_t bytes_transferred)
+    {
+        std::cout << "update Sent" << std::endl;
+    }
     
+    void sendUpdate(boost::asio::ip::tcp::socket *socket_, std::string message_)
+    {
+     
+         boost::asio::async_write((*socket_),
+                                  boost::asio::buffer(message_),
+                                  updateConfirmation);
+     
+    }
+
     
 }

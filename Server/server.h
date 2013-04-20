@@ -26,7 +26,6 @@ namespace serverss {
     public:
         
         // Constructors
-        server();
     
         ss_result do_create(std::string, std::string);
         ss_result do_join(std::string, std::string, user*);

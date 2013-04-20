@@ -11,11 +11,6 @@
 
 namespace serverss{
     
-    server::server()
-    {
-        
-    }
-    
     /* 
      * Called from the controller. Will check if the spreadsheet exists, and 
      * create the spreadsheet if it does not exist. Adds the spreadsheet to 

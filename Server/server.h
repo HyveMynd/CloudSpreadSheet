@@ -30,11 +30,11 @@ namespace serverss {
     
         ss_result do_create(std::string, std::string);
         ss_result do_update(std::string, int, cell);
-        ss_result do_join(std::string, std::string, user);
+        ss_result do_join(std::string, std::string, user*);
         ss_result do_change(std::string, int, cell);
         ss_result do_undo(std::string, int);
         ss_result do_save(std::string);
-        ss_result do_leave(std::string, user);
+        void do_leave(std::string, user);
     
     private:
     

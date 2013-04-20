@@ -16,18 +16,23 @@ namespace serverss{
     {
         this->name = name;
         this->password = password;
-        this->version = 1;
+        this->version = 0;
     }
     
     /*
      * Adds the user to the list of users.
      */
-    ss_result spreadsheet::join(user new_user, ss_result& result)
+    ss_result spreadsheet::join(user* new_user, ss_result& result)
     {
         users.push_back(new_user);
         result.version = version;
         
-        //do join
+        // Check the list to see if the user is already joined
+        if (find_user(new_user) == NULL)
+            return make_error(result, "User has already joined the editing session.");
+        
+        // Add user to the list of users
+        users.push_back(new_user);
         
         result.status = OK;
         return result;
@@ -101,19 +106,22 @@ namespace serverss{
     /*
      * Removes the user from the user list
      */
-    ss_result spreadsheet::leave(user user_leaving, ss_result& result)
+    void spreadsheet::leave(user user_leaving)
     {
         //do leave
         
-        result.status = OK;
-        return result;
     }
     
     void spreadsheet::log()
     {}
     
-    user* spreadsheet::find_user(user& this_user)
+    user* spreadsheet::find_user(user* this_user)
     {
+        for (std::list<user*>::iterator it = users.begin(); it != users.end(); it++)
+        {
+            if ((*it) == this_user)
+                return (*it);
+        }
         return NULL;
     }
     

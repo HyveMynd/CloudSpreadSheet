@@ -44,7 +44,12 @@ namespace serverss {
   {
     int left = s.find_first_of("<");
     int right = s.find_first_of(">");
-    string result = s.substr(left + 1, right -left - 1);
+    if (left == -1 || right == -1) {
+      s = "";
+      return "";
+    }
+
+    string result = s.substr(left, right -left+1);
     cout << "\nleft=" << left << "\nright=" << right << "\ntoken=" << result << endl;
     s = s.substr(right + 1);
     return result;
@@ -52,8 +57,8 @@ namespace serverss {
   
   string getvalue(string &s) {
     int left = s.find_first_of("<");
-    string result = s.substr(0, left -1);
-    s = s.substr(left +1);
+    string result = s.substr(0, left);
+    s = s.substr(left);
 
     return result;
   }
@@ -64,65 +69,70 @@ namespace serverss {
   {
     map<string, string> result;
     map<string, string>::iterator it;
+    string cellname = "";
+    string cellcontents = "";
     stack<string> tokens;
     enum states {spreadsheet, tokenstate, cell, name, contents };
 
     // header removed from xml
     // format is validated in get_xml
-    string s = get_xml(fname);
+    string s;
+    s = uppercase(get_xml(fname));
+
+    cout << "\ns=" << s << endl;
+    string token = gettoken(s);
+    int cnt = 0;
+
+    while (s.length() > 0)
+    {
+
+      if (cnt++ > 5)
+        return result;
+      if (token == "")
+        return result; 
+
+      if (token == "<CELL>") {
+        token = gettoken(s);
+        continue; 
+      }
+
+      if (token == "<NAME>") {
+        cellname = getvalue(s);
+        token = gettoken(s);
+      }
+
+      if (token == "</NAME>") {
+        token = gettoken(s);
+      }
+
+
+      if (token == "<CONTENTS>") {
+        cellcontents = getvalue(s);
+        token = gettoken(s);
+        result.insert(pair<string, string>(cellname, cellcontents));
+      }
+
+      if (token == "</CONTENTS>") {
+        token = gettoken(s);
+      }
+
+
+      if (token == "<SPREADSHEET>") {
+        token = gettoken(s);
+      }
+
+      if (token == "</SPREADSHEET>") {
+        break;
+        token = gettoken(s);
+      }
+
+      //cout << "\ns=" << s 
+           //<< "\ntoken=" << token << "\ncellname=" 
+           //<< cellname << "\ncellcontents=" 
+           //<< cellcontents << endl
+           //<< "\ncnt=" << cnt << endl;
+    }
    
-    int state = tokenstate;
-    string token = "";
-    string cellname = "";
-    string cellcontents ="";
-
-    int i = 0;
-    while (!s.empty()) {
-      cout << "\ns=" << s << "\ntoken=" << token << "\ncellname=" << cellname << "\ncontents=" << contents << endl;
-      if (i++ > 10) break; 
-      switch (state)  {
-       case tokenstate : 
-           token = uppercase(gettoken(s)); 
-           if (token == "CELL") {
-             state = cell;
-             continue;
-           }
-           else if (token == "NAME") {
-             state = name;
-             continue;
-           }
-           else if (token == "CONTENTS")  {
-             state = contents;
-             continue;
-           }
-           else if (token[0] == '/') {
-             state = tokenstate;
-             continue;
-           }
-           break;
-       case cell :
-         state = tokenstate;
-         token = gettoken(s);
-         continue;
-         break;
-       case name :
-         cout << "getting cellname " << endl <<  s << endl;
-         cellname  = getvalue(s);
-         state = tokenstate;
-         continue;
-       case contents: 
-         cellcontents = getvalue(s);
-         it = result.find(cellname);
-
-         if (it != result.end())
-             result.insert(pair<string,string>(cellname, cellcontents));
-
-         cellname = "";
-         cellcontents = "";
-         state = tokenstate;
-         break;
-      } //switch
-    } // while
     return result;
   } // get_map
 
@@ -167,6 +177,7 @@ namespace serverss {
     }
     is.close();                
 
+    cout << endl << endl << endl;
     if (checkformat(result)) 
         return result;
     else return NULL;

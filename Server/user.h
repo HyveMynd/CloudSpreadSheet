@@ -17,7 +17,7 @@ namespace serverss{
     class user{
     private:
         
-        socket* user_socket;
+        boost::asio::ip::tcp::socket* user_socket;
         
     public:
         user(boost::asio::ip::tcp::socket*);

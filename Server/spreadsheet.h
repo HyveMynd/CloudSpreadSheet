@@ -35,7 +35,7 @@ namespace serverss {
         ss_result change(cell, int, ss_result&);
         ss_result update(cell, int, ss_result&);
         ss_result save(ss_result&);
-        void leave(user);
+        void leave(user*);
         ss_result undo(int, ss_result&);
     
         // Accessors

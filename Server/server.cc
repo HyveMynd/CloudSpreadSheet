@@ -142,7 +142,7 @@ namespace serverss{
      * Called from the controller. Find the correct spreadsheet and calls the
      * leave method for that spreadsheet.
      */
-    void server::do_leave(std::string name, user user_leaving)
+    void server::do_leave(std::string name, user* user_leaving)
     {
         ss_result result;
         result.file_name = name;

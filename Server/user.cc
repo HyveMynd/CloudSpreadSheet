@@ -8,13 +8,13 @@
 
 #include "user.h"
 
-using boost::asio::ip::tcp;
+//using boost::asio::ip::tcp;
 
 namespace serverss {
     
-    user::user(socket* user_socket)
-    {
-        this->user_socket = user_socket;
-    }
+//    user::user(socket* user_socket)
+//    {
+//        this->user_socket = user_socket;
+//    }
     
 }

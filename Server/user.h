@@ -10,19 +10,19 @@
 #define ____user__
 
 #include <iostream>
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
+//#include <boost/bind.hpp>
+//#include <boost/asio.hpp>
 
-using boost::asio::ip::tcp;
+//using boost::asio::ip::tcp;
 
 namespace serverss{
     class user{
     private:
         
-        tcp::socket* user_socket;
+        //socket* user_socket;
         
     public:
-        user(socket*);
+        //user(socket*);
     };
 }
 

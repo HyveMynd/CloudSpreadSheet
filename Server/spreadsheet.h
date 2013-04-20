@@ -50,14 +50,13 @@ namespace serverss {
         std::stack<cell> undo_stack;
         std::string password;
         std::string name;
-        std::map<std::string, cell> ss_contents;
+        std::map<std::string, std::string> ss_contents;
         int version;
         
         void log();
         user* find_user(user*);
         ss_result& incorrect_version_error(ss_result&);
         ss_result& make_error(ss_result&, std::string);
-        cell* find_cell(std::string);
     };
 
 }

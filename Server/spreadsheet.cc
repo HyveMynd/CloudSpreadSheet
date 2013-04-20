@@ -49,12 +49,22 @@ namespace serverss{
         if (user_version != version)
             return incorrect_version_error(result);
         
-        cell* cll = find_cell(changes.cell_name);
+        
+        std::map<std::string, std::string>::iterator it = ss_contents.find(changes.cell_name);
         
         if (cll == NULL)
-            ss_contents.insert(changes.cell_name, changes);
+        {
+            cell old;
+            old.cell_name = changes.cell_name;
+            undo_stack.push(old);
+            ss_contents.insert(std::pair<std::string, std::string>(changes.cell_name, changes.contents));
+        }
         else
-            ss_contents.find(cll)
+        {
+            cell old = (*cll);
+            undo_stack.push(old);
+            cll->contents = changes.contents;
+        }
         
         version++;
         result.version = version;
@@ -90,7 +100,19 @@ namespace serverss{
         if (user_version != version)
             return incorrect_version_error(result);
         
-        //do undo
+        // Nothing to undo
+        if (undo_stack.size() == 0)
+        {
+            result.status = END;
+            return result;
+        }
+        
+//        cell undo_cell = undo_stack.top();
+//        undo_stack.pop();
+//        
+//        cell* cll = find_cell(undo_cell.cell_name);
+//        
+//        cll->contents = undo_cell.contents;
         
         version++;
         result.version = version;
@@ -103,7 +125,7 @@ namespace serverss{
      */
     ss_result spreadsheet::save(ss_result& result)
     {
-        //do save
+        put_xml(name, ss_contents);
         
         result.status = OK;
         return result;
@@ -120,17 +142,6 @@ namespace serverss{
     
     void spreadsheet::log()
     {}
-    
-    cell* spreadsheet::find_cell(std::string cell_name)
-    {
-        std::map<std::string, cell>::iterator it = ss_contents.find(cell_name);
-        cell* ss = NULL;
-        
-        if (it != ss_contents.end())
-            ss = &(it->second);
-        return ss;
-
-    }
     
     user* spreadsheet::find_user(user* this_user)
     {

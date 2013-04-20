@@ -63,34 +63,31 @@ namespace serverss{
         }
         else
         {
+            version++;
+            result.status = OK;
+            result.version = version;
+
             old.cell_name = cll->first;
             old.contents = cll->second;
             undo_stack.push(old);
             cll->second = changes.contents;
+            
+            result.cell_result = changes;
+            
+            //update all users
+            for (std::list<user>::iterator it = users.begin(); it != users.end(); ++it)
+            {
+                update(result, (*it));
+            }
         }
         
-        version++;
-        result.version = version;
-        result.status = OK;
         return result;
     }
     
-    /*
-     * Checks the user version against the spreadsheet version. If
-     * equal the updates will go through and the version increases. 
-     * Otherwise fail.
-     */
-    ss_result spreadsheet::update(cell updates, int user_version, ss_result& result)
+    void spreadsheet::update(ss_result result, user* user_to_update)
     {
-        if (user_version != version)
-            return incorrect_version_error(result);
-        
-        //do update
-        
-        version++;
-        result.version = version;
-        result.status = OK;
-        return result;
+        result.Status = Update;
+        sendUpdate(user->user_socket, result.to_string());
     }
     
     /*
@@ -171,5 +168,24 @@ namespace serverss{
     {
         return make_error(result, "Incorrect Version Number");
     }
+    
+    
+    
+    void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_)
+    {
+     
+         boost::asio::async_write((*socket_),
+                                  boost::asio::buffer(message_),
+                                  boost::bind(&socketConnection::connectionEstablished, this,
+                                              boost::asio::placeholders::error));
+     
+    }
+    
+    void updateConfirmation(const boost::system::error_code& error,
+                             size_t bytes_transferred)
+    {
+         cout << "update Sent" << endl;
+    }
+     
     
 }

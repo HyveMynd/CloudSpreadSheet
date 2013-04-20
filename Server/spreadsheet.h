@@ -14,6 +14,8 @@
 #include <list>
 #include <stack>
 #include <map>
+#include <boost/bind.hpp>
+#include <boost/asio.hpp>
 #include "ss_result.h"
 #include "cell.h"
 #include "user.h"
@@ -33,7 +35,6 @@ namespace serverss {
         // Spreadsheet functions
         ss_result join(user*, ss_result&);
         ss_result change(cell, int, ss_result&);
-        ss_result update(cell, int, ss_result&);
         ss_result save(ss_result&);
         void leave(user*);
         ss_result undo(int, ss_result&);
@@ -54,9 +55,14 @@ namespace serverss {
         int version;
         
         void log();
+        void update(ss_result result, user* user_to_update);
         user* find_user(user*);
         ss_result& incorrect_version_error(ss_result&);
         ss_result& make_error(ss_result&, std::string);
+        
+        void updateConfirmation(const boost::system::error_code& error,
+                                size_t bytes_transferred);
+        void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_);
     };
 
 }

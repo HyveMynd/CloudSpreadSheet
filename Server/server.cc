@@ -86,23 +86,6 @@ namespace serverss{
     }
     
     /*
-     * Called from the controller. Wraps the changes in a 'cell' object and calls the
-     * 'update' method on the correct spreadsheet.
-     */
-    ss_result server::do_update(std::string name, int version, cell new_cell)
-    {
-        ss_result result;
-        result.file_name = name;
-        result.command = Update;
-        spreadsheet* ss = find_ss(name);
-        
-        if (ss == NULL)
-            return not_found_error(result);
-        
-        return ss->update(new_cell, version, result);
-    }
-    
-    /*
      * Called from the controller. Find the correct spreadsheet and calls the 
      * undo method for that spreadsheet.
      */

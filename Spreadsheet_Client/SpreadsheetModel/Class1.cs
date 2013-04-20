@@ -37,12 +37,12 @@ namespace SpreadsheetModel
                 TcpClient client = new TcpClient(host, port);
                 socket = new StringSocket(client.Client, UTF8Encoding.Default);
             }
-            string name = "bill";
-            string password = "bill";
-            if (socket.Connected)
-            {
-                socket.BeginSend("CREATE\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
-            }
+            //string name = "bill";
+            //string password = "bill";
+            //if (socket.Connected)
+            //{
+            //    socket.BeginSend("CREATE\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
+            //}
             socket.BeginReceive(EventRecieved, null);
         }
 

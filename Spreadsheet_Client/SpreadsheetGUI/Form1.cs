@@ -58,6 +58,9 @@ namespace SS
             myModel.SaveFail += failSave;
             myModel.Error += error;
             myModel.Test += tester;
+            tabControl1.Appearance = TabAppearance.Buttons;
+            tabControl1.SizeMode = TabSizeMode.Fixed;
+            tabControl1.ItemSize = new System.Drawing.Size(0, 1);
             
             mySheet = new Spreadsheet(s => true/*Regex.IsMatch(s, "(^([a-z]|[A-Z])\\d+$)")*/, s => s.ToUpper(), "ps6");
             numWindows++;
@@ -111,6 +114,10 @@ namespace SS
             myModel.Test += tester;
             numWindows++;
             mySheet = openSheet;
+            tabControl1.Appearance = TabAppearance.Buttons;
+            tabControl1.SizeMode = TabSizeMode.Fixed;
+            tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+            
 
             foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
             {
@@ -442,6 +449,7 @@ namespace SS
             myName = name;
             Spreadsheet myopenSheet = new Spreadsheet(filename, s => true, s => s.ToUpper(), "ps6");
             GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, name));
+            tabControl1.Invoke(new Action(() => tabControl1.SelectedIndex = 1));
             
         }
         private void failJoin(string name, string message)

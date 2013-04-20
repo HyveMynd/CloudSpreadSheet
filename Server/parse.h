@@ -1,4 +1,7 @@
+#ifndef PARSE_H
+#define PARSE_H
 #include <iostream>
+#include <string>
 #include <map>
 
 namespace serverss {
@@ -15,4 +18,8 @@ namespace serverss {
   // saves a file to disk in xml format
   bool put_xml(std::string fname, std::map<std::string, std::string> xml);
 
+  /* change string to upper case */
+  std::string uppercase(std::string s);
+
 } 
+#endif 

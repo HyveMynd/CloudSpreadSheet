@@ -86,7 +86,7 @@ namespace serverss{
     
     void spreadsheet::update(ss_result result, user* user_to_update)
     {
-        result.Status = Update;
+        result.command = Update;
 //        sendUpdate(user->user_socket, result.to_string());
     }
     

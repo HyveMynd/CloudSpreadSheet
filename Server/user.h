@@ -13,6 +13,8 @@
 //#include <boost/bind.hpp>
 //#include <boost/asio.hpp>
 
+using boost::asio::ip::tcp;
+
 namespace serverss{
     class user{
     private:
@@ -20,7 +22,7 @@ namespace serverss{
         tcp::socket* user_socket;
         
     public:
-        user(tcp::socket*);
+        user(socket*);
     };
 }
 

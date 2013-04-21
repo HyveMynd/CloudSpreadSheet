@@ -105,16 +105,18 @@ namespace SpreadsheetModel
             {
                 Test(s);
             }
+            Console.WriteLine("Here");
             if (CreateOK != null && s.StartsWith("CREATE OK"))
             {
                
-               // s.TrimStart('C', 'R', 'E', 'A', 'T', 'E', ' ', 'O', 'K');
+               
                 string[] words = Regex.Split(s, "\n");
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string password = words[2].TrimStart('P', 'a', 's', 's', 'w', 'o', 'r', 'd', ':');
                 Join(name, password);
-               // CreatOK(s.TrimStart('C','R','E','A','T','E',' ','O','K'));
+
             }
+           
             if (CreateFail != null && s.StartsWith("CREATE FAIL"))
             {
                 string[] words = Regex.Split(s, "\n");

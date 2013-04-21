@@ -373,7 +373,7 @@ namespace CustomNetworking
                 incompleteLine += encoding.GetString(receiveBytes, 0, count);
 
                 // Extract all complete lines of text and put into the ReceivedLines queue
-                int lineEnd, lineStart = 0;
+                //int lineEnd, lineStart = 0;
                 //while ((lineEnd = incompleteLine.IndexOf('\n', lineStart)) >= 0)
                 //{
                     receivedLines.Enqueue(incompleteLine);

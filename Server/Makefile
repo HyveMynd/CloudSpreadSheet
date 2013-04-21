@@ -33,3 +33,15 @@ test: test.cc parse.h parse.o
 
 clean: 
 	rm -f *.o test
+    
+mac:
+	g++ -o barj_server controller.cc server.cc spreadsheet.cc user.cc cell.cc parse.cc ss_result.cc -I/opt/local/include/ -L/opt/local/lib/ -lboost_system-mt -lpthread
+
+mtest:
+	g++ test_server.cc server.cc spreadsheet.cc user.cc cell.cc parse.cc ss_result.cc -I/opt/local/include/ -L/opt/local/lib/ -lboost_system-mt -lpthread
+    
+run: mtest cleanss
+	./a.out
+
+cleanss:
+	rm -f data/*.ss

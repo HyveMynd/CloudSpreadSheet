@@ -13,6 +13,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include "enums.h"
 #include "user.h"
 #include "spreadsheet.h"
@@ -37,13 +38,14 @@ namespace serverss {
     private:
     
         std::map<std::string, spreadsheet> spreadsheets;
+        const static bool server_log = true;
         
         void log(std::string);
         ss_result& make_error (ss_result&, std::string);
         spreadsheet* find_ss(std::string);
         ss_result& not_found_error(ss_result&);
-        bool file_exists(std::string&);
-        std::string add_extension(std::string&);
+        bool file_exists(std::string);
+        std::string add_extension(std::string);
     };
     
 }

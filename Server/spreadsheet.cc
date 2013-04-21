@@ -25,7 +25,6 @@ namespace serverss{
     ss_result spreadsheet::join(user* new_user, ss_result& result)
     {
         log("Entered join");
-        users.push_back(new_user);
         result.version = version;
         
         // Check the list to see if the user is already joined
@@ -33,11 +32,15 @@ namespace serverss{
             return make_error(result, "User has already joined the editing session.");
         
         // Add user to the list of users
+        log("Adding user to list");
         users.push_back(new_user);
         
+        log("Getting map from parser");
         ss_contents = get_map(name);
         
+        log("Getting xml from file");
         result.xml = get_xml(name);
+        
         result.status = OK;
         log("Join success");
         return result;
@@ -147,21 +150,24 @@ namespace serverss{
     /*
      * Removes the user from the user list
      */
-    void spreadsheet::leave(user* user_leaving)
+    bool spreadsheet::leave(user* user_leaving)
     {
         log("Entered leave");
         user* leave = find_user(user_leaving);
         
         if (leave == NULL)
-            return;
+            return false;
         
         log("Leave Success");
         users.remove(user_leaving);
+        
+        return users.size() == 0;
     }
     
     void spreadsheet::log(std::string message)
     {
-        std::cout << name << ": " << message << std::endl;
+        if(ss_log)
+        	std::cout << "SPREADSHEET LOG " << name << ": " << message << std::endl;
     }
     
     user* spreadsheet::find_user(user* this_user)

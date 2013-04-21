@@ -8,7 +8,6 @@
 
 #include "server.h"
 
-
 namespace serverss{
     
     /* 
@@ -24,15 +23,21 @@ namespace serverss{
         ss_result result;
         result.file_name = name;
         result.file_password = password;
+        result.command = Create;
         std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
 
         // If the spreadsheet does not exist, create one and insert into the map.
         // return the name and password
         if (it == spreadsheets.end() && !file_exists(name)){
-            log (name + " spreadsheet is nto found. Creating it");
+            log (name + " spreadsheet is not found. Creating it");
             spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password)));
             result.status = OK;
-            result.command = Create;
+            
+            // Create the file on disk
+            log("Writng " + name + " to disk:");
+            std::string filename = "data/"+name;
+            std::ofstream outfile (filename.c_str());
+            outfile.close();
             
             return result;
         }
@@ -132,7 +137,9 @@ namespace serverss{
         result.command = Leave;
         spreadsheet* ss = find_ss(name);
         
-        ss->leave(user_leaving);
+        //remove spreadsheet from memory if all users have left
+        if(ss->leave(user_leaving))
+            spreadsheets.erase(name);
     }
 
     ss_result& server::make_error(ss_result& result, std::string message)
@@ -160,7 +167,8 @@ namespace serverss{
     
     void server::log(std::string message)
     {
-        std::cout << message << std::endl;
+        if(server_log)
+        	std::cout << "SERVER LOG: " <<  message << std::endl;
     }
     
     
@@ -172,16 +180,16 @@ namespace serverss{
      @return    true if the file exists, else false
      
      */
-    bool server::file_exists(std::string& filename)
+    bool server::file_exists(std::string filename)
     {
-        std::string fn;
-        struct stat buf;
-        fn = add_extension(filename);
-
-        return stat(fn.c_str(), &buf) != 1;
+        add_extension(filename);
+        filename = "data/" + filename;
+        const char* fn = filename.c_str();
+        std::ifstream ifile(fn);
+        return ifile;
     }
     
-    std::string server::add_extension(std::string& filename)
+    std::string server::add_extension(std::string filename)
     {
         if(filename.substr(filename.find_last_of(".") + 1) == "ss")
             return filename;

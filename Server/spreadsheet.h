@@ -36,7 +36,7 @@ namespace serverss {
         ss_result join(user*, ss_result&);
         ss_result change(cell, int, ss_result&);
         ss_result save(ss_result&);
-        void leave(user*);
+        bool leave(user*);
         ss_result undo(int, ss_result&);
     
         // Accessors
@@ -53,6 +53,7 @@ namespace serverss {
         std::string name;
         std::map<std::string, std::string> ss_contents;
         int version;
+        const static bool ss_log = true;
         
         void log(std::string);
         void update(ss_result result, user* user_to_update);

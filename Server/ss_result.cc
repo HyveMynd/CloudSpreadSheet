@@ -16,7 +16,7 @@ namespace serverss {
     std::string ss_result::to_string(){
         std::stringstream ver;
         ver << version;
-        
+
         switch (status){
             case OK:
                 return ok_to_string();
@@ -33,7 +33,7 @@ namespace serverss {
     
     std::string ss_result::error_to_string(){
         std::string error = " FAIL\nName:"+file_name+"\n"+message+"\n";
-        
+
         switch (command) {
             case Create:
                 return "CREATE"+error;
@@ -49,8 +49,10 @@ namespace serverss {
                 return "SAVE"+error;
             case Leave:
                 return "LEAVE"+error;
-            default:
+            default:{
+                std::cout << "Error switch statement. Command is not correct. THROW:" << std::endl;
                 throw 1;
+            }
         }
     }
     
@@ -60,7 +62,7 @@ namespace serverss {
         
         switch (command) {
             case Create:
-                return "CREATE OK\nName"+file_name+"\nPassword:"+file_password+"\n";
+                return "CREATE OK\nName:"+file_name+"\nPassword:"+file_password+"\n";
             case Join:
                 return "JOIN OK\nName"+file_name+"\nVersion:"+ver.str()+"\nLength:"+length+"\n"+xml+"\n";
             case Change:
@@ -71,8 +73,10 @@ namespace serverss {
                 return "UNDO OK\nName:"+file_name+"\nVersion:"+ver.str()+"\nCell:"+cell_result.to_string()+"\nLength:"+length+"\n"+contents+"\n";
             case Save:
                 return "SAVE OK\nName:"+file_name+"\n";
-            default:
+            default:{
+                std::cout << "OK switch statement. Command is not correct. THROW:" << std::endl;
                 throw 1;
+            }
         }
     }
     
@@ -88,8 +92,10 @@ namespace serverss {
                 return "UPDATE "+wait;
             case Undo:
                 return "UNDO "+wait;
-            default:
+            default:{
+                std::cout << "WAIT switch statement. Command is not correct. THROW:" << std::endl;
                 throw 1;
+            }
         }
     }
     

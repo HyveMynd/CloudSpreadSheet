@@ -24,7 +24,7 @@ namespace serverss{
      */
     ss_result spreadsheet::join(user* new_user, ss_result& result)
     {
-        log("Entered join"):
+        log("Entered join");
         users.push_back(new_user);
         result.version = version;
         

@@ -92,7 +92,8 @@ namespace serverss{
 //                update(result, (*it));
 //            }
         }
-        result.content = cll->content;
+        log("map has new cell changes");
+        result.contents = cll->second;
         result.version = version;
 		result.status = OK;
         log("Returning change success");

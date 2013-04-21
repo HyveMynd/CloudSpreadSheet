@@ -174,11 +174,14 @@ namespace serverss {
     while (is.good())
     {
       char c = is.get();
-      if (is.good())
+      if (is.good()) 
         if (debug) cout << c;
         result += c;
     }
     is.close();                
+
+    if (result.empty()) 
+      result = header;
 
     if (debug) cout << endl << endl << endl;
 

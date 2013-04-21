@@ -175,7 +175,7 @@ namespace serverss {
     {
       char c = is.get();
       if (is.good())
-        cout << c;
+        if (debug) cout << c;
         result += c;
     }
     is.close();                

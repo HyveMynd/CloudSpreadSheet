@@ -21,7 +21,7 @@ namespace serverss
 	class socketConnection
 	{
     public:
-        log(string message)
+        void log(string message)
         {
             cout << message << endl;
         }

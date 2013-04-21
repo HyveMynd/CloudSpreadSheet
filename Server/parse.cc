@@ -15,6 +15,7 @@ using namespace std;
 
 namespace serverss {
 
+  int debug = 0;
   // gets the indexed word from the line for parsing the data 
   string get_word(int word_index, string str, char ch) {
     int sp_index = 1;
@@ -50,7 +51,7 @@ namespace serverss {
     }
 
     string result = s.substr(left, right -left+1);
-    cout << "\nleft=" << left << "\nright=" << right << "\ntoken=" << result << endl;
+    if (debug) cout << "\nleft=" << left << "\nright=" << right << "\ntoken=" << result << endl;
     s = s.substr(right + 1);
     return result;
   }
@@ -79,7 +80,8 @@ namespace serverss {
     string s;
     s = uppercase(get_xml(fname));
 
-    cout << "\ns=" << s << endl;
+    if (debug) cout << "\ns=" << s << endl;
+
     string token = gettoken(s);
     int cnt = 0;
 
@@ -126,11 +128,12 @@ namespace serverss {
         token = gettoken(s);
       }
 
-      //cout << "\ns=" << s 
-           //<< "\ntoken=" << token << "\ncellname=" 
-           //<< cellname << "\ncellcontents=" 
-           //<< cellcontents << endl
-           //<< "\ncnt=" << cnt << endl;
+      if (debug) 
+        cout << "\ns=" << s 
+           << "\ntoken=" << token << "\ncellname=" 
+           << cellname << "\ncellcontents=" 
+           << cellcontents << endl
+           << "\ncnt=" << cnt << endl;
     }
    
     return result;
@@ -177,7 +180,8 @@ namespace serverss {
     }
     is.close();                
 
-    cout << endl << endl << endl;
+    if (debug) cout << endl << endl << endl;
+
     if (checkformat(result)) 
         return result;
     else return NULL;

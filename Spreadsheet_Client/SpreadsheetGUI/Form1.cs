@@ -10,6 +10,7 @@ using SS;
 using System.Text.RegularExpressions;
 using System.IO;
 using SpreadsheetUtilities;
+using SpreadsheetModel;
 
 namespace SS
 {
@@ -20,15 +21,47 @@ namespace SS
     {
         private int numWindows = 0;
         private Spreadsheet mySheet;
-        private bool saveOnClose = false;
-        private bool closeNow = false;
         private string myFileName = null;
+        private string myVersion = null;
+        private string myLength = null;
+        private string myName = null;
+        private bool waiting = false;
+        private string waitVersion = null;
+        private string waitContent = null;
+        private string waitCellName = null;
+        private string waitLength = null;
+        private string waitName = null;
+        private bool undoWaiting = false;
+        private string undoWaitVersion = null;
+        private string undoWaitName = null;
+        private SpreadsheetModel.SSModel myModel;
         /// <summary>
         /// Creates a new empty spreadsheet
         /// </summary>
         public Form1()
         {
             InitializeComponent();
+            myModel = new SpreadsheetModel.SSModel();
+            myModel.CreateOK += ValidSS;
+            myModel.CreateFail += InvalidSS;
+            myModel.JoinOK += successJoin;
+            myModel.JoinFail += failJoin;
+            myModel.ChangeOk += successChange;
+            myModel.ChangeWait += waitChange;
+            myModel.ChangeFail += failChange;
+            myModel.UndoOk += successUndo;
+            myModel.UndoEnd += endUndo;
+            myModel.UndoWait += waitUndo;
+            myModel.UndoFail += failUndo;
+            myModel.Update += update;
+            myModel.SaveOk += successSave;
+            myModel.SaveFail += failSave;
+            myModel.Error += error;
+            myModel.Test += tester;
+            tabControl1.Appearance = TabAppearance.Buttons;
+            tabControl1.SizeMode = TabSizeMode.Fixed;
+            tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+            
             mySheet = new Spreadsheet(s => true/*Regex.IsMatch(s, "(^([a-z]|[A-Z])\\d+$)")*/, s => s.ToUpper(), "ps6");
             numWindows++;
             int mycol;
@@ -62,8 +95,29 @@ namespace SS
         {
             
             InitializeComponent();
+            myModel = new SpreadsheetModel.SSModel();
+            myModel.CreateOK += ValidSS;
+            myModel.CreateFail += InvalidSS;
+            myModel.JoinOK += successJoin;
+            myModel.JoinFail += failJoin;
+            myModel.ChangeOk += successChange;
+            myModel.ChangeWait += waitChange;
+            myModel.ChangeFail += failChange;
+            myModel.UndoOk += successUndo;
+            myModel.UndoEnd += endUndo;
+            myModel.UndoWait += waitUndo;
+            myModel.UndoFail += failUndo;
+            myModel.Update += update;
+            myModel.SaveOk += successSave;
+            myModel.SaveFail += failSave;
+            myModel.Error += error;
+            myModel.Test += tester;
             numWindows++;
             mySheet = openSheet;
+            tabControl1.Appearance = TabAppearance.Buttons;
+            tabControl1.SizeMode = TabSizeMode.Fixed;
+            tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+            
 
             foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
             {
@@ -102,68 +156,6 @@ namespace SS
             this.Text = filename;
         }
         
-
-        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-          
-        }
-        /// <summary>
-        /// Puts up a save as file dialog box and makes sure the file name is ok
-        /// If an overwrite will occor warns the user
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-
-            try
-            {
-                   /* if (File.Exists(saveFileDialog1.FileName))
-                    {
-
-                        /*if (MessageBox.Show("File exists overwrite?", "Overwrite", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                        {
-                            mySheet.Save(saveFileDialog1.FileName);
-                            this.Text = saveFileDialog1.FileName;
-
-                        }
-                        else
-                        {
-                           
-                        }
-                    }
-
-                else
-                {*/
-                    mySheet.Save(saveFileDialog1.FileName);
-                    this.Text = saveFileDialog1.FileName;
-                    myFileName = saveFileDialog1.FileName;
-               // }
-
-                if (saveOnClose)
-                {
-                    closeNow = true;
-                    
-                    this.Close();
-                }
-            }
-            catch (SpreadsheetReadWriteException ex)
-            {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        /// <summary>
-        /// When new is clicked creates a new empty spreadsheet
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GuiApplicationContext.getAppContext().RunForm(new Form1());
-            
-            numWindows++;
-            this.Text = "Spreadsheet";
-        }
         /// <summary>
         /// When save is clicked saves the current spreadsheet
         /// </summary>
@@ -171,132 +163,22 @@ namespace SS
         /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            if (myFileName != null && File.Exists(myFileName))
-            {
-                mySheet.Save(saveFileDialog1.FileName);
-                this.Text = this.Text.TrimEnd('*');
-            }
-            else
-            {
-                saveFileDialog1.ShowDialog();
-            }
+            myModel.Save(myName);
+            
         }
-        /// <summary>
-        /// When open is clicked opens a new spreadsheet from a file
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Show dialog to enter password for a specific spreadsheet
-
-
-            // Ask the controller for load the speficied file
-
-
-
-            /*
-            try
-            {
-                openFileDialog1.ShowDialog();
-                Spreadsheet myopenSheet = new Spreadsheet(openFileDialog1.FileName, s => true, s => s.ToUpper(), "ps6");
-                GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, openFileDialog1.FileName.ToString()));
-                numWindows++;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            */
-        }
+        
         /// <summary>
         /// When close is clicked closes current window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-        {            
+        {
+            myModel.Leave(myName);
             this.Close();
         }
-        /// <summary>
-        /// When exit is clicked asks user to close all windows then closes based on users choice
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (numWindows >= 1)
-            {
-                DialogResult myClose = MessageBox.Show("Close all Windows?", "Close Windows", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                if (myClose == DialogResult.Yes)
-                {
-                    Application.Exit();
-                    saveOnClose = true;
-                    /*try
-                    {
-
-                        Application.Exit();
-                    }
-                    catch (InvalidOperationException)
-                    {
-                    }*/
-                    
-                }
-                if (myClose == DialogResult.No)
-                {
-                   // Application.Exit();
-                    //closeNow = true;
-                }
-            }
-            else
-            {
-                saveOnClose = true;
-                Application.Exit();
-            }
-        }
-        /// <summary>
-        /// When a window starts to close figures out if that window needs to be saved and prompts the user
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!closeNow)
-            {
-              
-                if (mySheet.Changed)
-                {
-                    
-                    this.Focus();
-                    DialogResult myResult=MessageBox.Show("Save Changes?", "Spreadsheet", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                    if  (myResult==DialogResult.Yes)
-                    {
-                        saveToolStripMenuItem_Click(sender, e);
-                        this.Hide();
-                    }
-                    if (myResult == DialogResult.No)
-                    {
-                        e.Cancel = false;
-                        this.Hide();
-                        /*if (exitAll)
-                        {
-                            exitAll = false;
-                            this.Close();
-
-                        }*/
-                    }
-                }
-            }
-            else if (closeNow)
-            {
-                e.Cancel = false;
-                saveOnClose = false;
-                closeNow = false;
-                this.Close();
-                numWindows--;
-            }
-        }
+        
+       
         /// <summary>
         /// Detects when user changes the selection and populates the Text boxes
         /// </summary>
@@ -391,39 +273,24 @@ namespace SS
                 int colLetter;
                 object content;
                 object value;
+                string sendContent;
+                string length;
                 
                 try
                 {
                    
                     int chRow;
                     int chcol;
-                   // bool fail=false;
                     spreadsheetPanel1.GetSelection(out mycol, out myRow);
                     spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
                     colLetter = mycol + 65;
                     
-                   
-                     /*   foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
-                        {
-                            if (!fail)
-                            {
-                                if (mySheet.GetCellValue(s).ToString() == "SpreadsheetUtilities.FormulaError")
-                                {
-                                    MessageBox.Show("Formula Error", "ERROR1", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    mySheet.SetContentsOfCell(GetCellName(mycol, myRow), myVal);
-                                    fail = true;
-                                }
-                            }
-                        }
-                        if (!fail)
-                        {*/
                             foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
                             {
                                 GetRowColoumn(s, out chcol, out chRow);
 
                                 spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString());
                             }
-                      //  }
                         content = mySheet.GetCellContents(GetCellName(mycol, myRow));
 
                         value = mySheet.GetCellValue(GetCellName(mycol, myRow));
@@ -432,10 +299,12 @@ namespace SS
                         if (content is Formula)
                         {
                             textBox1.Text = "=" + content.ToString();
+                            sendContent = "=" + content.ToString();
                         }
                         else
                         {
                             textBox1.Text = content.ToString();
+                            sendContent = content.ToString();
                         }
                         if (mySheet.Changed && !this.Text.EndsWith("*"))
                         {
@@ -445,7 +314,14 @@ namespace SS
                         {
                             this.Text = this.Text.TrimEnd('*');
                         }
-                    
+                        length = sendContent.Length.ToString();
+                        waitVersion = myVersion;
+                        waitLength = length;
+                        waitName = myName;
+                        waitCellName = GetCellName(mycol, myRow);
+                        waitContent = sendContent;
+                        myModel.Change(myName, myVersion, GetCellName(mycol, myRow), length, sendContent);
+
                 }
                 catch (CircularException)
                 {
@@ -458,15 +334,7 @@ namespace SS
                 }
             }
         }
-        /// <summary>
-        /// Saves when save as is clicked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            saveFileDialog1.ShowDialog();
-        }
+        
         /// <summary>
         /// Sets cell value when button is pressed
         /// </summary>
@@ -480,6 +348,8 @@ namespace SS
             int colLetter;
             object content;
             object value;
+            string sendContent;
+            string length;
             spreadsheetPanel1.GetSelection(out mycol, out myRow);
             try
             {
@@ -491,37 +361,30 @@ namespace SS
                 spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
                 colLetter = mycol + 65;
 
-                   /* foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
-                    {
-
-                        if (mySheet.GetCellValue(s).ToString() == "SpreadsheetUtilities.FormulaError")
-                        {
-                            MessageBox.Show("Formula Error", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            mySheet.SetContentsOfCell(GetCellName(mycol, myRow), myVal);
-                            fail = true;
-                        }
-                    }
-                    if (!fail)
-                    {*/
+                 
                         foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
                         {
                             GetRowColoumn(s, out chcol, out chRow);
 
                             spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString());
                         }
-                   // }
+
                     content = mySheet.GetCellContents(GetCellName(mycol, myRow));
                     
                     value = mySheet.GetCellValue(GetCellName(mycol, myRow));
                     textBox2.Text = ((char)colLetter).ToString() + (myRow + 1).ToString() + "= " + value;
                     spreadsheetPanel1.SetValue(mycol, myRow, value.ToString());
+                   
+
                     if (content is Formula)
                     {
                         textBox1.Text = "=" + content.ToString();
+                        sendContent = "=" + content.ToString();
                     }
                     else
                     {
                         textBox1.Text = content.ToString();
+                        sendContent = content.ToString();
                     }
                     if (mySheet.Changed && !this.Text.EndsWith("*"))
                     {
@@ -531,7 +394,14 @@ namespace SS
                     {
                         this.Text = this.Text.TrimEnd('*');
                     }
-                
+                    length = sendContent.Length.ToString();
+                    waitVersion = myVersion;
+                    waitLength = length;
+                    waitName = myName;
+                    waitCellName = GetCellName(mycol, myRow);
+                    waitContent = sendContent;
+                    myModel.Change(myName, myVersion, GetCellName(mycol, myRow), length, sendContent);
+
             }
             catch (CircularException)
             {
@@ -560,6 +430,190 @@ namespace SS
                 + "\r\n" + "Get help form help menu", "Help", MessageBoxButtons.OK, MessageBoxIcon.Question);
                 
         }
-        
+        private void tester(string test)
+        {
+            testTexBox.Invoke(new Action(() => testTexBox.Text = test));
+        }
+        private void ValidSS(string creds)
+        {
+            
+        }
+        private void InvalidSS(string name, string message)
+        {
+            MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        private void successJoin(string name,string version,string length, string filename)
+        {
+            myVersion = version;
+            myLength = length;
+            myName = name;
+            Spreadsheet myopenSheet = new Spreadsheet(filename, s => true, s => s.ToUpper(), "ps6");
+            GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, name));
+            tabControl1.Invoke(new Action(() => tabControl1.SelectedIndex = 1));
+            
+        }
+        private void failJoin(string name, string message)
+        {
+            MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        private void successChange(string name, string version)
+        {
+            myName = name;
+            myVersion = version;
+            waitVersion = null;
+            waitLength = null;
+            waitName = null;
+            waitCellName = null;
+            waitContent = null;
+        }
+        private void waitChange(string name, string version)
+        {
+            
+            waitName = name;
+            waitVersion = version;
+            waiting = true;
+        }
+        private void failChange(string name, string message)
+        {
+            MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        private void successUndo(string name, string version, string cell, string length, string content)
+        {
+            myName = name;
+            myVersion = version;
+            myLength = length;
+            changeCell(name, version, cell, length, content);
+            
+        }
+        private void endUndo(string name, string version)
+        {
+            MessageBox.Show("Nothing to Undo", name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            myName = name;
+            myVersion = version;
+        }
+        private void failUndo(string name,string message)
+        {
+            MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        private void waitUndo(string name, string version)
+        {
+            undoWaitName = name;
+            undoWaitVersion = version;
+            undoWaiting = true;
+        }
+        private void update(string name,string version, string cell, string length, string content)
+        {
+            if (waiting)
+            {
+                if (waitVersion == myVersion)
+                {
+                    myModel.Change(waitName, waitVersion, waitCellName, waitLength, waitContent);
+                    waiting = false;
+                }
+            }
+            if (undoWaiting)
+            {
+                if (undoWaitVersion == myVersion)
+                {
+                    myModel.Undo(myName, myVersion);
+                    undoWaiting = false;
+                }
+            }
+            changeCell(name, version, cell, length, content);
+        }
+        private void successSave(string name)
+        {
+            MessageBox.Show(name+" Saved", name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        private void failSave(string name, string message)
+        {
+            MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        private void error(string error)
+        {
+            MessageBox.Show(error, error, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            int port = 0;
+            if (Int32.TryParse(editPort.Text, out port))
+            {
+                myModel.Connect(editHost.Text, port);
+            }
+            
+        }
+
+        private void createButton_Click(object sender, EventArgs e)
+        {
+            if (editFilename.Text != null && editPasswd.Text != null)
+            {
+                myModel.Create(editFilename.Text, editPasswd.Text);
+            }
+            else
+            {
+                 MessageBox.Show("Filename and Password cannot be blank", "Missing filename or password", MessageBoxButtons.OK, MessageBoxIcon.Error);
+           
+            }
+        }
+
+        private void JoinButton_Click(object sender, EventArgs e)
+        {
+            if (editFilename.Text != null && editPasswd.Text != null)
+            {
+                myModel.Join(editFilename.Text, editPasswd.Text);
+            }
+            else
+            {
+                MessageBox.Show("Filename and Password cannot be blank", "Missing filename or password", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            myModel.Undo(myName, myVersion);
+        }
+        private void changeCell(string name, string version, string cell, string length, string content)
+        {
+           
+            int mycol;
+            int myRow;
+            
+            object cellContent;
+            object value;
+
+            try
+            {
+
+
+                int chRow;
+                int chcol;
+               
+                foreach (string s in mySheet.SetContentsOfCell(cell, content))
+                {
+                    GetRowColoumn(s, out chcol, out chRow);
+
+                    spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString());
+                }
+
+                cellContent = mySheet.GetCellContents(cell);
+
+                value = mySheet.GetCellValue(cell);
+                GetRowColoumn(cell, out mycol, out myRow);
+                spreadsheetPanel1.SetValue(mycol, myRow, value.ToString());
+
+            }
+            catch (CircularException)
+            {
+                MessageBox.Show("Cannot use current cell as part of formula", "CircularException", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+            }
+        }
     }
 }

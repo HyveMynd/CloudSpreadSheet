@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "parse.h"
 #include "enums.h"
 #include "user.h"
 #include "spreadsheet.h"

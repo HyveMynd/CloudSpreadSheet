@@ -68,6 +68,15 @@ void test_join(server& myServer)
     test_ok(result);
 }
 
+void test_join_again(server& myServer)
+{
+    boost::asio::ip::tcp::socket* new_socket = NULL;
+    user new_user(new_socket);
+    new_user.uid = 0;
+    ss_result result = myServer.do_join("testCreate", "test", &new_user);
+    test_fail(result);
+}
+
 void test_join_fail(server& myServer)
 {
     boost::asio::ip::tcp::socket* new_socket = NULL;
@@ -126,7 +135,7 @@ int main (int argc, char* argv)
     test_join_fail(myServer);
     
     write("TESTING do_join again");
-    test_join(myServer);
+    test_join_again(myServer);
     
     /*----CHANGE TESTS----*/
 	write("TESTING do_change new");

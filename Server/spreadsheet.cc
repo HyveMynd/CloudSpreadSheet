@@ -36,10 +36,11 @@ namespace serverss{
         users.push_back(new_user);
         
         log("Getting map from parser");
-        ss_contents = get_map(name);
+        std::string fname = "data/" + name;
+        ss_contents = get_map(fname);
         
         log("Getting xml from file");
-        result.xml = get_xml(name);
+        result.xml = get_xml(fname);
         
         result.status = OK;
         log("Join success");
@@ -140,7 +141,8 @@ namespace serverss{
     ss_result spreadsheet::save(ss_result& result)
     {
         log("Entered save");
-        put_xml(name, ss_contents);
+        std::string fname = "data/" + name;
+        put_xml(fname, ss_contents);
         
         result.status = OK;
         log("Save Success");

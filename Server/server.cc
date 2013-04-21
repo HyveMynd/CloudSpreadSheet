@@ -24,13 +24,15 @@ namespace serverss{
         result.file_name = name;
         result.file_password = password;
         result.command = Create;
-        std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
+//        std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
+        spreadsheet* ss = find_ss(name);
 
         // If the spreadsheet does not exist, create one and insert into the map.
         // return the name and password
-        if (it == spreadsheets.end() && !file_exists(name)){
+        if (ss == NULL && !file_exists(name)){
             log (name + " spreadsheet is not found. Creating it");
             spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password)));
+            log("Added " + name + " to map.");
             result.status = OK;
             
             // Create the file on disk
@@ -54,21 +56,26 @@ namespace serverss{
     {
         log("Entered do_join");
         name = add_extension(name);
-        std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
         ss_result result;
         result.command = Join;
         result.file_name = name;
         result.file_password = password;
         
-        // TODO Add to map if necesary
+        //add ss to map if neccesary
+		spreadsheet* ss = find_ss(name);
+//        if (ss == NULL)
+//        {
+//            std::map<std::string, std::string> cell_map = get_map
+//            spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet() ));
+//        }
         
-        if (it == spreadsheets.end() && !file_exists(name) )
+        if (ss == NULL)
             return not_found_error(result);
         
-        if (it->second.get_password().compare(password) != 0)
+        if (ss->get_password().compare(password) != 0)
             return make_error (result, "The password for the file is incorrect. Try again."); 
         
-        return it->second.join(new_user, result);
+        return ss->join(new_user, result);
     }
     
     /*
@@ -82,7 +89,6 @@ namespace serverss{
         result.file_name = name;
         result.command = Change;
         spreadsheet* ss = find_ss(name);
-
         if (ss == NULL)
             return not_found_error(result);
         

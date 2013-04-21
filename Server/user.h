@@ -17,9 +17,12 @@ namespace serverss{
     class user{
     private:
         
+        static int id_count;
         boost::asio::ip::tcp::socket* user_socket;
         
     public:
+        int uid;
+
         user(boost::asio::ip::tcp::socket*);
     };
 }

@@ -28,7 +28,7 @@ namespace serverss{
         result.version = version;
         
         // Check the list to see if the user is already joined
-        if (find_user(new_user) == NULL)
+        if (find_user(new_user) != NULL)
             return make_error(result, "User has already joined the editing session.");
         
         // Add user to the list of users
@@ -174,7 +174,7 @@ namespace serverss{
     {
         for (std::list<user*>::iterator it = users.begin(); it != users.end(); it++)
         {
-            if ((*it) == this_user)
+            if ((*it)->uid == this_user->uid)
                 return (*it);
         }
         return NULL;

@@ -8,6 +8,7 @@
 
 #include "cell.h"
 namespace serverss {
+        
     cell::cell(std::string cell_name, std::string contents)
     {
         this->cell_name = cell_name;

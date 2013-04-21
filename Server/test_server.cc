@@ -114,6 +114,18 @@ void test_change_version(server& myServer)
     test_fail(result);
 }
 
+void test_save(server& myServer)
+{
+    ss_result result = myServer.do_save("testCreate");
+    test_ok(result);
+}
+
+void test_save_fail(server& myServer)
+{
+    ss_result result = myServer.do_save("test_Create");
+    test_fail(result);
+}
+
 int main (int argc, char* argv)
 {
     write ("\n\n-----=====TESTING START=====---------\n\n");
@@ -142,16 +154,23 @@ int main (int argc, char* argv)
     test_change_new(myServer);
     
     write("TESTING do_change existing");
-    //test_change_exist(myServer);
+    test_change_exist(myServer);
     
     write("TESITNG do_change fail no SS");
-    //test_change_no_ss(myServer);
+    test_change_no_ss(myServer);
     
     write("TESITNG do_change fail wrong version");
-    //test_change_version(myServer);
+    test_change_version(myServer);
+    
+    /*----UNDO TESTS----*/
 
     
     /*----SAVE TESTS----*/
+    write("TESITNG do_save");
+    test_save(myServer);
+
+    write("TESITNG do_save fail");
+    test_save_fail(myServer);
 
     /*----LEAVE TESTS----*/
 

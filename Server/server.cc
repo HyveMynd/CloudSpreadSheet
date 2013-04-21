@@ -24,7 +24,6 @@ namespace serverss{
         result.file_name = name;
         result.file_password = password;
         result.command = Create;
-//        std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
         spreadsheet* ss = find_ss(name);
 
         // If the spreadsheet does not exist, create one and insert into the map.
@@ -199,10 +198,11 @@ namespace serverss{
     
     std::string server::add_extension(std::string filename)
     {
-        if(filename.substr(filename.find_last_of(".") + 1) == "ss")
-            return filename;
-        else
-            return filename + ".ss";
+//        if(filename.substr(filename.find_last_of(".") + 1) == "ss")
+//            return filename;
+//        else
+//            return filename + ".ss";
+        return filename;
     }
     
 }

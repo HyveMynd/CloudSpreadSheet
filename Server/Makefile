@@ -44,4 +44,4 @@ run: mtest cleanss
 	./a.out
 
 cleanss:
-	rm -f data/*.ss
+	rm -f data/*

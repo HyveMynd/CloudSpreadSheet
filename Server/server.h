@@ -38,7 +38,7 @@ namespace serverss {
     
         std::map<std::string, spreadsheet> spreadsheets;
         
-        void log();
+        void log(std::string);
         ss_result& make_error (ss_result&, std::string);
         spreadsheet* find_ss(std::string);
         ss_result& not_found_error(ss_result&);

@@ -18,6 +18,7 @@ namespace serverss{
      */
     ss_result server::do_create(std::string name, std::string password)
     {
+        log("Entered do_create");
         // TODO check for spaces
         name = add_extension(name);
         ss_result result;
@@ -28,13 +29,13 @@ namespace serverss{
         // If the spreadsheet does not exist, create one and insert into the map.
         // return the name and password
         if (it == spreadsheets.end() && !file_exists(name)){
+            log (name + " spreadsheet is nto found. Creating it");
             spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password)));
             result.status = OK;
             result.command = Create;
             
             return result;
         }
-        
         return make_error(result, "File name already exists. Please choose a different name.");
     }
     
@@ -45,6 +46,7 @@ namespace serverss{
      */
     ss_result server::do_join(std::string name, std::string password, user* new_user)
     {
+        log("Entered do_join");
         name = add_extension(name);
         std::map<std::string, spreadsheet>::iterator it = spreadsheets.find(name);
         ss_result result;
@@ -69,6 +71,7 @@ namespace serverss{
      */
     ss_result server::do_change(std::string name, int version, cell new_cell)
     {
+        log("Entered do_change");
         ss_result result;
         result.file_name = name;
         result.command = Change;
@@ -86,6 +89,7 @@ namespace serverss{
      */
     ss_result server::do_undo(std::string name, int version)
     {
+        log("Entered do_undo");
         ss_result result;
         result.file_name = name;
         result.command = Undo;
@@ -104,11 +108,11 @@ namespace serverss{
      */
     ss_result server::do_save(std::string name)
     {
+        log("Entered do_save");
         ss_result result;
         result.file_name = name;
         result.command = Save;
         spreadsheet* ss = find_ss(name);
-        
         
         if (ss == NULL)
             return not_found_error(result);
@@ -122,6 +126,7 @@ namespace serverss{
      */
     void server::do_leave(std::string name, user* user_leaving)
     {
+        log("Entered do_leave");
         ss_result result;
         result.file_name = name;
         result.command = Leave;
@@ -132,6 +137,7 @@ namespace serverss{
 
     ss_result& server::make_error(ss_result& result, std::string message)
     {
+        log("ERROR: " + message);
         result.status = FAIL;
         result.message = message;
         return result;
@@ -152,8 +158,10 @@ namespace serverss{
         return make_error(result, "Could not find the spreadsheet");
     }
     
-    void server::log()
-    {}
+    void server::log(std::string message)
+    {
+        std::cout << message << std::endl;
+    }
     
     
     // Function: fileExists

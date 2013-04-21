@@ -54,7 +54,7 @@ namespace serverss {
         std::map<std::string, std::string> ss_contents;
         int version;
         
-        void log();
+        void log(std::string);
         void update(ss_result result, user* user_to_update);
         user* find_user(user*);
         ss_result& incorrect_version_error(ss_result&);

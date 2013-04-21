@@ -24,6 +24,7 @@ namespace serverss{
      */
     ss_result spreadsheet::join(user* new_user, ss_result& result)
     {
+        log("Entered join"):
         users.push_back(new_user);
         result.version = version;
         
@@ -38,6 +39,7 @@ namespace serverss{
         
         result.xml = get_xml(name);
         result.status = OK;
+        log("Join success");
         return result;
     }
     
@@ -48,6 +50,7 @@ namespace serverss{
      */
     ss_result spreadsheet::change(cell changes, int user_version, ss_result& result)
     {
+        log("Entered change");
         if (user_version != version)
             return incorrect_version_error(result);
         
@@ -57,12 +60,14 @@ namespace serverss{
 
         if (cll == ss_contents.end())
         {
+            log("New cell. Adding to map");
             old.cell_name = changes.cell_name;
             undo_stack.push(old);
             ss_contents.insert(std::pair<std::string, std::string>(changes.cell_name, changes.contents));
         }
         else
         {
+            log("Cell exists. Changing contents");
             version++;
             result.status = OK;
             result.version = version;
@@ -75,17 +80,20 @@ namespace serverss{
             result.cell_result = changes;
             
 //            //update all users
+//            log("Sending updates to users");
 //            for (std::list<user>::iterator it = users.begin(); it != users.end(); ++it)
 //            {
 //                update(result, (*it));
 //            }
         }
         
+        log("Returning change success");
         return result;
     }
     
     void spreadsheet::update(ss_result result, user* user_to_update)
     {
+        log("Sending Update");
         result.command = Update;
 //        sendUpdate(user->user_socket, result.to_string());
     }
@@ -97,19 +105,21 @@ namespace serverss{
      */
     ss_result spreadsheet::undo(int user_version, ss_result& result)
     {
+        log("Entered undo");
         if (user_version != version)
             return incorrect_version_error(result);
         
         // Nothing to undo
         if (undo_stack.size() == 0)
         {
+            log("Nothing to undo");
             result.status = END;
             return result;
         }
         
         cell undo_cell = undo_stack.top();
         undo_stack.pop();
-        
+        log("Undoing cell " + undo_cell.cell_name);
         std::map<std::string, std::string>::iterator cll = ss_contents.find(undo_cell.cell_name);
         
         cll->second = undo_cell.contents;
@@ -117,6 +127,7 @@ namespace serverss{
         version++;
         result.version = version;
         result.status = OK;
+        log("Undo Success");
         return result;
     }
     
@@ -125,9 +136,11 @@ namespace serverss{
      */
     ss_result spreadsheet::save(ss_result& result)
     {
+        log("Entered save");
         put_xml(name, ss_contents);
         
         result.status = OK;
+        log("Save Success");
         return result;
     }
     
@@ -136,16 +149,20 @@ namespace serverss{
      */
     void spreadsheet::leave(user* user_leaving)
     {
+        log("Entered leave");
         user* leave = find_user(user_leaving);
         
         if (leave == NULL)
             return;
         
+        log("Leave Success");
         users.remove(user_leaving);
     }
     
-    void spreadsheet::log()
-    {}
+    void spreadsheet::log(std::string message)
+    {
+        std::cout << name << ": " << message << std::endl;
+    }
     
     user* spreadsheet::find_user(user* this_user)
     {
@@ -159,6 +176,7 @@ namespace serverss{
     
     ss_result& spreadsheet::make_error(ss_result& result, std::string message)
     {
+        log("ERROR: " + message);
         result.status = FAIL;
         result.message = message;
         return result;

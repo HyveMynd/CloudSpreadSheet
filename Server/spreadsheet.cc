@@ -41,6 +41,8 @@ namespace serverss{
         
         log("Getting xml from file");
         result.xml = get_xml(fname);
+        log("XML is: " + result.xml);
+        result.length = result.xml.length();
         
         result.status = OK;
         log("Join success");
@@ -58,30 +60,30 @@ namespace serverss{
         if (user_version != version)
             return incorrect_version_error(result);
         
+        result.cell_result = changes;
+        result.version = user_version;
         
         std::map<std::string, std::string>::iterator cll = ss_contents.find(changes.cell_name);
         cell old;
 
+        version++;
         if (cll == ss_contents.end())
         {
             log("New cell. Adding to map");
             old.cell_name = changes.cell_name;
+            old.contents = "";
             undo_stack.push(old);
             ss_contents.insert(std::pair<std::string, std::string>(changes.cell_name, changes.contents));
         }
         else
         {
             log("Cell exists. Changing contents");
-            version++;
-            result.status = OK;
-            result.version = version;
 
             old.cell_name = cll->first;
             old.contents = cll->second;
             undo_stack.push(old);
             cll->second = changes.contents;
             
-            result.cell_result = changes;
             
 //            //update all users
 //            log("Sending updates to users");
@@ -90,7 +92,9 @@ namespace serverss{
 //                update(result, (*it));
 //            }
         }
-        
+        result.content = cll->content;
+        result.version = version;
+		result.status = OK;
         log("Returning change success");
         return result;
     }

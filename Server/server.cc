@@ -84,7 +84,8 @@ namespace serverss{
      */
     ss_result server::do_change(std::string name, int version, cell new_cell)
     {
-        log("Entered do_change");
+        name = add_extension(name);
+        log("Entered do_change. File to modify: " +name);
         ss_result result;
         result.file_name = name;
         result.command = Change;

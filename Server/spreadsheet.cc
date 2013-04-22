@@ -19,6 +19,13 @@ namespace serverss{
         this->version = 0;
     }
     
+    spreadsheet::spreadsheet(std::string name, std::string password, std::map<std::string, std::string> cell_map)
+    {
+        this->name = name;
+        this->password = password;
+        this->ss_contents = cell_map;
+    }
+    
     /*
      * Adds the user to the list of users.
      */
@@ -83,19 +90,20 @@ namespace serverss{
             old.contents = cll->second;
             undo_stack.push(old);
             cll->second = changes.contents;
-            
-            
-//            //update all users
-//            log("Sending updates to users");
-//            for (std::list<user>::iterator it = users.begin(); it != users.end(); ++it)
-//            {
-//                update(result, (*it));
-//            }
         }
+        
         log("map has new cell changes");
         result.contents = changes.contents;
         result.version = version;
 		result.status = OK;
+
+        //update all users
+        log("Sending updates to users");
+        for (std::list<user*>::iterator it = users.begin(); it != users.end(); ++it)
+        {
+        	update(result, (*it));
+        }
+
         log("Returning change success");
         return result;
     }
@@ -104,7 +112,7 @@ namespace serverss{
     {
         log("Sending Update");
         result.command = Update;
-//        sendUpdate(user->user_socket, result.to_string());
+		sendUpdate(user_to_update->user_socket, result.to_string());
     }
     
     /*
@@ -186,10 +194,6 @@ namespace serverss{
                 ++itr;
         }
     	
-    
-        
-        ss << " size after " << users.size();
-        log(ss.str());
         return (users.size() == 0);
     }
     
@@ -231,17 +235,18 @@ namespace serverss{
     
     
     
+    /*--------Send Updates to Users-------*/
     void updateConfirmation(const boost::system::error_code& error,
                             size_t bytes_transferred)
     {
-        std::cout << "update Sent" << std::endl;
+        std::cout << "Update sent" << std::endl;
     }
     
-    void sendUpdate(boost::asio::ip::tcp::socket *socket_, std::string message_)
+    void spreadsheet::sendUpdate(boost::asio::ip::tcp::socket *socket_, std::string message_)
     {
-     
+        log("Entered sendUpdate");
          boost::asio::async_write((*socket_),
-                                  boost::asio::buffer(message_),
+                                  boost::asio::buffer(message_, message_.length()),
                                   updateConfirmation);
      
     }

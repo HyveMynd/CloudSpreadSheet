@@ -42,6 +42,9 @@ namespace serverss{
             outfile << header;
             outfile.close();
             
+            //put file password
+//            put_file_password(filename);
+            
             return result;
         }
         return make_error(result, "File name already exists. Please choose a different name.");
@@ -68,8 +71,14 @@ namespace serverss{
 		spreadsheet* ss = find_ss(name);
 //        if (ss == NULL)
 //        {
-//            std::map<std::string, std::string> cell_map = get_map
-//            spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet() ));
+//            std::string filename = "data/"+name;
+//            std::string file_password = get_file_password(filename);
+//            
+//            if (file_password.compare("") == 0)
+//                return make_error (result, "The password for the file is incorrect. Try again.");
+//            
+//            std::map<std::string, std::string> cell_map = get_map(filename);
+//            spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password, cell_map) ));
 //        }
         
         if (ss == NULL)

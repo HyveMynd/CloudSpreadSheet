@@ -32,6 +32,7 @@ namespace serverss {
         
         // Constructors
         spreadsheet(std::string, std::string);
+        spreadsheet(std::string, std::string, std::map<std::string, std::string>);
         
         // Spreadsheet functions
         ss_result join(user*, ss_result&);
@@ -62,9 +63,8 @@ namespace serverss {
         ss_result& incorrect_version_error(ss_result&);
         ss_result& make_error(ss_result&, std::string);
         
-//        void updateConfirmation(const boost::system::error_code& error,
-//                                size_t bytes_transferred);
-//        void sendUpdate(boost::asio::ip::tcp::socket *socket_, string message_);
+//        void updateConfirmation(const boost::system::error_code& error, size_t bytes_transferred);
+        void sendUpdate(boost::asio::ip::tcp::socket *socket_, std::string message_);
     };
 
 }

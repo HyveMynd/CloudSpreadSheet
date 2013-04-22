@@ -8,7 +8,10 @@ namespace serverss {
 
 
   // header for all spreadsheets 
-  const std::string  header = "<?XML VERSION=\"1.0\" ENCODING=\"UTF-8\"?><SPREADSHEET VERSION=\"PS6\"/>";
+  const std::string  header = "<?xml version=\"1.0\" encoding=\"utf-8\"?><spreadsheet version=\"ps6\"/>\n";
+  const std::string ssdb = "data/ss.db";
+
+  void log(std::string s, std::string msg);
 
   // gets the indexed word from the line for parsing the data
   std::string get_word(int word_index, std::string str, char ch);
@@ -22,8 +25,17 @@ namespace serverss {
   // saves a file to disk in xml format
   bool put_xml(std::string fname, std::map<std::string, std::string> xml);
 
-  /* change string to upper case */
-  std::string uppercase(std::string s);
+  /* change string to lower case */
+  std::string lowercase(std::string s);
 
+  /*
+   * get_file_password
+   */
+  std::string get_file_password(std::string fname);
+
+  /*
+   * put_file_password
+   */
+  bool put_file_password(std::string fname, std::string password);
 } 
 #endif 

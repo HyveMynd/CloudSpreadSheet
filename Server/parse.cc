@@ -16,6 +16,15 @@ using namespace std;
 namespace serverss {
 
   int debug = 0;
+
+  void log(string s, string msg) {
+    ofstream os("log.txt");
+
+    cout << s << ":" << msg << endl;
+    os << s << ":" << msg << endl;
+    os.close();
+  }
+
   // gets the indexed word from the line for parsing the data 
   string get_word(int word_index, string str, char ch) {
     int sp_index = 1;
@@ -64,8 +73,10 @@ namespace serverss {
     return result;
   }
 
-  /* returns a hash map of cells read from
-   * filename on disk */
+  /* 
+   * returns a hash map of cells read from
+   * filename on disk 
+   */
   map<string,string> get_map(string fname)
   {
     map<string, string> result;
@@ -78,7 +89,7 @@ namespace serverss {
     // header removed from xml
     // format is validated in get_xml
     string s;
-    s = uppercase(get_xml(fname));
+    s = lowercase(get_xml(fname));
 
     if (debug) cout << "\ns=" << s << endl;
 
@@ -93,37 +104,37 @@ namespace serverss {
       if (token == "")
         return result; 
 
-      if (token == "<CELL>") {
+      if (token == "<cell>") {
         token = gettoken(s);
         continue; 
       }
 
-      if (token == "<NAME>") {
+      if (token == "<name>") {
         cellname = getvalue(s);
         token = gettoken(s);
       }
 
-      if (token == "</NAME>") {
+      if (token == "</name>") {
         token = gettoken(s);
       }
 
 
-      if (token == "<CONTENTS>") {
+      if (token == "<contents>") {
         cellcontents = getvalue(s);
         token = gettoken(s);
         result.insert(pair<string, string>(cellname, cellcontents));
       }
 
-      if (token == "</CONTENTS>") {
+      if (token == "</contents>") {
         token = gettoken(s);
       }
 
 
-      if (token == "<SPREADSHEET>") {
+      if (token == "<spreadsheet>") {
         token = gettoken(s);
       }
 
-      if (token == "</SPREADSHEET>") {
+      if (token == "</spreadsheet>") {
         break;
         token = gettoken(s);
       }
@@ -140,20 +151,28 @@ namespace serverss {
   } // get_map
 
 
-  /* change string to upper case */
-  string uppercase(string s) 
+  /* 
+   * change string to lower case 
+   */
+  string lowercase(string s) 
     {
       for (int i; i < s.size(); i++)
-        s[i] = toupper(s[i]);
+        s[i] = tolower(s[i]);
       return s;
 
     }
 
-  /* check format checks the validity of an xml string
-   * the file format */
+
+  /* 
+   * check format checks the validity of an xml string
+   * the file format 
+   */
   bool checkformat(string s)
   {
-    s = uppercase(s); 
+    if (s.size() > 0) {
+      s = lowercase(s); 
+    }
+
     if (s.find(header) == string::npos)
       return false;
     s = s.substr(header.size()); 
@@ -161,14 +180,15 @@ namespace serverss {
     return true;
   }
 
-  
 
-  /* returns a xml formatted string of cells */
+  /* 
+   * returns a xml formatted string of cells 
+   */
   string get_xml(string fname) {
     string result = "";
 
     ifstream is(fname.c_str()); 
-
+    
     while (is.good())
     {
       char c = is.get();
@@ -182,7 +202,7 @@ namespace serverss {
     if (result.empty()) 
       result = header;
 
-    if (debug) cout << endl << endl << endl;
+
 
     return result;
     //if (checkformat(result)) 
@@ -190,12 +210,29 @@ namespace serverss {
     //else return NULL;
   }
 
+string readfile(string fname) 
+{
+     string input = ""; 
+
+     ifstream is(fname.c_str());     // open file
+
+     while (is.good())          // loop while extraction from file is possible
+     {
+       char c = is.get();       // get character from file
+       if (is.good())
+         input += c;
+     }
+
+     is.close();                // close file
+     return 0;
+}
+
   /* creates an xml formatted string and saves it to disk */
   bool put_xml(const string fname, map<string, string> data)
   { 
     bool result = false;
     fstream ss;
-    ss.open(fname.c_str(), fstream::out | fstream::app);
+    ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc );
     //ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc);
 
     ss << header;
@@ -207,6 +244,78 @@ namespace serverss {
    
     ss << "</spreadsheet>";
     ss.close();
+    return true;
+  }
+
+  /*
+   * get_file_password
+   * searches the database for a spreadsheet name
+   * if found returns the password
+   */
+  string get_file_password(string fname)
+  {
+    string ssname = "";
+    string sspwd = "";
+    string line;
+    fstream fs;
+
+    fs.open(ssdb.c_str(),fstream::in | fstream::out | fstream::app);    
+
+    while (fs.good()) {
+       fs >> ssname >> sspwd;
+
+        if (fname == ssname) {
+          sspwd = get_word(2, line,',');
+        }
+
+        fs.close();
+    }
+
+    return sspwd;
+  }
+
+  /*
+   * put_file_password
+   * searches the database for a spreadsheet and password
+   * if the spreadsheet is found but the password doesn't match 
+   * returns a false
+   * if not found inserts the spreadsheet and password
+   */
+  bool put_file_password(string fname, string password) 
+  {
+    string ssname = "";
+    string sspwd = "";
+    string line;
+    fstream fs;
+
+    fs.open(ssdb.c_str(),fstream::in | fstream::out | fstream::app);    
+
+    while (fs.good()) {
+      fs >> ssname >> sspwd;
+      log("after fs >> ssname put_file_password line",  ssname);
+      log("after fs >> sspwd  put_file_password line",  sspwd);
+
+      if (ssname == fname) 
+        if (sspwd != password)
+        {
+          fs.close();
+          return false;
+        } else {
+          fs.close();
+          log("","file and password already their");
+          return true;
+        }
+    }
+    log("after while >> ssname put_file_password line",  fname);
+    log("after while >> sspwd  put_file_password line",  password);
+
+
+    fs.clear();
+    fs << fname;
+    fs << " " ;
+    fs << password ;
+    fs << endl;
+    fs.close();
     return true;
   }
 }

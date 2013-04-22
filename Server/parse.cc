@@ -234,7 +234,7 @@ string readfile(string fname)
     fstream ss;
     ss.open(fname.c_str(), fstream::out | fstream::app );
     //ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc);
-    ss << header;
+    //ss << header;
     
     // iterate throught the data
     map<string,string>::iterator it;

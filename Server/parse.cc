@@ -149,7 +149,7 @@ namespace serverss {
 
     }
 
-  const string  header = "?XML VERSION=\"1.0\" ENCODING=\"UTF-8\"?><SPREADSHEET VERSION=\"PS6\"";
+  const string  header = "&lt?XML VERSION=&quot1.0&quotENCODING=&quotUTF-8&quot?&gt&ltSPREADSHEET VERSION=&quotPS6&quot&gt";
 
   /* check format checks the validity of an xml string
    * the file format */

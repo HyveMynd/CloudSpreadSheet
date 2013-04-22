@@ -21,15 +21,10 @@ namespace serverss
 	class socketConnection
 	{
     public:
-        void log(string message)
-        {
-            cout << message << endl;
-        }
 	  server* my_server;
 	  socketConnection(boost::asio::io_service& io_service, server* my_server)
 	    : socket_(io_service), newUser(&socket_)
         {
-            log("created socket connection");
 	  this->my_server = my_server;
 	}
         
@@ -40,12 +35,13 @@ namespace serverss
         
 		void start()
 		{
-			log("in start");
-			std::string message_ = "Connection Established!\n";
-			boost::asio::async_write(socket_,
-                                     boost::asio::buffer(message_),
-						 boost::bind((&serverss::socketConnection::connectionEstablished), this,
-                                                 boost::asio::placeholders::error));
+			
+		// begin recieve here with the callback being Recieve command
+                socket_.async_read_some(boost::asio::buffer(data_, max_length),
+                                        boost::bind(&socketConnection::RecieveCommand, this,
+                                                    boost::asio::placeholders::error,
+                                                    boost::asio::placeholders::bytes_transferred));
+
 		}
         // * method was originally handle write* this method is the callback to all writes
         // this method begin receives from the client
@@ -53,7 +49,8 @@ namespace serverss
         {
             if (!error)
             {
-                log("in connectionEstablished. No error");
+		// empty data_
+		memset(data_, 0, 1024);
                 // begin recieve here with the callback being Recieve command
                 socket_.async_read_some(boost::asio::buffer(data_, max_length),
                                         boost::bind(&socketConnection::RecieveCommand, this,
@@ -62,7 +59,6 @@ namespace serverss
             }
             else
             {
-                log("in connectionEstablished. ERROR!");
                 delete this;
             }
         }
@@ -72,8 +68,8 @@ namespace serverss
         void RecieveCommand(const boost::system::error_code& error,
                             size_t bytes_transferred)
         {
-            log("In Revieve command");
             string command = data_;
+	    cout << command << endl;
             string msg;
             if (!error)
             {
@@ -82,13 +78,15 @@ namespace serverss
                 // responds with FAIL
                 if(get_word(1,command,'\n').find("CREATE") != std::string::npos)
                 {
-                    log("Got create command");
                     string name = "";
                     string password = "";
                     bool sendError = false;
                     string message = "";
+
+		    
                     if(get_word(2,command,'\n').substr(0,5) == "Name:")
                     {
+			
                         name = get_word(2,command,'\n').substr(5,(get_word(2,command,'\n')).size()-5);
                     }
                     else
@@ -96,6 +94,7 @@ namespace serverss
                     
                     if(get_word(3,command,'\n').substr(0,9) == "Password:")
                     {
+			cout << "hi" << endl;
                         password = get_word(3,command,'\n').substr(9,(get_word(3,command,'\n')).size()-9);
                     }
                     else
@@ -105,18 +104,17 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {
-                        //message = (my_server.do_create(name,password)).to_string();
-                        message = command;
-                        log("Got: " + message + " from server. Sending back");
-                    }
+			message = (my_server->do_create(name,password)).to_string();
+			//(my_server->do_create(name,password));
+			cout << message << endl;
+		    }
                     boost::asio::async_write(socket_,
-                                             boost::asio::buffer(message, bytes_transferred),
+                                             boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                 }
                 else if(get_word(1,command,'\n').find("JOIN") != std::string::npos)
                 {
-                    log("Got join message");
                     string name = "";
                     string password = "";
                     bool sendError = false;
@@ -140,18 +138,18 @@ namespace serverss
                     else
                     {
                         message = (my_server->do_join(name,password, &newUser)).to_string();
-                        log("Got: " + message + " from server. Sending back");
+                        cout << message << endl; 
+
                     }
                     
                     boost::asio::async_write(socket_,
-                                             boost::asio::buffer(message, bytes_transferred),
+                                             boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                     
                 }
                 else if(get_word(1,command,'\n').find("CHANGE") != std::string::npos)
                 {
-                    log("got change command");
                     string name = "";
                     string version = "";
                     string cellPos = "";
@@ -175,9 +173,9 @@ namespace serverss
                         sendError = true;
                     
                     if(get_word(4,command,'\n').substr(0,5) == "Cell:")
-					{
-						cellPos = get_word(4,command,'\n').substr(5,(get_word(4,command,'\n')).size()-5);
-					}
+			{
+			cellPos = get_word(4,command,'\n').substr(5,(get_word(4,command,'\n')).size()-5);
+			}
                     else
                         sendError = true;
                     
@@ -193,18 +191,17 @@ namespace serverss
                     else
                     {
                         message = (my_server->do_change(name,atoi(version.c_str()), cell(cellPos,content))).to_string();
-                        log("Got: " + message + " from server. Sending back");
+                        
                     }
                     
                     boost::asio::async_write(socket_,
-                                             boost::asio::buffer(message, bytes_transferred),
+                                             boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                     
                 }
                 else if(get_word(1,command,'\n').find("UNDO") != std::string::npos)
                 {
-                    log("got undo command");
                     string name = "";
                     string version = "";
                     string message = "";
@@ -230,17 +227,15 @@ namespace serverss
                     else
                     {
                         message = (my_server->do_undo(name,atoi(version.c_str()))).to_string();
-                        log("Got: " + message + " from server. Sending back");
                     }
                     
                     boost::asio::async_write(socket_,
-                                             boost::asio::buffer(message, bytes_transferred),
+                                             boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                 }
                 else if(get_word(1,command,'\n').find("SAVE") != std::string::npos)
                 {
-                    log("got save command");
                     string name = "";
                     bool sendError = false;
                     string message = "";
@@ -256,17 +251,15 @@ namespace serverss
                     else
                     {
                         message = (my_server->do_save(name)).to_string();
-                        log("Got: " + message + " from server. Sending back");
                     }
                     
                     boost::asio::async_write(socket_,
-                                             boost::asio::buffer(message, bytes_transferred),
+                                             boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                 }
                 else if(command.find("LEAVE") != std::string::npos)
                 {
-                    log("Got leave command");
                     string name = "";
                     bool sendError = false;
                     string message = "";
@@ -282,7 +275,6 @@ namespace serverss
                     else
                     {	
                         my_server->do_leave(name, &newUser);
-                        log("Got: " + message + " from server. Sending back");
                     }
                 }
             }
@@ -299,22 +291,7 @@ namespace serverss
         // a user object 
         user newUser;
 	};
-    /*
-     void sendUpdate(socket *socket_, string message_)
-     {
-     
-     boost::asio::async_write(*socket_,
-     boost::asio::buffer(message_),        
-     boost::bind(&socketConnection::connectionEstablished, this,
-     boost::asio::placeholders::error));
-     
-     }
-     void updateConfirmation(const boost::system::error_code& error,
-     size_t bytes_transferred)
-     {
-     cout << "update Sent" << endl;
-     }
-     */
+  
 	class begin
 	{
 	public:
@@ -325,7 +302,6 @@ namespace serverss
         acceptor_(io_service, tcp::endpoint(tcp::v4(), port))
         {
 	  this->my_server = my_server;
-            cout << "In begin. Opening New Socket Conenction" << endl;
 	  socketConnection* new_socketConnection = new socketConnection(io_service_, my_server);
             acceptor_.async_accept(new_socketConnection->socket(),
                                    boost::bind(&begin::handle_accept, this, new_socketConnection,
@@ -335,10 +311,8 @@ namespace serverss
         void handle_accept(socketConnection* new_socketConnection,
                            const boost::system::error_code& error)
         {
-            cout << "In Handle_accept" << endl;
             if (!error)
             {
-                cout << "Starting new socketConnection" << endl;
                 // start a new socketConnection
                 new_socketConnection->start();
                 new_socketConnection = new socketConnection(io_service_, my_server);
@@ -349,7 +323,6 @@ namespace serverss
             }
             else
             {
-                cout << "Error in new_SocketConnection. Deleting" << endl;
                 delete new_socketConnection;
             }
         }
@@ -366,8 +339,8 @@ int main()
     try
     {
 		boost::asio::io_service io_service;
-        cout << "Starting io_service" << endl;
-		serverss::begin s(io_service, 1984, my_server);
+
+		serverss::begin s(io_service, 1980, my_server);
 		io_service.run();
     }
     catch (std::exception& e)

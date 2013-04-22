@@ -77,8 +77,8 @@ namespace serverss{
             if (file_password.compare("") == 0)
                 return make_error(result, "The password for the file is incorrect. Try again.");
             
-            std::map<std::string, std::string> cell_map = get_map(filename);
-            spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password, cell_map) ));
+//            std::map<std::string, std::string> cell_map = get_map(filename);
+            spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password) ));
             
             //reassign pointer
             ss = find_ss(name);

@@ -24,6 +24,7 @@ namespace serverss{
         this->name = name;
         this->password = password;
         this->ss_contents = cell_map;
+        this->version = 0;
     }
     
     /*

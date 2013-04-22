@@ -1,6 +1,6 @@
-all: controller 
+all: barj_server
 
-controller: controller.o parse.o cell.o user.o ss_result.o server.o
+barj_server: controller.o parse.o cell.o user.o ss_result.o server.o
 	g++ *.o -lboost_system -lpthread -o barj_server
 
 controller.o: controller.cc parse.h ss_result.h server.h user.h cell.h

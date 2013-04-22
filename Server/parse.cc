@@ -186,9 +186,10 @@ namespace serverss {
 
     if (debug) cout << endl << endl << endl;
 
-    if (checkformat(result)) 
-        return result;
-    else return NULL;
+    return result;
+    //if (checkformat(result)) 
+        //return result;
+    //else return NULL;
   }
 
   /* creates an xml formatted string and saves it to disk */

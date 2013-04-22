@@ -70,9 +70,9 @@ void test_create_fail(server& myServer)
 void test_join(server& myServer)
 {
     boost::asio::ip::tcp::socket* new_socket = NULL;
-    user new_user(new_socket);
-    new_user.uid = 0;
-    ss_result result = myServer.do_join("testCreate", "test", &new_user);
+    user* new_user = new user(new_socket);
+//    new_user->uid = 0;
+    ss_result result = myServer.do_join("testCreate", "test", new_user);
     test_ok(result);
 }
 
@@ -242,7 +242,7 @@ int main (int argc, char* argv)
     write("TESITNG do_leave");
     test_leave(myServer);
     
-    write("TESITNG do_leave");
+    write("TESITNG do_leave again. SS should not be found");
     test_leave(myServer);
 
     

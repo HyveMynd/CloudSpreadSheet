@@ -14,6 +14,7 @@
 #include <list>
 #include <stack>
 #include <map>
+#include <sstream>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include "ss_result.h"

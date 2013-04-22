@@ -162,6 +162,8 @@ namespace serverss{
      */
     bool spreadsheet::leave(user* user_leaving)
     {
+        std::stringstream ss;
+        ss << "size before " << users.size();
         log("Entered leave");
         user* leave = find_user(user_leaving);
         
@@ -169,11 +171,26 @@ namespace serverss{
             log("User not found to leave");
             return false;
         }
-        
+                
         log("Leave Success");
-        users.remove(user_leaving);
+
+        // Delete user and remove pointer from list
+        for(std::list<user*>::iterator itr = users.begin(); itr != users.end();)
+        {
+            if ( (*itr)->uid == user_leaving->uid )
+            {
+                delete (*itr);
+                itr=users.erase(itr);
+            }
+            else
+                ++itr;
+        }
+    	
+    
         
-        return users.size() == 0;
+        ss << " size after " << users.size();
+        log(ss.str());
+        return (users.size() == 0);
     }
     
     void spreadsheet::log(std::string message)
@@ -186,6 +203,9 @@ namespace serverss{
     {
         for (std::list<user*>::iterator it = users.begin(); it != users.end(); it++)
         {
+//            std::stringstream ss;
+//            ss << (*it)->uid << " vs " << this_user->uid;
+//            log("uids are: " + ss.str());
             if ((*it)->uid == this_user->uid)
                 return (*it);
         }

@@ -54,6 +54,9 @@ namespace serverss{
     ss_result server::do_join(std::string name, std::string password, user* new_user)
     {
         log("Entered do_join");
+        std::stringstream sss;
+        sss << new_user->uid;
+        log("Uid is: " + sss.str());
         name = add_extension(name);
         ss_result result;
         result.command = Join;

@@ -38,7 +38,7 @@ namespace serverss{
             log("Writng " + name + " to disk:");
             std::string filename = "data/"+name;
             std::ofstream outfile (filename.c_str());
-            outfile << "<?XML VERSION=\"1.0\" ENCODING=\"UTF-8\"?><SPREADSHEET VERSION=\"PS6\">";
+            outfile << "<?XML VERSION=\"1.0\" ENCODING=\"UTF-8\"?><SPREADSHEET VERSION=\"PS6\"/>";
             outfile.close();
             
             return result;

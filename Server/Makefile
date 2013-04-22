@@ -16,14 +16,14 @@ cell.o: cell.cc cell.h
 	g++ -c cell.cc 
 
 spreadsheet.o: spreadsheet.cc spreadsheet.h enums.h
-	g++ -c spreadsheet.cc enums.h
+	g++ -c spreadsheet.cc 
 
 
 user.o: user.cc user.h
 	g++ -c user.cc
 
 ss_result.o: ss_result.cc ss_result.h enums.h
-	g++ -c ss_result.cc enums.h
+	g++ -c ss_result.cc 
 
 spreadsheetServer2: spreadsheetServer2.cc parse.h ss_result.h 
 	g++ spreadsheetServer2.cc parse.o ss_result.o -lboost_system -lpthread -o server2
@@ -32,7 +32,7 @@ test: test.cc parse.h parse.o
 	g++ -o test test.cc parse.o parse.h
 
 clean: 
-	rm -f *.o test
+	rm -f *.o test barj_server a.out data/* *.gch
     
 mac:
 	g++ -o barj_server controller.cc server.cc spreadsheet.cc user.cc cell.cc parse.cc ss_result.cc -I/opt/local/include/ -L/opt/local/lib/ -lboost_system-mt -lpthread

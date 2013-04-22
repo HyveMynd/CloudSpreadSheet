@@ -58,6 +58,8 @@ namespace serverss{
         log("Entered do_join");
         std::stringstream sss;
         sss << new_user->uid;
+        log("Name id: " + name);
+        log("Password is: " + password);
         log("Uid is: " + sss.str());
         name = add_extension(name);
         ss_result result;
@@ -77,6 +79,9 @@ namespace serverss{
             
             std::map<std::string, std::string> cell_map = get_map(filename);
             spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password, cell_map) ));
+            
+            //reassign pointer
+            ss = find_ss(name);
         }
         
         if (ss == NULL)
@@ -157,14 +162,14 @@ namespace serverss{
         
         if(ss == NULL)
         {
-            log("SS not found to remove user");
+            log("SS not found to remove user: " + name);
 			return;
         }
             
         //remove spreadsheet from memory if all users have left
         if(ss->leave(user_leaving))
         {
-            log("no more users. Removing ss from map");
+            log("no more users. Removing ss from map: " + name);
             spreadsheets.erase(name);
         }
     }

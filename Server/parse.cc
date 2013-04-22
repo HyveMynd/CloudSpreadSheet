@@ -256,7 +256,6 @@ string readfile(string fname)
   {
     string ssname = "";
     string sspwd = "";
-    string line;
     fstream fs;
 
     fs.open(ssdb.c_str(),fstream::in | fstream::out | fstream::app);    
@@ -265,13 +264,13 @@ string readfile(string fname)
        fs >> ssname >> sspwd;
 
         if (fname == ssname) {
-          sspwd = get_word(2, line,',');
+          fs.close();
+          return sspwd;
         }
-
-        fs.close();
+       
     }
 
-    return sspwd;
+    return "";
   }
 
   /*

@@ -149,8 +149,6 @@ namespace serverss {
 
     }
 
-  const string  header = "<?XML VERSION='1.0'ENCODING='UTF-8'?><SPREADSHEET VERSION='PS6'/>";
-
   /* check format checks the validity of an xml string
    * the file format */
   bool checkformat(string s)

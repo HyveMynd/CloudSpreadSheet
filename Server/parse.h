@@ -6,6 +6,10 @@
 
 namespace serverss {
 
+
+  // header for all spreadsheets 
+  const std::string  header = "<?XML VERSION=\"1.0\" ENCODING=\"UTF-8\"?><SPREADSHEET VERSION=\"PS6\"/>";
+
   // gets the indexed word from the line for parsing the data
   std::string get_word(int word_index, std::string str, char ch);
 

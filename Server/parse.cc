@@ -231,10 +231,10 @@ string readfile(string fname)
   bool put_xml(const string fname, map<string, string> data)
   { 
     bool result = false;
-    fstream ss;
-    ss.open(fname.c_str(), fstream::out | fstream::app );
+    ofstream ss(fname.c_str());
     //ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc);
-    //ss << header;
+    ss << header;
+    log("put_xml",header);
     
     // iterate throught the data
     map<string,string>::iterator it;

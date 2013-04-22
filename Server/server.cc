@@ -37,7 +37,7 @@ namespace serverss{
             log("Writng " + name + " to disk:");
             std::string filename = "data/"+name;
             std::ofstream outfile (filename.c_str());
-//            outfile << header;
+            outfile << header;
             outfile.close();
             
             //put file password

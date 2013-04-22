@@ -68,7 +68,7 @@ namespace serverss {
             case Join:
                 return "JOIN OK\nName:"+file_name+"\nVersion:"+ver.str()+"\nLength:"+len.str()+"\n"+xml+"\n";
             case Change:
-                return "CHANGE OK\nName:"+file_name+"\nVersion:"+ver.str()+"\n"+contents+"\n";
+                return "CHANGE OK\nName:"+file_name+"\nVersion:"+ver.str()+"\n";
             case Update:
                 return "UPDATE\nName:"+file_name+"\nVersion:"+ver.str()+"\nCell:"+cell_result.cell_name+"\nLength:"+len.str()+"\n"+cell_result.contents+"\n";
             case Undo:

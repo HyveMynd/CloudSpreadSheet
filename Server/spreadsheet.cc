@@ -147,6 +147,9 @@ namespace serverss{
         result.status = OK;
         result.cell_result = undo_cell;
         result.length = undo_cell.contents.length();
+        
+        //TODO send updates to users
+        
         log("Undo Success");
         return result;
     }

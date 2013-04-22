@@ -201,10 +201,12 @@ namespace serverss{
     {
         if(ss_log)
         {
+            std::string logstr = "SPREADSHEET LOG " + name + ": " + message;
             std::string logfname = "data/log.txt";
-        	std::cout << "SPREADSHEET LOG " << name << ": " << message << std::endl;
+            
+        	std::cout << logstr << std::endl;
             std::ofstream logfile(logfname.c_str());
-            logfile << message << "\n";
+            logfile << logstr << "\n";
             logfile.close();
         }
     }

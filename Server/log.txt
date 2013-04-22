@@ -1,0 +1,1 @@
+after while >> sspwd  put_file_password line:test

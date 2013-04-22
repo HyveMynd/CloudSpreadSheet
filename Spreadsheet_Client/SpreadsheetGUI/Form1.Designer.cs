@@ -315,6 +315,7 @@
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
             this.spreadsheetPanel1.Size = new System.Drawing.Size(1184, 413);
             this.spreadsheetPanel1.TabIndex = 1;
+            this.spreadsheetPanel1.SelectionChanged += new SS.SelectionChangedHandler(this.spreadsheetPanel1_SelectionChanged);
             // 
             // Port
             // 

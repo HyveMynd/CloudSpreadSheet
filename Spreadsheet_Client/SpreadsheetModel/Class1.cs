@@ -15,7 +15,7 @@ namespace SpreadsheetModel
         private StringSocket socket;
         public event Action<string> CreateOK;
         public event Action<string,string> CreateFail;
-        public event Action<string,string,string,string> JoinOK;
+        public event Action<string,string,string,string,string> JoinOK;
         public event Action<string,string> JoinFail;
         public event Action<string,string> ChangeOk;
         public event Action<string,string> ChangeWait;
@@ -73,7 +73,7 @@ namespace SpreadsheetModel
         {
             if (socket.Connected)
             {
-                socket.BeginSend("CHANGE\nName:" + name + "\nVersion:" + version + "\nCell:" + cell + "\nLength:" + length + "\ncontent\n", (e, p) => { }, null);
+                socket.BeginSend("CHANGE\nName:" + name + "\nVersion:" + version + "\nCell:" + cell + "\nLength:" + length + "\n"+content+"\n", (e, p) => { }, null);
                 //socket.BeginSend("CHANGE\n", (e, p) => { }, null);
                 //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
                 //socket.BeginSend("Version:" + version + "\n", (e, p) => { }, null);
@@ -160,7 +160,7 @@ namespace SpreadsheetModel
                 tw.Close();
                 
 
-                JoinOK(name,version,length,"data.ss");
+                JoinOK(name,version,length,"data.ss",words[4]);
                
             }
             if (JoinFail != null && s.StartsWith("JOIN FAIL"))

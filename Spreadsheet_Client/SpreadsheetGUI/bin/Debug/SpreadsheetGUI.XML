@@ -14,13 +14,6 @@
             Creates a new empty spreadsheet
             </summary>
         </member>
-        <member name="M:SS.Form1.#ctor(SS.Spreadsheet,System.String)">
-            <summary>
-            Creates a spreadsheet that is populated from a file
-            </summary>
-            <param name="openSheet"></param>
-            <param name="filename"></param>
-        </member>
         <member name="M:SS.Form1.saveToolStripMenuItem_Click(System.Object,System.EventArgs)">
             <summary>
             When save is clicked saves the current spreadsheet

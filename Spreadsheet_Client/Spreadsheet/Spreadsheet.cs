@@ -53,10 +53,6 @@ namespace SS
         public Spreadsheet(string myPath, Func<string, bool> myValid, Func<string, string> myNormalize, string myVersion)
             : base(myValid, myNormalize, myVersion)
         {
-            if (myVersion != GetSavedVersion(myPath))
-            {
-                throw new SpreadsheetReadWriteException("Invalid version entered");
-            }
             mySpreadsheet = new Dictionary<string, Cell>();
             dependentCells = new DependencyGraph();
             //GetSavedVersion(myPath);
@@ -371,13 +367,13 @@ namespace SS
                             {
                                 case "spreadsheet":
 
-                                    return myReader["version"];
+                                    return /*myReader["version"]*/"";
                             }
 
                         }
 
                     }
-                    return myReader["version"];
+                    return /*myReader["version"]*/"";
                 }
             }
             catch (System.IO.DirectoryNotFoundException)
@@ -412,7 +408,7 @@ namespace SS
                 {
                     myWriter.WriteStartDocument();
                     myWriter.WriteStartElement("spreadsheet");
-                    myWriter.WriteAttributeString("version", Version);
+                    //myWriter.WriteAttributeString("version", Version);
                     foreach (string s in GetNamesOfAllNonemptyCells())
                     {
                         if (GetCellContents(s) is string)

@@ -17,3 +17,8 @@ C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\Spreadsh
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\obj\Debug\SpreadsheetTests.dll
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\obj\Debug\SpreadsheetTests.pdb
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\bin\Debug\SpreadsheetTests.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\bin\Debug\SpreadsheetTests.pdb
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\obj\Debug\SpreadsheetTests.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\SpreadsheetTests\obj\Debug\SpreadsheetTests.pdb

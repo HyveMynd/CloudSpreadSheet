@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using SpreadsheetUtilities;
 using SpreadsheetModel;
+using System.Threading;
 
 namespace SS
 {
@@ -35,6 +36,7 @@ namespace SS
         private string undoWaitVersion = null;
         private string undoWaitName = null;
         private SpreadsheetModel.SSModel myModel;
+        private Spreadsheet myopenSheet = null;
         /// <summary>
         /// Creates a new empty spreadsheet
         /// </summary>
@@ -176,6 +178,7 @@ namespace SS
         {
             myModel.Leave(myName);
             this.Close();
+            Application.Exit();
         }
         
        
@@ -192,8 +195,8 @@ namespace SS
             object content;
             try
             {
-
-                textBox1.Clear();
+               
+                this.textBox1.Clear();
                 spreadsheetPanel1.GetSelection(out mycol, out myRow);
                 content = mySheet.GetCellContents(GetCellName(mycol, myRow));
                 if (content is Formula)
@@ -447,14 +450,20 @@ namespace SS
             myVersion = version;
             myLength = length;
             myName = name;
-            Spreadsheet myopenSheet = new Spreadsheet(filename, s => true, s => s.ToUpper(), "ps6");
-            GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, name));
-            tabControl1.Invoke(new Action(() => tabControl1.SelectedIndex = 1));
+            
+            myopenSheet = new Spreadsheet(filename, s => true, s => s.ToUpper(), "ps6");
+
+            OpenNew(myopenSheet, name);
+            //GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, name));
+            this.tabControl1.Invoke(new Action(()=>tabControl1.SelectedIndex=1));
+            
             
         }
         private void failJoin(string name, string message)
         {
             MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
+            
         }
         private void successChange(string name, string version)
         {
@@ -476,6 +485,7 @@ namespace SS
         private void failChange(string name, string message)
         {
             MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
         }
         private void successUndo(string name, string version, string cell, string length, string content)
         {
@@ -483,6 +493,8 @@ namespace SS
             myVersion = version;
             myLength = length;
             changeCell(name, version, cell, length, content);
+            this.textBox1.Invoke(new Action(()=>textBox1.Clear()));
+            //textBox1.Clear();
             
         }
         private void endUndo(string name, string version)
@@ -614,6 +626,75 @@ namespace SS
 
 
             }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+        private void OpenNew(Spreadsheet openSheet, string filename)
+        {
+
+            InitializeComponent();
+            myModel = new SpreadsheetModel.SSModel();
+            myModel.CreateOK += ValidSS;
+            myModel.CreateFail += InvalidSS;
+            myModel.JoinOK += successJoin;
+            myModel.JoinFail += failJoin;
+            myModel.ChangeOk += successChange;
+            myModel.ChangeWait += waitChange;
+            myModel.ChangeFail += failChange;
+            myModel.UndoOk += successUndo;
+            myModel.UndoEnd += endUndo;
+            myModel.UndoWait += waitUndo;
+            myModel.UndoFail += failUndo;
+            myModel.Update += update;
+            myModel.SaveOk += successSave;
+            myModel.SaveFail += failSave;
+            myModel.Error += error;
+            myModel.Test += tester;
+            numWindows++;
+            mySheet = openSheet;
+            tabControl1.Appearance = TabAppearance.Buttons;
+            tabControl1.SizeMode = TabSizeMode.Fixed;
+            tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+
+
+            foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
+            {
+                int myCol;
+                int myRow;
+                GetRowColoumn(s, out myCol, out myRow);
+                if (myCol <= 25 | myRow <= 99)
+                {
+
+
+                    spreadsheetPanel1.SetValue(myCol, myRow, mySheet.GetCellValue(s).ToString());
+                }
+            }
+            int mycol;
+            int myrow;
+            int colLetter;
+            string myVal;
+            object content;
+
+            textBox1.Clear();
+            spreadsheetPanel1.GetSelection(out mycol, out myrow);
+            content = mySheet.GetCellContents(GetCellName(mycol, myrow));
+            if (content is Formula)
+            {
+                textBox1.Text = "=" + content.ToString();
+            }
+            else
+            {
+                textBox1.Text = content.ToString();
+            }
+            spreadsheetPanel1.GetValue(mycol, myrow, out myVal);
+
+            colLetter = mycol + 65;
+            textBox2.Text = ((char)colLetter).ToString() + (myrow + 1).ToString() + "= " + myVal;
+            myFileName = filename;
+            this.Text = filename;
         }
     }
 }

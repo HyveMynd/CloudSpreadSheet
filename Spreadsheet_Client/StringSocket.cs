@@ -377,6 +377,7 @@ namespace CustomNetworking
                 //while ((lineEnd = incompleteLine.IndexOf('\n', lineStart)) >= 0)
                 //{
                     receivedLines.Enqueue(incompleteLine);
+                    incompleteLine = "";
                 //    lineStart = lineEnd + 1;
                 //}
                 //incompleteLine = incompleteLine.Substring(lineStart);

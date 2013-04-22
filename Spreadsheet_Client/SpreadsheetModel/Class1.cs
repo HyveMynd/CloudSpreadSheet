@@ -52,6 +52,9 @@ namespace SpreadsheetModel
             if (socket.Connected)
             {
                 socket.BeginSend("CREATE\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
+                //socket.BeginSend("CREATE\n", (e, p) => { }, null);
+                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                //socket.BeginSend("Password:" + password + "\n", (e, p) => { }, null);
             }
             socket.BeginReceive(EventRecieved, null);
         }
@@ -60,6 +63,9 @@ namespace SpreadsheetModel
             if (socket.Connected)
             {
                 socket.BeginSend("JOIN\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
+                //socket.BeginSend("JOIN\n", (e, p) => { }, null);
+                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                //socket.BeginSend("Password:" + password + "\n", (e, p) => { }, null);
             }
             socket.BeginReceive(EventRecieved, null);
         }
@@ -68,6 +74,9 @@ namespace SpreadsheetModel
             if (socket.Connected)
             {
                 socket.BeginSend("CHANGE\nName:" + name + "\nVersion:" + version + "\nCell:" + cell + "\nLength:" + length + "\ncontent\n", (e, p) => { }, null);
+                //socket.BeginSend("CHANGE\n", (e, p) => { }, null);
+                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                //socket.BeginSend("Version:" + version + "\n", (e, p) => { }, null);
             }
             socket.BeginReceive(EventRecieved, null);
         }
@@ -76,6 +85,9 @@ namespace SpreadsheetModel
             if (socket.Connected)
             {
                 socket.BeginSend("UNDO\nName:" + name + "\nVersion:" + version + "\n", (e, p) => { }, null);
+                //socket.BeginSend("UNDO\n", (e, p) => { }, null);
+                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                //socket.BeginSend("Version:" + version + "\n", (e, p) => { }, null);
             }
             socket.BeginReceive(EventRecieved, null);
         }
@@ -84,6 +96,9 @@ namespace SpreadsheetModel
             if (socket.Connected)
             {
                 socket.BeginSend("SAVE\nName:" + name + "\n", (e, p) => { }, null);
+                //socket.BeginSend("SAVE\n", (e, p) => { }, null);
+                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                
             }
             socket.BeginReceive(EventRecieved, null);
         }
@@ -92,6 +107,9 @@ namespace SpreadsheetModel
             if (socket.Connected)
             {
                 socket.BeginSend("LEAVE\nName:" + name + "\n", (e, p) => { }, null);
+                //socket.BeginSend("LEAVE\n", (e, p) => { }, null);
+                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                
             }
         }
 
@@ -105,7 +123,7 @@ namespace SpreadsheetModel
             {
                 Test(s);
             }
-            Console.WriteLine("Here");
+            
             if (CreateOK != null && s.StartsWith("CREATE OK"))
             {
                
@@ -113,7 +131,8 @@ namespace SpreadsheetModel
                 string[] words = Regex.Split(s, "\n");
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string password = words[2].TrimStart('P', 'a', 's', 's', 'w', 'o', 'r', 'd', ':');
-                Join(name, password);
+               
+                //Join(name, password);
 
             }
            
@@ -123,6 +142,7 @@ namespace SpreadsheetModel
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string message = words[2];
                 CreateFail(name,message);
+               
             }
             if (JoinOK != null && s.StartsWith("JOIN OK"))
             {
@@ -134,12 +154,14 @@ namespace SpreadsheetModel
                 TextWriter tw = new StreamWriter("data.ss");
 
                 // write a line of text to the file
-                tw.WriteLine(words[4]);
+                tw.WriteLine(words[4].ToLower());
 
                 // close the stream
                 tw.Close();
+                
 
                 JoinOK(name,version,length,"data.ss");
+               
             }
             if (JoinFail != null && s.StartsWith("JOIN FAIL"))
             {
@@ -147,6 +169,7 @@ namespace SpreadsheetModel
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string message = words[2];
                 JoinFail(name,message);
+                
             }
             if (ChangeOk != null && s.StartsWith("CHANGE OK"))
             {
@@ -154,6 +177,7 @@ namespace SpreadsheetModel
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
                 ChangeOk(name,version);
+                
             }
             if (ChangeWait != null && s.StartsWith("CHANGE WAIT"))
             {
@@ -161,6 +185,7 @@ namespace SpreadsheetModel
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
                 ChangeWait(name,version);
+                
             }
             if (ChangeFail != null && s.StartsWith("CHANGE FAIL"))
             {
@@ -168,6 +193,7 @@ namespace SpreadsheetModel
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string message = words[2];
                 ChangeFail(name,message);
+                
             }
             if (UndoOk != null && s.StartsWith("UNDO OK"))
             {
@@ -178,6 +204,7 @@ namespace SpreadsheetModel
                 string length = words[4].TrimStart('L', 'e', 'n', 'g', 't', 'h', ':');
                 string content = words[5];
                 UndoOk(name,version,cell,length,content);
+               
             }
             if (UndoEnd != null && s.StartsWith("UNDO END"))
             {
@@ -186,6 +213,7 @@ namespace SpreadsheetModel
                 string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
                
                 UndoEnd(name,version);
+               
             }
             if (UndoWait != null && s.StartsWith("UNDO WAIT"))
             {
@@ -194,6 +222,7 @@ namespace SpreadsheetModel
                 string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
                
                 UndoWait(name,version);
+                
             }
             if (UndoFail != null && s.StartsWith("UNDO FAIL"))
             {
@@ -201,6 +230,7 @@ namespace SpreadsheetModel
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string message = words[2];
                 UndoFail(name,message);
+                
             }
             if (Update != null && s.StartsWith("UPDATE"))
             {
@@ -211,12 +241,14 @@ namespace SpreadsheetModel
                 string length = words[4].TrimStart('L', 'e', 'n', 'g', 't', 'h', ':');
                 string content = words[5];
                 Update(name,version,cell,length,content);
+                
             }
             if (SaveOk != null && s.StartsWith("SAVE OK"))
             {
                 string[] words = Regex.Split(s, "\n");
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 SaveOk(name);
+               
             }
             if (SaveFail != null && s.StartsWith("SAVE FAIL"))
             {
@@ -224,12 +256,15 @@ namespace SpreadsheetModel
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string message = words[2];
                 SaveFail(name,message);
+               
             }
             if (Error != null && s.StartsWith("Error"))
             {
                 string[] words = Regex.Split(s, "\n");
                 Error(words[0]);
+                
             }
+            
             if (socket != null)
             {
                 socket.BeginReceive(EventRecieved, null);

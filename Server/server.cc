@@ -197,7 +197,13 @@ namespace serverss{
     void server::log(std::string message)
     {
         if(server_log)
+        {
+            std::string logfname = "data/log.txt";
         	std::cout << "SERVER LOG: " <<  message << std::endl;
+            std::ofstream logfile(logfname.c_str());
+            logfile << message << "\n";
+            logfile.close();   
+        }
     }
     
     

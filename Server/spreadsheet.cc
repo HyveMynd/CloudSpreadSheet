@@ -200,7 +200,13 @@ namespace serverss{
     void spreadsheet::log(std::string message)
     {
         if(ss_log)
+        {
+            std::string logfname = "data/log.txt";
         	std::cout << "SPREADSHEET LOG " << name << ": " << message << std::endl;
+            std::ofstream logfile(logfname.c_str());
+            logfile << message << "\n";
+            logfile.close();
+        }
     }
     
     user* spreadsheet::find_user(user* this_user)

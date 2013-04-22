@@ -10,6 +10,7 @@
 #define ____spreadsheet__
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <list>
 #include <stack>

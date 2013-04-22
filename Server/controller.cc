@@ -332,21 +332,32 @@ namespace serverss
         tcp::acceptor acceptor_;
 	};
 }
-int main()
+
+/*
+ * main starts the server at a default port of 1984 unless 
+ * read from command line 
+ */
+int main(int argc, char *argv[])
 {
-      serverss::server* my_server = new serverss::server();
+    int port = 1984;
+    serverss::server* my_server = new serverss::server();
+
 
     try
     {
-		boost::asio::io_service io_service;
+      if (argc > 1) {
+        port = atoi(argv[1]);
+      }
+		  boost::asio::io_service io_service;
 
-		serverss::begin s(io_service, 1980, my_server);
-		io_service.run();
+		  serverss::begin s(io_service, 1980, my_server);
+		  io_service.run();
     }
-    catch (std::exception& e)
+      catch (std::exception& e)
     {
-		std::cerr << "Exception: " << e.what() << "\n";
+		  std::cerr << "Exception: " << e.what() << "\n";
     }
+
     delete my_server;
     return 0;
 }

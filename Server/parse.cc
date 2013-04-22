@@ -232,9 +232,8 @@ string readfile(string fname)
   { 
     bool result = false;
     fstream ss;
-    ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc );
+    ss.open(fname.c_str(), fstream::out | fstream::app );
     //ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc);
-
     ss << header;
     
     // iterate throught the data

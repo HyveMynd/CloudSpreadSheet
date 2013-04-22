@@ -452,7 +452,8 @@ namespace SS
             myName = name;
             
             myopenSheet = new Spreadsheet(filename, s => true, s => s.ToUpper(), "ps6");
-
+            //this.Invoke(new Action(()=>OpenNew(myopenSheet,name)));
+                //this.textBox1.Invoke(new Action(()=>textBox1.Clear()));
             OpenNew(myopenSheet, name);
             //GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, name));
             this.tabControl1.Invoke(new Action(()=>tabControl1.SelectedIndex=1));
@@ -635,29 +636,33 @@ namespace SS
         private void OpenNew(Spreadsheet openSheet, string filename)
         {
 
-            InitializeComponent();
-            myModel = new SpreadsheetModel.SSModel();
-            myModel.CreateOK += ValidSS;
-            myModel.CreateFail += InvalidSS;
-            myModel.JoinOK += successJoin;
-            myModel.JoinFail += failJoin;
-            myModel.ChangeOk += successChange;
-            myModel.ChangeWait += waitChange;
-            myModel.ChangeFail += failChange;
-            myModel.UndoOk += successUndo;
-            myModel.UndoEnd += endUndo;
-            myModel.UndoWait += waitUndo;
-            myModel.UndoFail += failUndo;
-            myModel.Update += update;
-            myModel.SaveOk += successSave;
-            myModel.SaveFail += failSave;
-            myModel.Error += error;
-            myModel.Test += tester;
-            numWindows++;
+            //InitializeComponent();
+            //myModel = new SpreadsheetModel.SSModel();
+            //myModel.CreateOK += ValidSS;
+            //myModel.CreateFail += InvalidSS;
+            //myModel.JoinOK += successJoin;
+            //myModel.JoinFail += failJoin;
+            //myModel.ChangeOk += successChange;
+            //myModel.ChangeWait += waitChange;
+            //myModel.ChangeFail += failChange;
+            //myModel.UndoOk += successUndo;
+            //myModel.UndoEnd += endUndo;
+            //myModel.UndoWait += waitUndo;
+            //myModel.UndoFail += failUndo;
+            //myModel.Update += update;
+            //myModel.SaveOk += successSave;
+            //myModel.SaveFail += failSave;
+            //myModel.Error += error;
+            //myModel.Test += tester;
+            //numWindows++;
             mySheet = openSheet;
-            tabControl1.Appearance = TabAppearance.Buttons;
-            tabControl1.SizeMode = TabSizeMode.Fixed;
-            tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+            //this.tabControl1.Invoke(new Action(() => tabControl1.Appearance = TabAppearance.Buttons));
+            //this.tabControl1.Invoke(new Action(()=>tabControl1.SizeMode = TabSizeMode.Fixed));
+            //this.tabControl1.Invoke(new Action(()=>tabControl1.ItemSize=new System.Drawing.Size(0,1)));
+
+            //tabControl1.Appearance = TabAppearance.Buttons;
+            //tabControl1.SizeMode = TabSizeMode.Fixed;
+            //tabControl1.ItemSize = new System.Drawing.Size(0, 1);
 
 
             foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
@@ -677,24 +682,28 @@ namespace SS
             int colLetter;
             string myVal;
             object content;
-
-            textBox1.Clear();
+            this.textBox1.Invoke(new Action(() => textBox1.Clear()));
+            //textBox1.Clear();
             spreadsheetPanel1.GetSelection(out mycol, out myrow);
             content = mySheet.GetCellContents(GetCellName(mycol, myrow));
             if (content is Formula)
             {
-                textBox1.Text = "=" + content.ToString();
+                this.textBox1.Invoke(new Action(()=>
+                textBox1.Text = "=" + content.ToString()));
             }
             else
             {
-                textBox1.Text = content.ToString();
+                this.textBox1.Invoke(new Action(()=>
+                textBox1.Text = content.ToString()));
             }
             spreadsheetPanel1.GetValue(mycol, myrow, out myVal);
 
             colLetter = mycol + 65;
-            textBox2.Text = ((char)colLetter).ToString() + (myrow + 1).ToString() + "= " + myVal;
+            this.textBox2.Invoke(new Action(()=>
+            textBox2.Text = ((char)colLetter).ToString() + (myrow + 1).ToString() + "= " + myVal));
             myFileName = filename;
-            this.Text = filename;
+            this.Invoke(new Action(() => this.Text = filename));
+            //this.Text = filename;
         }
     }
 }

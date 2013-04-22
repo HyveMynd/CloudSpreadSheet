@@ -23,9 +23,10 @@ namespace serverss
     public:
 	  server* my_server;
 	  socketConnection(boost::asio::io_service& io_service, server* my_server)
-	    : socket_(io_service), newUser(&socket_)
+	    : socket_(io_service)
         {
 	  this->my_server = my_server;
+            newUser = new user(&socket_);
 	}
         
         tcp::socket& socket()
@@ -137,7 +138,7 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {
-                        message = (my_server->do_join(name,password, &newUser)).to_string();
+                        message = (my_server->do_join(name,password, newUser)).to_string();
                         cout << message << endl; 
 
                     }
@@ -274,7 +275,7 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {	
-                        my_server->do_leave(name, &newUser);
+                        my_server->do_leave(name, newUser);
                     }
                 }
             }
@@ -289,7 +290,7 @@ namespace serverss
         enum { max_length = 1024 };
         char data_[max_length];
         // a user object 
-        user newUser;
+        user* newUser;
 	};
   
 	class begin

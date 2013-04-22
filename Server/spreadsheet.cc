@@ -123,6 +123,7 @@ namespace serverss{
         {
             log("Nothing to undo");
             result.status = END;
+            result.version = version;
             return result;
         }
         
@@ -136,6 +137,8 @@ namespace serverss{
         version++;
         result.version = version;
         result.status = OK;
+        result.cell_result = undo_cell;
+        result.length = undo_cell.contents.length();
         log("Undo Success");
         return result;
     }
@@ -162,8 +165,10 @@ namespace serverss{
         log("Entered leave");
         user* leave = find_user(user_leaving);
         
-        if (leave == NULL)
+        if (leave == NULL){
+            log("User not found to leave");
             return false;
+        }
         
         log("Leave Success");
         users.remove(user_leaving);
@@ -197,7 +202,11 @@ namespace serverss{
     
     ss_result& spreadsheet::incorrect_version_error(ss_result& result)
     {
-        return make_error(result, "Incorrect Version Number");
+        log("ERROR: Incorrect Version Number");
+        result.version = version;
+        result.status = WAIT;
+        result.message = "Incorrect Version Number";
+        return result;
     }
     
     

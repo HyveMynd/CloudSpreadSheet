@@ -47,6 +47,14 @@ void test_ok(ss_result& result)
         write_fail();
 }
 
+void test_wait(ss_result& result)
+{
+    if(result.status == WAIT)
+    	write_result(result);
+    else
+        write_fail();
+}
+
 void test_create(server& myServer)
 {
     ss_result result = myServer.do_create("testCreate", "test");
@@ -82,7 +90,7 @@ void test_join_fail(server& myServer)
     boost::asio::ip::tcp::socket* new_socket = NULL;
     user new_user(new_socket);
     new_user.uid = 0;
-    ss_result result = myServer.do_join("testCreate", "test", &new_user);
+    ss_result result = myServer.do_join("test_Create", "test", &new_user);
     test_fail(result);
 }
 
@@ -111,7 +119,7 @@ void test_change_version(server& myServer)
 {
     cell new_cell("A1", "321");
     ss_result result = myServer.do_change("testCreate", 0, new_cell);
-    test_fail(result);
+    test_wait(result);
 }
 
 void test_save(server& myServer)
@@ -126,6 +134,50 @@ void test_save_fail(server& myServer)
     test_fail(result);
 }
 
+void test_undo(server& myServer)
+{
+    ss_result result = myServer.do_undo("testCreate", 2);
+    test_ok(result);
+}
+
+void test_undo_fail(server& myServer)
+{
+    ss_result result = myServer.do_undo("test_Create", 2);
+    test_fail(result);
+}
+
+void test_undo_version(server& myServer)
+{
+    ss_result result = myServer.do_undo("testCreate", 1);
+    test_wait(result);
+}
+
+void test_undo_end(server& myServer)
+{
+    ss_result result = myServer.do_undo("testCreate", 0);
+    
+    if(result.status == END)
+    	write_result(result);
+    else
+        write_fail();
+}
+
+void test_leave(server& myServer)
+{
+    boost::asio::ip::tcp::socket* new_socket = NULL;
+    user new_user(new_socket);
+    new_user.uid = 0;
+    myServer.do_leave("testCreate", &new_user);
+}
+
+void test_leave_user(server& myServer)
+{
+    boost::asio::ip::tcp::socket* new_socket = NULL;
+    user new_user(new_socket);
+    new_user.uid = 4;
+    myServer.do_leave("testCreate", &new_user);
+}
+
 int main (int argc, char* argv)
 {
     write ("\n\n-----=====TESTING START=====---------\n\n");
@@ -137,7 +189,6 @@ int main (int argc, char* argv)
     
     write("TESTING do_create fails");
     test_create_fail(myServer);
-
     
     /*----JOIN TESTS----*/
     write("TESTING do_join");
@@ -148,6 +199,10 @@ int main (int argc, char* argv)
     
     write("TESTING do_join again");
     test_join_again(myServer);
+    
+    /*----UNDO TESTS----*/
+    write("TESITNG do_undo no changes to undo");
+    test_undo_end(myServer);
     
     /*----CHANGE TESTS----*/
 	write("TESTING do_change new");
@@ -163,6 +218,14 @@ int main (int argc, char* argv)
     test_change_version(myServer);
     
     /*----UNDO TESTS----*/
+    write("TESITNG do_undo");
+    test_undo(myServer);
+    
+    write("TESITNG do_undo_fail cant find SS");
+    test_undo_fail(myServer);
+    
+    write("TESITNG do_undo_fail wrong version");
+    test_undo_version(myServer);
 
     
     /*----SAVE TESTS----*/
@@ -171,8 +234,16 @@ int main (int argc, char* argv)
 
     write("TESITNG do_save fail");
     test_save_fail(myServer);
-
+    
     /*----LEAVE TESTS----*/
+    write("TESITNG do_leave fail no user");
+    test_leave_user(myServer);
+
+    write("TESITNG do_leave");
+    test_leave(myServer);
+    
+    write("TESITNG do_leave");
+    test_leave(myServer);
 
     
     cout << "TESTING DONE!" << endl;

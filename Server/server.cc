@@ -144,9 +144,18 @@ namespace serverss{
         result.command = Leave;
         spreadsheet* ss = find_ss(name);
         
+        if(ss == NULL)
+        {
+            log("SS not found to remove user");
+			return;
+        }
+            
         //remove spreadsheet from memory if all users have left
         if(ss->leave(user_leaving))
+        {
+            log("no more users. Removing ss from map");
             spreadsheets.erase(name);
+        }
     }
 
     ss_result& server::make_error(ss_result& result, std::string message)

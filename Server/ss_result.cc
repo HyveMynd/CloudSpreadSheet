@@ -25,7 +25,7 @@ namespace serverss {
             case WAIT:
                 return wait_to_string();
             case END:
-                return "UNDO END\nName"+file_name+"\nVersion:"+ver.str()+"\n";
+                return "UNDO END\nName:"+file_name+"\nVersion:"+ver.str()+"\n";
         }
 
         
@@ -58,19 +58,21 @@ namespace serverss {
     
     std::string ss_result::ok_to_string(){
         std::stringstream ver;
+        std::stringstream len;
+        len << length;
         ver << version;
         
         switch (command) {
             case Create:
                 return "CREATE OK\nName:"+file_name+"\nPassword:"+file_password+"\n";
             case Join:
-                return "JOIN OK\nName"+file_name+"\nVersion:"+ver.str()+"\nLength:"+length+"\n"+xml+"\n";
+                return "JOIN OK\nName:"+file_name+"\nVersion:"+ver.str()+"\nLength:"+len.str()+"\n"+xml+"\n";
             case Change:
-                return "CHANGE OK\nName"+file_name+"\nVersion:"+ver.str()+"\n"+contents+"\n";
+                return "CHANGE OK\nName:"+file_name+"\nVersion:"+ver.str()+"\n"+contents+"\n";
             case Update:
-                return "UPDATE\nName:"+file_name+"\nVersion:"+ver.str()+"\nCell:"+cell_result.to_string()+"\nLength:"+length+"\n"+contents+"\n";
+                return "UPDATE\nName:"+file_name+"\nVersion:"+ver.str()+"\nCell:"+cell_result.cell_name+"\nLength:"+len.str()+"\n"+cell_result.contents+"\n";
             case Undo:
-                return "UNDO OK\nName:"+file_name+"\nVersion:"+ver.str()+"\nCell:"+cell_result.to_string()+"\nLength:"+length+"\n"+contents+"\n";
+                return "UNDO OK\nName:"+file_name+"\nVersion:"+ver.str()+"\nCell:"+cell_result.cell_name+"\nLength:"+len.str()+"\n"+cell_result.contents+"\n";
             case Save:
                 return "SAVE OK\nName:"+file_name+"\n";
             default:{

@@ -36,7 +36,7 @@ namespace serverss{
         std::string file_password;
         std::string message;
         int version;
-        std::string length;
+        int length;
         std::string xml;
         cell cell_result;
         std::string contents;

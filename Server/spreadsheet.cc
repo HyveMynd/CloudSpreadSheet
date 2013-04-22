@@ -162,6 +162,10 @@ namespace serverss{
     {
         log("Entered save");
         std::string fname = "data/" + name;
+        
+        // Delete file before saving again
+        remove(fname.c_str());
+        
         put_xml(fname, ss_contents);
         
         result.status = OK;

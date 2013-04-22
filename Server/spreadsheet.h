@@ -16,6 +16,7 @@
 #include <stack>
 #include <map>
 #include <sstream>
+#include <stdio.h>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include "ss_result.h"

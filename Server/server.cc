@@ -18,7 +18,6 @@ namespace serverss{
     ss_result server::do_create(std::string name, std::string password)
     {
         log("Entered do_create");
-        // TODO check for spaces
         name = add_extension(name);
         ss_result result;
         result.file_name = name;
@@ -38,12 +37,11 @@ namespace serverss{
             log("Writng " + name + " to disk:");
             std::string filename = "data/"+name;
             std::ofstream outfile (filename.c_str());
-            //outfile << "<?XML VERSION=\"1.0\" ENCODING=\"UTF-8\"?><SPREADSHEET VERSION=\"PS6\"/>";
             outfile << header;
             outfile.close();
             
             //put file password
-//            put_file_password(filename);
+            put_file_password(filename, password);
             
             return result;
         }
@@ -69,17 +67,17 @@ namespace serverss{
         
         //add ss to map if neccesary
 		spreadsheet* ss = find_ss(name);
-//        if (ss == NULL)
-//        {
-//            std::string filename = "data/"+name;
-//            std::string file_password = get_file_password(filename);
-//            
-//            if (file_password.compare("") == 0)
-//                return make_error (result, "The password for the file is incorrect. Try again.");
-//            
-//            std::map<std::string, std::string> cell_map = get_map(filename);
-//            spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password, cell_map) ));
-//        }
+        if (ss == NULL)
+        {
+            std::string filename = "data/"+name;
+            std::string file_password = get_file_password(filename);
+            
+            if (file_password.compare("") == 0)
+                return make_error(result, "The password for the file is incorrect. Try again.");
+            
+            std::map<std::string, std::string> cell_map = get_map(filename);
+            spreadsheets.insert(std::pair<std::string, spreadsheet>(name, spreadsheet(name, password, cell_map) ));
+        }
         
         if (ss == NULL)
             return not_found_error(result);

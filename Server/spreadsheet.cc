@@ -256,10 +256,10 @@ namespace serverss{
     void spreadsheet::sendUpdate(boost::asio::ip::tcp::socket *socket_, std::string message_)
     {
         log("Entered sendUpdate");
-         boost::asio::async_write((*socket_),
+        boost::asio::async_write((*socket_),
                                   boost::asio::buffer(message_, message_.length()),
                                   updateConfirmation);
-     
+        return;
     }
     
     /*-------Accesors--------*/

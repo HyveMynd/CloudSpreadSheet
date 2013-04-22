@@ -4,3 +4,9 @@ C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\bin\Debu
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\bin\Debug\StringSocket.pdb
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\obj\Debug\StringSocket.dll
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\obj\Debug\StringSocket.pdb
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\bin\Debug\StringSocket.XML
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\bin\Debug\StringSocket.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\bin\Debug\StringSocket.pdb
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\obj\Debug\StringSocket.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\obj\Debug\StringSocket.pdb

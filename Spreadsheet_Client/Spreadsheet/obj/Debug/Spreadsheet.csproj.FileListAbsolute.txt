@@ -8,3 +8,13 @@ C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\Spreadsh
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\obj\Debug\Spreadsheet.dll
 C:\Users\Brent\Documents\GitHub\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\obj\Debug\Spreadsheet.pdb
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\bin\Debug\Spreadsheet.XML
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\bin\Debug\Spreadsheet.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\bin\Debug\Spreadsheet.pdb
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\bin\Debug\Formula.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\bin\Debug\SpeadsheetUtilities.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\bin\Debug\Formula.xml
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\bin\Debug\SpeadsheetUtilities.xml
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\obj\Debug\Spreadsheet.dll
+C:\Users\Brent\Documents\cs3505-Final-Project\Spreadsheet_Client\Spreadsheet\obj\Debug\Spreadsheet.pdb

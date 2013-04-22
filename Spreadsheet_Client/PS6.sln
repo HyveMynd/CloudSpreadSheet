@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetGUI", "Spreadshe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{8E02C918-F772-47CC-820A-311277AB3DCF}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "Setup1\Setup1.vdproj", "{E911BE37-A45B-4237-A983-C1F16A582235}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringSocket", "StringSocket.csproj", "{8E503579-ED62-438B-B391-44AD56829B97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetModel", "SpreadsheetModel\SpreadsheetModel.csproj", "{0CACF803-CB7E-4BFE-ADA5-C2EA177C1D9D}"
@@ -67,12 +65,6 @@ Global
 		{8E02C918-F772-47CC-820A-311277AB3DCF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8E02C918-F772-47CC-820A-311277AB3DCF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8E02C918-F772-47CC-820A-311277AB3DCF}.Release|x86.ActiveCfg = Release|Any CPU
-		{E911BE37-A45B-4237-A983-C1F16A582235}.Debug|Any CPU.ActiveCfg = Debug
-		{E911BE37-A45B-4237-A983-C1F16A582235}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{E911BE37-A45B-4237-A983-C1F16A582235}.Debug|x86.ActiveCfg = Debug
-		{E911BE37-A45B-4237-A983-C1F16A582235}.Release|Any CPU.ActiveCfg = Release
-		{E911BE37-A45B-4237-A983-C1F16A582235}.Release|Mixed Platforms.ActiveCfg = Release
-		{E911BE37-A45B-4237-A983-C1F16A582235}.Release|x86.ActiveCfg = Release
 		{8E503579-ED62-438B-B391-44AD56829B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E503579-ED62-438B-B391-44AD56829B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E503579-ED62-438B-B391-44AD56829B97}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

@@ -4,24 +4,9 @@
         <name>Spreadsheet</name>
     </assembly>
     <members>
-        <member name="T:SS.CircularException">
+        <member name="T:SS.Spreadsheet">
             <summary>
-            Thrown to indicate that a change to a cell will cause a circular dependency.
-            </summary>
-        </member>
-        <member name="T:SS.InvalidNameException">
-            <summary>
-            Thrown to indicate that a name parameter was either null or invalid.
-            </summary>
-        </member>
-        <member name="T:SS.SpreadsheetReadWriteException">
-            <summary>
-            Thrown to indicate that a read or write attempt has failed.
-            </summary>
-        </member>
-        <member name="M:SS.SpreadsheetReadWriteException.#ctor(System.String)">
-            <summary>
-            Creates the exception with a message
+            Creates a spreadsheet class that extends AbstractSpreadsheet
             </summary>
         </member>
         <member name="T:SS.AbstractSpreadsheet">
@@ -290,11 +275,6 @@
             Version information
             </summary>
         </member>
-        <member name="T:SS.Spreadsheet">
-            <summary>
-            Creates a spreadsheet class that extends AbstractSpreadsheet
-            </summary>
-        </member>
         <member name="M:SS.Spreadsheet.#ctor">
             <summary>
             Creates a new Spreadsheet
@@ -408,6 +388,26 @@
         <member name="P:SS.Spreadsheet.Changed">
             <summary>
             Tells if a cell has been changed since it was created or saved.
+            </summary>
+        </member>
+        <member name="T:SS.CircularException">
+            <summary>
+            Thrown to indicate that a change to a cell will cause a circular dependency.
+            </summary>
+        </member>
+        <member name="T:SS.InvalidNameException">
+            <summary>
+            Thrown to indicate that a name parameter was either null or invalid.
+            </summary>
+        </member>
+        <member name="T:SS.SpreadsheetReadWriteException">
+            <summary>
+            Thrown to indicate that a read or write attempt has failed.
+            </summary>
+        </member>
+        <member name="M:SS.SpreadsheetReadWriteException.#ctor(System.String)">
+            <summary>
+            Creates the exception with a message
             </summary>
         </member>
     </members>

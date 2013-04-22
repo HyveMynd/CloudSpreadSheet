@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using SpreadsheetUtilities;
 using SpreadsheetModel;
+using System.Threading;
 
 namespace SS
 {
@@ -35,6 +36,22 @@ namespace SS
         private string undoWaitVersion = null;
         private string undoWaitName = null;
         private SpreadsheetModel.SSModel myModel;
+        private Spreadsheet myopenSheet = null;
+        //private int myRow1 = 0;
+        //private int mycol1 = 0;
+        //private string myval1 = null;
+        private int myRow2 = 0;
+        private int mycol2 = 0;
+        private string myval2 = null;
+        private int myRow3 = 0;
+        private int mycol3 = 0;
+        private string myVal3 = null;
+        private int myRow4 = 0;
+        private int mycol4 = 0;
+        private string myVal4 = null;
+        private int myRow5 = 0;
+        private int mycol5 = 0;
+        private string myVal5 = null;
         /// <summary>
         /// Creates a new empty spreadsheet
         /// </summary>
@@ -69,21 +86,28 @@ namespace SS
             int colLetter;
             string myVal;
             object content;
-                textBox1.Clear();
-                spreadsheetPanel1.GetSelection(out mycol, out myRow);
+            //this.textBox1.Invoke(new Action(()=>textBox1.Clear()));
+            textBox1.Clear();
+            
+            //this.spreadsheetPanel1.Invoke(new Action(()=>spreadsheetPanel1.GetSelection(out mycol1, out myRow1)));
+            spreadsheetPanel1.GetSelection(out mycol, out myRow);
                 content = mySheet.GetCellContents(GetCellName(mycol, myRow));
                 if (content is Formula)
                 {
+                    //this.textBox1.Invoke(new Action(()=>textBox1.Text = "=" + content.ToString()));
                     textBox1.Text = "=" + content.ToString();
                 }
                 else
                 {
+                    //this.textBox1.Invoke(new Action(()=>textBox1.Text = content.ToString()));
                     textBox1.Text = content.ToString();
                 }
+            //this.spreadsheetPanel1.Invoke(new Action(()=>spreadsheetPanel1.GetValue(mycol1, myRow1, out myal1)));
                 spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
-
                 colLetter = mycol + 65;
-                textBox2.Text = ((char)colLetter).ToString() + (myRow + 1).ToString() + "= " + myVal;
+            //this.textBox2.Invoke(new Action(()=>textBox2.Text = ((char)colLetter).ToString() + (myRow1 + 1).ToString() + "= " + myval1));
+            textBox2.Text=((char)colLetter).ToString()+(myRow+1).ToString()+"= "+myVal;
+            //this.Invoke(new Action(()=>this.Text = "Spreadsheet"));
             this.Text = "Spreadsheet";
         }
         /// <summary>
@@ -91,70 +115,70 @@ namespace SS
         /// </summary>
         /// <param name="openSheet"></param>
         /// <param name="filename"></param>
-        public Form1(Spreadsheet openSheet,string filename)
-        {
+        //public Form1(Spreadsheet openSheet,string filename)
+        //{
             
-            InitializeComponent();
-            myModel = new SpreadsheetModel.SSModel();
-            myModel.CreateOK += ValidSS;
-            myModel.CreateFail += InvalidSS;
-            myModel.JoinOK += successJoin;
-            myModel.JoinFail += failJoin;
-            myModel.ChangeOk += successChange;
-            myModel.ChangeWait += waitChange;
-            myModel.ChangeFail += failChange;
-            myModel.UndoOk += successUndo;
-            myModel.UndoEnd += endUndo;
-            myModel.UndoWait += waitUndo;
-            myModel.UndoFail += failUndo;
-            myModel.Update += update;
-            myModel.SaveOk += successSave;
-            myModel.SaveFail += failSave;
-            myModel.Error += error;
-            myModel.Test += tester;
-            numWindows++;
-            mySheet = openSheet;
-            tabControl1.Appearance = TabAppearance.Buttons;
-            tabControl1.SizeMode = TabSizeMode.Fixed;
-            tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+        //    InitializeComponent();
+        //    myModel = new SpreadsheetModel.SSModel();
+        //    myModel.CreateOK += ValidSS;
+        //    myModel.CreateFail += InvalidSS;
+        //    myModel.JoinOK += successJoin;
+        //    myModel.JoinFail += failJoin;
+        //    myModel.ChangeOk += successChange;
+        //    myModel.ChangeWait += waitChange;
+        //    myModel.ChangeFail += failChange;
+        //    myModel.UndoOk += successUndo;
+        //    myModel.UndoEnd += endUndo;
+        //    myModel.UndoWait += waitUndo;
+        //    myModel.UndoFail += failUndo;
+        //    myModel.Update += update;
+        //    myModel.SaveOk += successSave;
+        //    myModel.SaveFail += failSave;
+        //    myModel.Error += error;
+        //    myModel.Test += tester;
+        //    numWindows++;
+        //    mySheet = openSheet;
+        //    tabControl1.Appearance = TabAppearance.Buttons;
+        //    tabControl1.SizeMode = TabSizeMode.Fixed;
+        //    tabControl1.ItemSize = new System.Drawing.Size(0, 1);
             
 
-            foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
-            {
-                int myCol;
-                int myRow;
-                GetRowColoumn(s, out myCol, out myRow);
-                if (myCol <= 25 | myRow <= 99)
-                {
+        //    foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
+        //    {
+        //        int myCol;
+        //        int myRow;
+        //        GetRowColoumn(s, out myCol, out myRow);
+        //        if (myCol <= 25 | myRow <= 99)
+        //        {
                     
 
-                    spreadsheetPanel1.SetValue(myCol, myRow, mySheet.GetCellValue(s).ToString());
-                }
-            }
-            int mycol;
-            int myrow;
-            int colLetter;
-            string myVal;
-            object content;
+        //            spreadsheetPanel1.SetValue(myCol, myRow, mySheet.GetCellValue(s).ToString());
+        //        }
+        //    }
+        //    int mycol;
+        //    int myrow;
+        //    int colLetter;
+        //    string myVal;
+        //    object content;
           
-                textBox1.Clear();
-                spreadsheetPanel1.GetSelection(out mycol, out myrow);
-                content = mySheet.GetCellContents(GetCellName(mycol, myrow));
-                if (content is Formula)
-                {
-                    textBox1.Text = "=" + content.ToString();
-                }
-                else
-                {
-                    textBox1.Text = content.ToString();
-                }
-                spreadsheetPanel1.GetValue(mycol, myrow, out myVal);
+        //        textBox1.Clear();
+        //        spreadsheetPanel1.GetSelection(out mycol, out myrow);
+        //        content = mySheet.GetCellContents(GetCellName(mycol, myrow));
+        //        if (content is Formula)
+        //        {
+        //            textBox1.Text = "=" + content.ToString();
+        //        }
+        //        else
+        //        {
+        //            textBox1.Text = content.ToString();
+        //        }
+        //        spreadsheetPanel1.GetValue(mycol, myrow, out myVal);
 
-                colLetter = mycol + 65;
-                textBox2.Text = ((char)colLetter).ToString() + (myrow + 1).ToString() + "= " + myVal;
-            myFileName = filename;
-            this.Text = filename;
-        }
+        //        colLetter = mycol + 65;
+        //        textBox2.Text = ((char)colLetter).ToString() + (myrow + 1).ToString() + "= " + myVal;
+        //    myFileName = filename;
+        //    this.Text = filename;
+        //}
         
         /// <summary>
         /// When save is clicked saves the current spreadsheet
@@ -176,6 +200,7 @@ namespace SS
         {
             myModel.Leave(myName);
             this.Close();
+            Application.Exit();
         }
         
        
@@ -185,29 +210,35 @@ namespace SS
         /// <param name="sender"></param>
         private void spreadsheetPanel1_SelectionChanged(SS.SpreadsheetPanel sender)
         {
-            int mycol;
-            int myRow;
+            //int mycol;
+            //int myRow;
             int colLetter;
-            string myVal;
+            //string myVal;
             object content;
             try
             {
-
-                textBox1.Clear();
-                spreadsheetPanel1.GetSelection(out mycol, out myRow);
-                content = mySheet.GetCellContents(GetCellName(mycol, myRow));
+               //this.textBox1.Invoke(new Action(()=>this.textBox1.Clear()));
+                //textBox1.Clear();
+               this.textBox1.Clear();
+                this.spreadsheetPanel1.Invoke(new Action(()=>
+                spreadsheetPanel1.GetSelection(out mycol2, out myRow2)));
+                content = mySheet.GetCellContents(GetCellName(mycol2, myRow2));
                 if (content is Formula)
                 {
-                    textBox1.Text = "=" + content.ToString();
+                    //this.textBox1.Invoke(new Action(()=>textBox1.Text = "=" + content.ToString()));
+                    this.textBox1.Text = "=" + content.ToString();
                 }
                 else
                 {
-                    textBox1.Text = content.ToString();
+                    //this.textBox1.Invoke(new Action(()=>textBox1.Text = content.ToString()));
+                    this.textBox1.Text = content.ToString();
                 }
-                spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
+                this.spreadsheetPanel1.Invoke(new Action(()=>
+                spreadsheetPanel1.GetValue(mycol2, myRow2, out myval2)));
 
-                colLetter = mycol + 65;
-                textBox2.Text = ((char)colLetter).ToString() + (myRow + 1).ToString() + "= " + myVal;
+                colLetter = mycol2 + 65;
+                this.textBox2.Invoke(new Action(()=>
+                textBox2.Text = ((char)colLetter).ToString() + (myRow2 + 1).ToString() + "= " + myval2));
                
             }
             catch (CircularException)
@@ -267,9 +298,9 @@ namespace SS
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                int mycol;
-                int myRow;
-                string myVal;
+                //int mycol;
+                //int myRow;
+                //string myVal;
                 int colLetter;
                 object content;
                 object value;
@@ -281,46 +312,55 @@ namespace SS
                    
                     int chRow;
                     int chcol;
-                    spreadsheetPanel1.GetSelection(out mycol, out myRow);
-                    spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
-                    colLetter = mycol + 65;
-                    
-                            foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
+                    this .spreadsheetPanel1.Invoke(new Action(()=>
+                    spreadsheetPanel1.GetSelection(out mycol3, out myRow3)));
+                    this.spreadsheetPanel1.Invoke(new Action(()=>
+                    spreadsheetPanel1.GetValue(mycol3, myRow3, out myVal3)));
+                    colLetter = mycol3 + 65;
+                    //string text;
+                        //this.textBox1.Invoke(new Action(()=>text=textBox1.Text));
+                            foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol3, myRow3), this.textBox1.Text))
                             {
                                 GetRowColoumn(s, out chcol, out chRow);
-
-                                spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString());
+                                this.spreadsheetPanel1.Invoke(new Action(()=>
+                                spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString())));
                             }
-                        content = mySheet.GetCellContents(GetCellName(mycol, myRow));
+                        content = mySheet.GetCellContents(GetCellName(mycol3, myRow3));
 
-                        value = mySheet.GetCellValue(GetCellName(mycol, myRow));
-                        spreadsheetPanel1.SetValue(mycol, myRow, value.ToString());
-                        textBox2.Text = ((char)colLetter).ToString() + (myRow + 1).ToString() + "= " + value.ToString();
+                        value = mySheet.GetCellValue(GetCellName(mycol3, myRow3));
+                    this.spreadsheetPanel1.Invoke(new Action(()=>
+                        spreadsheetPanel1.SetValue(mycol3, myRow3, value.ToString())));
+                    this.textBox2.Invoke(new Action(()=>
+                        textBox2.Text = ((char)colLetter).ToString() + (myRow3 + 1).ToString() + "= " + value.ToString()));
                         if (content is Formula)
                         {
-                            textBox1.Text = "=" + content.ToString();
+                            this.textBox1.Invoke(new Action(()=>
+                            textBox1.Text = "=" + content.ToString()));
                             sendContent = "=" + content.ToString();
                         }
                         else
                         {
-                            textBox1.Text = content.ToString();
+                            this.textBox1.Invoke(new Action(()=>
+                            textBox1.Text = content.ToString()));
                             sendContent = content.ToString();
                         }
                         if (mySheet.Changed && !this.Text.EndsWith("*"))
                         {
-                            this.Text = this.Text + "*";
+                            this.Invoke(new Action(()=>
+                            this.Text = this.Text + "*"));
                         }
                         if (!mySheet.Changed)
                         {
-                            this.Text = this.Text.TrimEnd('*');
+                            this.Invoke(new Action(()=>
+                            this.Text = this.Text.TrimEnd('*')));
                         }
                         length = sendContent.Length.ToString();
                         waitVersion = myVersion;
                         waitLength = length;
                         waitName = myName;
-                        waitCellName = GetCellName(mycol, myRow);
+                        waitCellName = GetCellName(mycol3, myRow3);
                         waitContent = sendContent;
-                        myModel.Change(myName, myVersion, GetCellName(mycol, myRow), length, sendContent);
+                        myModel.Change(myName, myVersion, GetCellName(mycol3, myRow3), length, sendContent);
 
                 }
                 catch (CircularException)
@@ -342,15 +382,16 @@ namespace SS
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            int mycol;
-            int myRow;
-            string myVal;
+           // int mycol;
+            //int myRow;
+            //string myVal;
             int colLetter;
             object content;
             object value;
             string sendContent;
             string length;
-            spreadsheetPanel1.GetSelection(out mycol, out myRow);
+            this.spreadsheetPanel1.Invoke(new Action(()=>
+            spreadsheetPanel1.GetSelection(out mycol4, out myRow4)));
             try
             {
                 
@@ -358,49 +399,55 @@ namespace SS
                 int chRow;
                 int chcol;
                 //bool fail = false;
-                spreadsheetPanel1.GetValue(mycol, myRow, out myVal);
-                colLetter = mycol + 65;
+                this.spreadsheetPanel1.Invoke(new Action(()=>
+                spreadsheetPanel1.GetValue(mycol4, myRow4, out myVal4)));
+                colLetter = mycol4 + 65;
 
                  
-                        foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol, myRow), textBox1.Text))
+                        foreach (string s in mySheet.SetContentsOfCell(GetCellName(mycol4, myRow4), this.textBox1.Text))
                         {
                             GetRowColoumn(s, out chcol, out chRow);
-
-                            spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString());
+                            this.spreadsheetPanel1.Invoke(new Action(()=>
+                            spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString())));
                         }
 
-                    content = mySheet.GetCellContents(GetCellName(mycol, myRow));
+                    content = mySheet.GetCellContents(GetCellName(mycol4, myRow4));
                     
-                    value = mySheet.GetCellValue(GetCellName(mycol, myRow));
-                    textBox2.Text = ((char)colLetter).ToString() + (myRow + 1).ToString() + "= " + value;
-                    spreadsheetPanel1.SetValue(mycol, myRow, value.ToString());
+                    value = mySheet.GetCellValue(GetCellName(mycol4, myRow4));
+                this.textBox2.Invoke(new Action(()=>
+                    textBox2.Text = ((char)colLetter).ToString() + (myRow4 + 1).ToString() + "= " + value));
+                    spreadsheetPanel1.SetValue(mycol4, myRow4, value.ToString());
                    
 
                     if (content is Formula)
                     {
-                        textBox1.Text = "=" + content.ToString();
+                        this.textBox1.Invoke(new Action(()=>
+                        textBox1.Text = "=" + content.ToString()));
                         sendContent = "=" + content.ToString();
                     }
                     else
                     {
-                        textBox1.Text = content.ToString();
+                        this.textBox1.Invoke(new Action(()=>
+                        textBox1.Text = content.ToString()));
                         sendContent = content.ToString();
                     }
                     if (mySheet.Changed && !this.Text.EndsWith("*"))
                     {
-                        this.Text = this.Text + "*";
+                        this.Invoke(new Action(()=>
+                        this.Text = this.Text + "*"));
                     }
                     if (!mySheet.Changed)
                     {
-                        this.Text = this.Text.TrimEnd('*');
+                        this.Invoke(new Action(()=>
+                        this.Text = this.Text.TrimEnd('*')));
                     }
                     length = sendContent.Length.ToString();
                     waitVersion = myVersion;
                     waitLength = length;
                     waitName = myName;
-                    waitCellName = GetCellName(mycol, myRow);
+                    waitCellName = GetCellName(mycol4, myRow4);
                     waitContent = sendContent;
-                    myModel.Change(myName, myVersion, GetCellName(mycol, myRow), length, sendContent);
+                    myModel.Change(myName, myVersion, GetCellName(mycol4, myRow4), length, sendContent);
 
             }
             catch (CircularException)
@@ -442,19 +489,27 @@ namespace SS
         {
             MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-        private void successJoin(string name,string version,string length, string filename)
+        private void successJoin(string name,string version,string length, string filename, string xml)
         {
             myVersion = version;
             myLength = length;
             myName = name;
-            Spreadsheet myopenSheet = new Spreadsheet(filename, s => true, s => s.ToUpper(), "ps6");
-            GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, name));
-            tabControl1.Invoke(new Action(() => tabControl1.SelectedIndex = 1));
+            
+            myopenSheet = new Spreadsheet(filename, s => true, s => s.ToUpper(), "ps6");
+            //this.Invoke(new Action(()=>OpenNew(myopenSheet,name)));
+                //this.textBox1.Invoke(new Action(()=>textBox1.Clear()));
+            OpenNew(myopenSheet, name);
+            //GuiApplicationContext.getAppContext().RunForm(new Form1(myopenSheet, name));
+            //MessageBox.Show(xml, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            this.tabControl1.Invoke(new Action(()=>tabControl1.SelectedIndex=1));
+            
             
         }
         private void failJoin(string name, string message)
         {
             MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
+            
         }
         private void successChange(string name, string version)
         {
@@ -476,6 +531,7 @@ namespace SS
         private void failChange(string name, string message)
         {
             MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
         }
         private void successUndo(string name, string version, string cell, string length, string content)
         {
@@ -483,6 +539,8 @@ namespace SS
             myVersion = version;
             myLength = length;
             changeCell(name, version, cell, length, content);
+            this.textBox1.Invoke(new Action(()=>textBox1.Clear()));
+            //textBox1.Clear();
             
         }
         private void endUndo(string name, string version)
@@ -593,15 +651,16 @@ namespace SS
                 foreach (string s in mySheet.SetContentsOfCell(cell, content))
                 {
                     GetRowColoumn(s, out chcol, out chRow);
-
-                    spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString());
+                    this.spreadsheetPanel1.Invoke(new Action(()=>
+                    spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString())));
                 }
 
                 cellContent = mySheet.GetCellContents(cell);
 
                 value = mySheet.GetCellValue(cell);
                 GetRowColoumn(cell, out mycol, out myRow);
-                spreadsheetPanel1.SetValue(mycol, myRow, value.ToString());
+                this.spreadsheetPanel1.Invoke(new Action(()=>
+                spreadsheetPanel1.SetValue(mycol, myRow, value.ToString())));
 
             }
             catch (CircularException)
@@ -614,6 +673,85 @@ namespace SS
 
 
             }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            closeToolStripMenuItem_Click(sender, e);
+            //Application.Exit();
+        }
+        private void OpenNew(Spreadsheet openSheet, string filename)
+        {
+
+            //InitializeComponent();
+            //myModel = new SpreadsheetModel.SSModel();
+            //myModel.CreateOK += ValidSS;
+            //myModel.CreateFail += InvalidSS;
+            //myModel.JoinOK += successJoin;
+            //myModel.JoinFail += failJoin;
+            //myModel.ChangeOk += successChange;
+            //myModel.ChangeWait += waitChange;
+            //myModel.ChangeFail += failChange;
+            //myModel.UndoOk += successUndo;
+            //myModel.UndoEnd += endUndo;
+            //myModel.UndoWait += waitUndo;
+            //myModel.UndoFail += failUndo;
+            //myModel.Update += update;
+            //myModel.SaveOk += successSave;
+            //myModel.SaveFail += failSave;
+            //myModel.Error += error;
+            //myModel.Test += tester;
+            //numWindows++;
+            mySheet = openSheet;
+            //this.tabControl1.Invoke(new Action(() => tabControl1.Appearance = TabAppearance.Buttons));
+            //this.tabControl1.Invoke(new Action(()=>tabControl1.SizeMode = TabSizeMode.Fixed));
+            //this.tabControl1.Invoke(new Action(()=>tabControl1.ItemSize=new System.Drawing.Size(0,1)));
+
+            //tabControl1.Appearance = TabAppearance.Buttons;
+            //tabControl1.SizeMode = TabSizeMode.Fixed;
+            //tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+
+
+            foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
+            {
+                int myCol;
+                int myRow;
+                GetRowColoumn(s, out myCol, out myRow);
+                if (myCol <= 25 | myRow <= 99)
+                {
+
+                    this.spreadsheetPanel1.Invoke(new Action(()=>
+                    spreadsheetPanel1.SetValue(myCol, myRow, mySheet.GetCellValue(s).ToString())));
+                }
+            }
+            //int mycol;
+            //int myrow;
+            int colLetter;
+            //string myVal;
+            object content;
+            this.textBox1.Invoke(new Action(() => textBox1.Clear()));
+            //textBox1.Clear();
+            this.spreadsheetPanel1.Invoke(new Action(()=>
+            spreadsheetPanel1.GetSelection(out mycol5, out myRow5)));
+            content = mySheet.GetCellContents(GetCellName(mycol5, myRow5));
+            if (content is Formula)
+            {
+                this.textBox1.Invoke(new Action(()=>
+                textBox1.Text = "=" + content.ToString()));
+            }
+            else
+            {
+                this.textBox1.Invoke(new Action(()=>
+                textBox1.Text = content.ToString()));
+            }
+            spreadsheetPanel1.GetValue(mycol5, myRow5, out myVal5);
+
+            colLetter = mycol5 + 65;
+            this.textBox2.Invoke(new Action(()=>
+            textBox2.Text = ((char)colLetter).ToString() + (myRow5 + 1).ToString() + "= " + myVal5));
+            myFileName = filename;
+            this.Invoke(new Action(() => this.Text = filename));
+            //this.Text = filename;
         }
     }
 }

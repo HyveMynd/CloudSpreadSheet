@@ -18,6 +18,7 @@ namespace serverss {
         this->uid = id_count;
         id_count++;
         this->user_socket = user_socket;
+        this->valid = true;
     }
     
 }

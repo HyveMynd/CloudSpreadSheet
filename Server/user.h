@@ -21,6 +21,7 @@ namespace serverss{
         
     public:
         int uid;
+        bool valid;
 
         boost::asio::ip::tcp::socket* user_socket;
         user(boost::asio::ip::tcp::socket*);

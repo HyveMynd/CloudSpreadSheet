@@ -129,6 +129,14 @@ namespace serverss{
         log("Sending Update");
         result.command = Update;
         result.length = result.cell_result.contents.length();
+        
+        //remove and ignore users with null sockets
+        if (!user_to_update->valid)
+        {
+            leave(user_to_update);
+            return;
+        }
+        
 		sendUpdate(user_to_update->user_socket, result.to_string());
     }
     

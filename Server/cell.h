@@ -28,7 +28,7 @@ namespace serverss{
         std::string to_string();
         
     private:
-        
+                
         void parse_contents(std::string);
         
     };

@@ -342,20 +342,22 @@ int main(int argc, char *argv[])
 
     try
     {
-      if (argc > 1) {
-        port = atoi(argv[1]);
-      }
-		 
-		  serverss::begin s(io_service, port, my_server);
-		  //work(io_service.run());
-		  auto_ptr<boost::asio::io_service::work> work(
-    			new boost::asio::io_service::work(io_service).run());
-    		while (stop != "stop")
-		{
-			cin >> stop;
-		}
+//      if (argc > 1) {
+//        port = atoi(argv[1]);
+//      }
+//		 
+//		  serverss::begin s(io_service, port, my_server);
+//		  //work(io_service.run());
+//		  auto_ptr<boost::asio::io_service::work> work(
+//    			new boost::asio::io_service::work(io_service));
+//    		while (stop != "stop")
+//		{
+//			cin >> stop;
+//		}
+        
+        io_service.run();
 	
-	work.reset();
+	//work.reset();
 	//io_service.stop();
 
     }

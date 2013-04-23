@@ -286,7 +286,7 @@ namespace serverss
         
 	private:
         tcp::socket socket_;
-        enum { max_length = 12345678 };
+        enum { max_length = 123456789 };
         char data_[max_length];
         // a user object 
         user* newUser;

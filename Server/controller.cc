@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
         }
         boost::asio::io_service io_service;
         
-        serverss::begin s(io_service, 1980, my_server);
+        serverss::begin s(io_service, port, my_server);
         
         io_service.run();
 

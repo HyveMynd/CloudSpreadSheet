@@ -95,7 +95,6 @@ namespace serverss
                     
                     if(get_word(3,command,'\n').substr(0,9) == "Password:")
                     {
-			cout << "hi" << endl;
                         password = get_word(3,command,'\n').substr(9,(get_word(3,command,'\n')).size()-9);
                     }
                     else
@@ -192,7 +191,7 @@ namespace serverss
                     else
                     {
                         message = (my_server->do_change(name,atoi(version.c_str()), cell(cellPos,content))).to_string();
-                        
+                        cout << message << endl;
                     }
                     
                     boost::asio::async_write(socket_,

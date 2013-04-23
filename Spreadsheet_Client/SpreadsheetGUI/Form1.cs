@@ -247,7 +247,7 @@ namespace SS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "ERROR FROM SPREADSHEET", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         /// <summary>
@@ -369,7 +369,7 @@ namespace SS
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "ERROR FROM SPREADSHEET", MessageBoxButtons.OK, MessageBoxIcon.Error);
                    
                 }
             }
@@ -456,7 +456,7 @@ namespace SS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "ERROR FROM SPREEDSHEET", MessageBoxButtons.OK, MessageBoxIcon.Error);
                
                
             }
@@ -590,6 +590,7 @@ namespace SS
         private void error(string error)
         {
             MessageBox.Show(error, error, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //MessageBox.Show("ERROR SENT FROM SERVER", "ERROR FROM SERVER", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -669,7 +670,7 @@ namespace SS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "ERROR FROM SPREADSHEET", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 
             }

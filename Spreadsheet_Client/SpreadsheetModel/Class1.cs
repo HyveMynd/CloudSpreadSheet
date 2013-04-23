@@ -237,7 +237,7 @@ namespace SpreadsheetModel
                 string[] words = Regex.Split(s, "\n");
                 string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
                 string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
-                string cell = words[3].TrimStart('C', 'e', 'l', 'l', ':');
+                string cell = words[3].Split(':')[1];
                 string length = words[4].TrimStart('L', 'e', 'n', 'g', 't', 'h', ':');
                 string content = words[5];
                 Update(name,version,cell,length,content);

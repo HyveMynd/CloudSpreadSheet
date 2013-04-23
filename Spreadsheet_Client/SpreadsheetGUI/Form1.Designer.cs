@@ -193,7 +193,7 @@
             this.editHost.Name = "editHost";
             this.editHost.Size = new System.Drawing.Size(100, 20);
             this.editHost.TabIndex = 8;
-            this.editHost.Text = "localhost";
+            this.editHost.Text = "lab2-14.eng.utah.edu";
             // 
             // label3
             // 
@@ -332,7 +332,7 @@
             this.editPort.Name = "editPort";
             this.editPort.Size = new System.Drawing.Size(100, 20);
             this.editPort.TabIndex = 16;
-            this.editPort.Text = "1984";
+            this.editPort.Text = "1980";
             // 
             // Form1
             // 

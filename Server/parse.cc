@@ -89,7 +89,7 @@ namespace serverss {
     // header removed from xml
     // format is validated in get_xml
     string s;
-    s = lowercase(get_xml(fname));
+    s = get_xml(fname);
 
     if (debug) cout << "\ns=" << s << endl;
 

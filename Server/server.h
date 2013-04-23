@@ -34,6 +34,7 @@ namespace serverss {
         ss_result do_change(std::string, int, cell);
         ss_result do_undo(std::string, int);
         ss_result do_save(std::string);
+        void shutdown();
         void do_leave(std::string, user*);
     
     private:

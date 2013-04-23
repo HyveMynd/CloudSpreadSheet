@@ -77,7 +77,11 @@ namespace serverss
                 // CREATES a file and add a file to the Spreadsheet map
                 // if the file already exists or valid file name (no spaces)
                 // responds with FAIL
-                if(get_word(1,command,'\n').find("CREATE") != std::string::npos)
+                if (get_word(1,command,'\n').find("shutdown") != std::string::npos)
+                {
+                	my_server->shutdown();
+                }
+                else if(get_word(1,command,'\n').find("CREATE") != std::string::npos)
                 {
                     string name = "";
                     string password = "";
@@ -342,30 +346,30 @@ int main(int argc, char *argv[])
 
     try
     {
-//      if (argc > 1) {
-//        port = atoi(argv[1]);
-//      }
-//		 
-//		  serverss::begin s(io_service, port, my_server);
-//		  //work(io_service.run());
-//		  auto_ptr<boost::asio::io_service::work> work(
-//    			new boost::asio::io_service::work(io_service));
-//    		while (stop != "stop")
-//		{
-//			cin >> stop;
-//		}
+      if (argc > 1) {
+        port = atoi(argv[1]);
+      }
+		 
+		  serverss::begin s(io_service, port, my_server);
+		  io_service.run();
+		  auto_ptr<boost::asio::io_service::work> work(
+    			new boost::asio::io_service::work(io_service));
+    		while (stop != "stop")
+		{
+			cin >> stop;
+		}
         
         
-        if (argc > 1) {
-            port = atoi(argv[1]);
-        }
-        boost::asio::io_service io_service;
-        
-        serverss::begin s(io_service, 1980, my_server);
-        io_service.run();
+//        if (argc > 1) {
+//            port = atoi(argv[1]);
+//        }
+//        boost::asio::io_service io_service;
+//        
+//        serverss::begin s(io_service, 1980, my_server);
+//        io_service.run();
 	
 	//work.reset();
-	//io_service.stop();
+	io_service.stop();
 
     }
       catch (std::exception& e)

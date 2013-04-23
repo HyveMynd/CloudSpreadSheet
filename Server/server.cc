@@ -238,4 +238,13 @@ namespace serverss{
         return filename;
     }
     
+    void server::shutdown()
+    {
+        for (std::map<std::string, spreadsheet>::iterator it = spreadsheets.begin(); it != spreadsheets.end(); ++it)
+        {
+            it->second.save();
+        }
+    }
+
+    
 }

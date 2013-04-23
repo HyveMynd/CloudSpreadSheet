@@ -133,6 +133,7 @@ namespace serverss{
         //remove and ignore users with null sockets
         if (!user_to_update->valid)
         {
+            log("Invalid user. Leaving");
             leave(user_to_update);
             return;
         }
@@ -223,11 +224,13 @@ namespace serverss{
         log("Leave Success");
 
         // Delete user and remove pointer from list
+        log("Deleting user");
+        delete (leave);
+        log("Removing userp pointer from list");
         for(std::list<user*>::iterator itr = users.begin(); itr != users.end();)
         {
             if ( (*itr)->uid == user_leaving->uid )
             {
-                delete (*itr);
                 itr=users.erase(itr);
             }
             else

@@ -137,13 +137,13 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {
-                        message = (my_server->do_join(name,password, newUser)).to_string();
-                        cout << message << endl; 
+                        message_ = (my_server->do_join(name,password, newUser)).to_string();
+                        cout << message_ << endl; 
 
                     }
                     
                     boost::asio::async_write(socket_,
-                                             boost::asio::buffer(message, message.size()),
+                                             boost::asio::buffer(message_, message_.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                     
@@ -285,6 +285,7 @@ namespace serverss
         }
         
 	private:
+	string message_;
         tcp::socket socket_;
         enum { max_length = 123456789 };
         char data_[max_length];

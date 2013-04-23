@@ -193,7 +193,7 @@
             this.editHost.Name = "editHost";
             this.editHost.Size = new System.Drawing.Size(100, 20);
             this.editHost.TabIndex = 8;
-            this.editHost.Text = "lab2-14.eng.utah.edu";
+            this.editHost.Text = "lab2-15.eng.utah.edu";
             // 
             // label3
             // 
@@ -219,6 +219,7 @@
             this.editPasswd.Name = "editPasswd";
             this.editPasswd.Size = new System.Drawing.Size(100, 20);
             this.editPasswd.TabIndex = 10;
+            this.editPasswd.Text = "pie";
             // 
             // lblSpreadsheet
             // 
@@ -235,6 +236,7 @@
             this.editFilename.Name = "editFilename";
             this.editFilename.Size = new System.Drawing.Size(100, 20);
             this.editFilename.TabIndex = 12;
+            this.editFilename.Text = "apple";
             // 
             // tabControl1
             // 

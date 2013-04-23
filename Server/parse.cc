@@ -239,7 +239,7 @@ string readfile(string fname)
     // iterate throught the data
     map<string,string>::iterator it;
     for (map<string,string>::iterator it=data.begin(); it!=data.end(); ++it)
-      ss << "<cell><name>" << it->first << "</name><contents>" << it->second << "</contents><cell>";
+      ss << "<cell><name>" << it->first << "</name><contents>" << it->second << "</contents></cell>";
    
     ss << "</spreadsheet>";
     ss.close();

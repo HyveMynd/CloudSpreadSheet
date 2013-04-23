@@ -16,8 +16,9 @@ using namespace std;
 
 namespace serverss
 {
-	//global variable
-    
+	/*
+     * Represents a single socket into which data comes through.
+     */
 	class socketConnection
 	{
     public:
@@ -107,11 +108,15 @@ namespace serverss
 			//(my_server->do_create(name,password));
 			cout << message << endl;
 		    }
+                    // send the message back
                     boost::asio::async_write(socket_,
                                              boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                 }
+                /*
+                 * Process a join
+                 */
                 else if(get_word(1,command,'\n').find("JOIN") != std::string::npos)
                 {
                     string name = "";
@@ -139,13 +144,16 @@ namespace serverss
                         cout << message << endl; 
 
                     }
-                    
+                    // send the message back
                     boost::asio::async_write(socket_,
                                              boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                     
                 }
+                /*
+                 * Process a change
+                 */
                 else if(get_word(1,command,'\n').find("CHANGE") != std::string::npos)
                 {
                     string name = "";
@@ -190,13 +198,16 @@ namespace serverss
                         message = (my_server->do_change(name,atoi(version.c_str()), cell(cellPos,content))).to_string();
                         cout << message << endl;
                     }
-                    
+                    // send the message back
                     boost::asio::async_write(socket_,
                                              boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                     
                 }
+                /*
+                 * Process an undo
+                 */
                 else if(get_word(1,command,'\n').find("UNDO") != std::string::npos)
                 {
                     string name = "";
@@ -224,12 +235,15 @@ namespace serverss
                     {
                         message = (my_server->do_undo(name,atoi(version.c_str()))).to_string();
                     }
-                    
+                    // send the message back
                     boost::asio::async_write(socket_,
                                              boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                 }
+                /*
+                 * Process a save
+                 */
                 else if(get_word(1,command,'\n').find("SAVE") != std::string::npos)
                 {
                     string name = "";
@@ -253,6 +267,9 @@ namespace serverss
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                 }
+                /*
+                 * Process a leave
+                 */
                 else if(command.find("LEAVE") != std::string::npos)
                 {
                     string name = "";
@@ -288,6 +305,9 @@ namespace serverss
         user* newUser;
 	};
   
+    /*
+     * Initializes the server. Begins to listen on the specified port
+     */
 	class begin
 	{
 	public:
@@ -342,20 +362,6 @@ int main(int argc, char *argv[])
 
     try
     {
-//      if (argc > 1) {
-//        port = atoi(argv[1]);
-//      }
-//		 
-//		  serverss::begin s(io_service, port, my_server);
-//		  //io_service.run();
-//		  auto_ptr<boost::asio::io_service::work> work(
-//    			new boost::asio::io_service::work(io_service));
-//        work.start();
-//    		while (stop != "stop")
-//		{
-//			cin >> stop;
-//		}
-        
         
         if (argc > 1) {
             port = atoi(argv[1]);
@@ -364,13 +370,8 @@ int main(int argc, char *argv[])
         
         serverss::begin s(io_service, 1980, my_server);
         
-        
         io_service.run();
-	
-        
-        
-	//work.reset();
-//	io_service.stop();
+
 
     }
       catch (std::exception& e)

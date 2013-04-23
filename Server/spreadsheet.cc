@@ -14,18 +14,24 @@ namespace serverss{
     /*--------Constructors----------*/
     spreadsheet::spreadsheet(std::string name, std::string password)
     {
+        log("In name/pass constructor");
+        log("Getting map from parser");
+        std::string fname = "data/" + name;
+        this->ss_contents = get_map(fname);
+
         this->name = name;
         this->password = password;
         this->version = 0;
     }
     
-    spreadsheet::spreadsheet(std::string name, std::string password, std::map<std::string, std::string> cell_map)
-    {
-        this->name = name;
-        this->password = password;
-        this->ss_contents = cell_map;
-        this->version = 0;
-    }
+//    spreadsheet::spreadsheet(std::string name, std::string password, std::map<std::string, std::string> cell_map)
+//    {
+//        log("In constructor with map");
+//        this->name = name;
+//        this->password = password;
+//        this->ss_contents = cell_map;
+//        this->version = 0;
+//    }
     
     /*
      * Adds the user to the list of users.
@@ -43,12 +49,17 @@ namespace serverss{
         log("Adding user to list");
         users.push_back(new_user);
         
-        log("Getting map from parser");
-        std::string fname = "data/" + name;
-        ss_contents = get_map(fname);
+        if (version == 0)
+        {
+        	log("Getting xml from file");
+        	result.xml = get_xml("data/"+name);
+        }
+        else
+        {
+        	log("Getting XML from map");
+        	result.xml = get_xml_from_map(ss_contents);
+        }
         
-        log("Getting xml from file");
-        result.xml = get_xml(fname);
         log("XML is: " + result.xml);
         result.length = result.xml.length();
         

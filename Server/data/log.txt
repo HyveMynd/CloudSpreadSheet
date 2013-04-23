@@ -1,1 +1,7 @@
-SPREADSHEET LOG testCreate: Entered sendUpdate
+SPREADSHEET LOG testCreate: UPDATE
+Name:testCreate
+Version:1
+Cell:A1
+Length:3
+123
+

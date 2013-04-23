@@ -34,7 +34,7 @@ namespace serverss {
         
         // Constructors
         spreadsheet(std::string, std::string);
-        spreadsheet(std::string, std::string, std::map<std::string, std::string>);
+//        spreadsheet(std::string, std::string, std::map<std::string, std::string>);
         
         // Spreadsheet functions
         ss_result join(user*, ss_result&);

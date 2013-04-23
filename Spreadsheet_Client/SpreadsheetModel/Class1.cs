@@ -210,7 +210,7 @@ namespace SpreadsheetModel
                 TextWriter tw = new StreamWriter("data.ss");
 
                 // write a line of text to the file
-                tw.WriteLine(words[4].ToLower());
+                tw.WriteLine(words[4]);
 
                 // close the stream
                 tw.Close();

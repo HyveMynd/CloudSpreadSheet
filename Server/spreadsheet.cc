@@ -24,14 +24,14 @@ namespace serverss{
         this->version = 0;
     }
     
-    spreadsheet::spreadsheet(std::string name, std::string password, std::map<std::string, std::string> cell_map)
-    {
-        log("In constructor with map");
-        this->name = name;
-        this->password = password;
-        this->ss_contents = cell_map;
-        this->version = 0;
-    }
+//    spreadsheet::spreadsheet(std::string name, std::string password, std::map<std::string, std::string> cell_map)
+//    {
+//        log("In constructor with map");
+//        this->name = name;
+//        this->password = password;
+//        this->ss_contents = cell_map;
+//        this->version = 0;
+//    }
     
     /*
      * Adds the user to the list of users.
@@ -53,7 +53,6 @@ namespace serverss{
         {
         	log("Getting xml from file");
         	result.xml = get_xml("data/"+name);
-            ss_contents = get_map(fname);
         }
         else
         {

@@ -15,7 +15,7 @@ using namespace std;
 
 namespace serverss {
 
-  int debug = 1;
+  int debug = 0;
 
   void log(string s, string msg) {
     ofstream os("log.txt");

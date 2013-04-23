@@ -227,6 +227,23 @@ string readfile(string fname)
      return 0;
 }
 
+  /* creates an xml formatted string */
+  string get_xml_from_map(map<string, string> data)
+  { 
+    string ss = "";
+    //ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc);
+    ss += header1;
+    log("put_xml",header);
+    
+    // iterate throught the data
+    map<string,string>::iterator it;
+    for (map<string,string>::iterator it=data.begin(); it!=data.end(); ++it)
+      ss += "<cell><name>" + it->first + "</name><contents>" + it->second + "</contents></cell>";
+   
+    ss += "</spreadsheet>";
+    return ss;
+  }
+
   /* creates an xml formatted string and saves it to disk */
   bool put_xml(const string fname, map<string, string> data)
   { 

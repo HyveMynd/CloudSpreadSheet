@@ -92,41 +92,62 @@ namespace SpreadsheetModel
         }
         public void Change(string name, string version, string cell, string length, string content)
         {
-            if (socket.Connected)
+            try
             {
-                WaitName = name;
-                WaitVersion = version;
-                waitCell = cell;
-                WaitLength = length;
-                WaitContent = content;
-                socket.BeginSend("CHANGE\nName:" + name + "\nVersion:" + version + "\nCell:" + cell + "\nLength:" + length + "\n"+content+"\n", (e, p) => { }, null);
-                //socket.BeginSend("CHANGE\n", (e, p) => { }, null);
-                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
-                //socket.BeginSend("Version:" + version + "\n", (e, p) => { }, null);
+                if (socket.Connected)
+                {
+                    WaitName = name;
+                    WaitVersion = version;
+                    waitCell = cell;
+                    WaitLength = length;
+                    WaitContent = content;
+                    socket.BeginSend("CHANGE\nName:" + name + "\nVersion:" + version + "\nCell:" + cell + "\nLength:" + length + "\n" + content + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("CHANGE\n", (e, p) => { }, null);
+                    //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("Version:" + version + "\n", (e, p) => { }, null);
+                }
+                socket.BeginReceive(EventRecieved, null);
             }
-            socket.BeginReceive(EventRecieved, null);
+            catch (Exception ex)
+            {
+                noConnection(ex.ToString());
+            }
         }
         public void Undo(string name, string version)
         {
-            if (socket.Connected)
+            try
             {
-                socket.BeginSend("UNDO\nName:" + name + "\nVersion:" + version + "\n", (e, p) => { }, null);
-                //socket.BeginSend("UNDO\n", (e, p) => { }, null);
-                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
-                //socket.BeginSend("Version:" + version + "\n", (e, p) => { }, null);
+                if (socket.Connected)
+                {
+                    socket.BeginSend("UNDO\nName:" + name + "\nVersion:" + version + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("UNDO\n", (e, p) => { }, null);
+                    //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("Version:" + version + "\n", (e, p) => { }, null);
+                }
+                socket.BeginReceive(EventRecieved, null);
             }
-            socket.BeginReceive(EventRecieved, null);
+            catch (Exception ex)
+            {
+                noConnection(ex.ToString());
+            }
         }
         public void Save(string name)
         {
-            if (socket.Connected)
+            try
             {
-                socket.BeginSend("SAVE\nName:" + name + "\n", (e, p) => { }, null);
-                //socket.BeginSend("SAVE\n", (e, p) => { }, null);
-                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
-                
+                if (socket.Connected)
+                {
+                    socket.BeginSend("SAVE\nName:" + name + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("SAVE\n", (e, p) => { }, null);
+                    //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+
+                }
+                socket.BeginReceive(EventRecieved, null);
             }
-            socket.BeginReceive(EventRecieved, null);
+            catch (Exception ex)
+            {
+                noConnection(ex.ToString());
+            }
         }
         public void Leave(string name)
         {

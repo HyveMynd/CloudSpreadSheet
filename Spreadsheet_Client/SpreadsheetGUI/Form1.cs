@@ -26,15 +26,15 @@ namespace SS
         private string myVersion = null;
         private string myLength = null;
         private string myName = null;
-        private bool waiting = false;
-        private string waitVersion = null;
-        private string waitContent = null;
-        private string waitCellName = null;
-        private string waitLength = null;
-        private string waitName = null;
-        private bool undoWaiting = false;
-        private string undoWaitVersion = null;
-        private string undoWaitName = null;
+        //private bool waiting = false;
+        //private string waitVersion = null;
+        //private string waitContent = null;
+        //private string waitCellName = null;
+        //private string waitLength = null;
+        //private string waitName = null;
+        //private bool undoWaiting = false;
+        //private string undoWaitVersion = null;
+        //private string undoWaitName = null;
         private SpreadsheetModel.SSModel myModel;
         private Spreadsheet myopenSheet = null;
         //private int myRow1 = 0;
@@ -52,6 +52,7 @@ namespace SS
         private int myRow5 = 0;
         private int mycol5 = 0;
         private string myVal5 = null;
+        
         /// <summary>
         /// Creates a new empty spreadsheet
         /// </summary>
@@ -75,6 +76,7 @@ namespace SS
             myModel.SaveFail += failSave;
             myModel.Error += error;
             myModel.Test += tester;
+            myModel.noConnection += connectError;
             tabControl1.Appearance = TabAppearance.Buttons;
             tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.ItemSize = new System.Drawing.Size(0, 1);
@@ -110,75 +112,7 @@ namespace SS
             //this.Invoke(new Action(()=>this.Text = "Spreadsheet"));
             this.Text = "Spreadsheet";
         }
-        /// <summary>
-        /// Creates a spreadsheet that is populated from a file
-        /// </summary>
-        /// <param name="openSheet"></param>
-        /// <param name="filename"></param>
-        //public Form1(Spreadsheet openSheet,string filename)
-        //{
-            
-        //    InitializeComponent();
-        //    myModel = new SpreadsheetModel.SSModel();
-        //    myModel.CreateOK += ValidSS;
-        //    myModel.CreateFail += InvalidSS;
-        //    myModel.JoinOK += successJoin;
-        //    myModel.JoinFail += failJoin;
-        //    myModel.ChangeOk += successChange;
-        //    myModel.ChangeWait += waitChange;
-        //    myModel.ChangeFail += failChange;
-        //    myModel.UndoOk += successUndo;
-        //    myModel.UndoEnd += endUndo;
-        //    myModel.UndoWait += waitUndo;
-        //    myModel.UndoFail += failUndo;
-        //    myModel.Update += update;
-        //    myModel.SaveOk += successSave;
-        //    myModel.SaveFail += failSave;
-        //    myModel.Error += error;
-        //    myModel.Test += tester;
-        //    numWindows++;
-        //    mySheet = openSheet;
-        //    tabControl1.Appearance = TabAppearance.Buttons;
-        //    tabControl1.SizeMode = TabSizeMode.Fixed;
-        //    tabControl1.ItemSize = new System.Drawing.Size(0, 1);
-            
-
-        //    foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
-        //    {
-        //        int myCol;
-        //        int myRow;
-        //        GetRowColoumn(s, out myCol, out myRow);
-        //        if (myCol <= 25 | myRow <= 99)
-        //        {
-                    
-
-        //            spreadsheetPanel1.SetValue(myCol, myRow, mySheet.GetCellValue(s).ToString());
-        //        }
-        //    }
-        //    int mycol;
-        //    int myrow;
-        //    int colLetter;
-        //    string myVal;
-        //    object content;
-          
-        //        textBox1.Clear();
-        //        spreadsheetPanel1.GetSelection(out mycol, out myrow);
-        //        content = mySheet.GetCellContents(GetCellName(mycol, myrow));
-        //        if (content is Formula)
-        //        {
-        //            textBox1.Text = "=" + content.ToString();
-        //        }
-        //        else
-        //        {
-        //            textBox1.Text = content.ToString();
-        //        }
-        //        spreadsheetPanel1.GetValue(mycol, myrow, out myVal);
-
-        //        colLetter = mycol + 65;
-        //        textBox2.Text = ((char)colLetter).ToString() + (myrow + 1).ToString() + "= " + myVal;
-        //    myFileName = filename;
-        //    this.Text = filename;
-        //}
+       
         
         /// <summary>
         /// When save is clicked saves the current spreadsheet
@@ -288,6 +222,70 @@ namespace SS
             string cell = letter.ToString() + (row+1).ToString();
             return cell.ToUpper();
         }
+        private void checkChange(string cellname, string content1)
+    {
+        int chcol;
+        int chRow;
+        object content;
+        object value;
+        string sendContent;
+        string length;
+        try
+        {
+
+            foreach (string s in mySheet.SetContentsOfCell(cellname, content1))
+            {
+                GetRowColoumn(s, out chcol, out chRow);
+                this.spreadsheetPanel1.Invoke(new Action(() =>
+                spreadsheetPanel1.SetValue(chcol, chRow, mySheet.GetCellValue(s).ToString())));
+            }
+            content = mySheet.GetCellContents(GetCellName(mycol3, myRow3));
+
+            value = mySheet.GetCellValue(GetCellName(mycol3, myRow3));
+            this.spreadsheetPanel1.Invoke(new Action(() =>
+                spreadsheetPanel1.SetValue(mycol3, myRow3, value.ToString())));
+            this.textBox2.Invoke(new Action(() =>
+                textBox2.Text = (cellname + "= " + value.ToString())));
+            if (content is Formula)
+            {
+                this.textBox1.Invoke(new Action(() =>
+                textBox1.Text = "=" + content.ToString()));
+                sendContent = "=" + content.ToString();
+            }
+            else
+            {
+                this.textBox1.Invoke(new Action(() =>
+                textBox1.Text = content.ToString()));
+                sendContent = content.ToString();
+            }
+            if (mySheet.Changed && !this.Text.EndsWith("*"))
+            {
+                this.Invoke(new Action(() =>
+                this.Text = this.Text + "*"));
+            }
+            if (!mySheet.Changed)
+            {
+                this.Invoke(new Action(() =>
+                this.Text = this.Text.TrimEnd('*')));
+            }
+
+            length = sendContent.Length.ToString();
+            myModel.Change(myName, myVersion, GetCellName(mycol3, myRow3), length, sendContent);
+        }
+        catch (CircularException)
+        {
+            MessageBox.Show("Cannot use current cell as part of formula", "CircularException", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "ERROR FROM SPREADSHEET", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        }
+
+
+
+
+    }
         /// <summary>
         /// Sets cell after enter is pressed
         /// </summary>
@@ -355,11 +353,11 @@ namespace SS
                             this.Text = this.Text.TrimEnd('*')));
                         }
                         length = sendContent.Length.ToString();
-                        waitVersion = myVersion;
-                        waitLength = length;
-                        waitName = myName;
-                        waitCellName = GetCellName(mycol3, myRow3);
-                        waitContent = sendContent;
+                        //waitVersion = myVersion;
+                        //waitLength = length;
+                        //waitName = myName;
+                        //waitCellName = GetCellName(mycol3, myRow3);
+                        //waitContent = sendContent;
                         myModel.Change(myName, myVersion, GetCellName(mycol3, myRow3), length, sendContent);
 
                 }
@@ -442,11 +440,11 @@ namespace SS
                         this.Text = this.Text.TrimEnd('*')));
                     }
                     length = sendContent.Length.ToString();
-                    waitVersion = myVersion;
-                    waitLength = length;
-                    waitName = myName;
-                    waitCellName = GetCellName(mycol4, myRow4);
-                    waitContent = sendContent;
+                    //waitVersion = myVersion;
+                    //waitLength = length;
+                    //waitName = myName;
+                    //waitCellName = GetCellName(mycol4, myRow4);
+                    //waitContent = sendContent;
                     myModel.Change(myName, myVersion, GetCellName(mycol4, myRow4), length, sendContent);
 
             }
@@ -480,6 +478,10 @@ namespace SS
         private void tester(string test)
         {
             testTexBox.Invoke(new Action(() => testTexBox.Text = test));
+        }
+        private void connectError(string error)
+        {
+            MessageBox.Show("ERROR NOT CONNECTED", error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         private void ValidSS(string creds)
         {
@@ -515,18 +517,21 @@ namespace SS
         {
             myName = name;
             myVersion = version;
-            waitVersion = null;
-            waitLength = null;
-            waitName = null;
-            waitCellName = null;
-            waitContent = null;
+            //waitVersion = null;
+            //waitLength = null;
+            //waitName = null;
+            //waitCellName = null;
+            //waitContent = null;
         }
-        private void waitChange(string name, string version)
+        private void waitChange(string name, string version, string cellName, string cellcontent)
         {
             
-            waitName = name;
-            waitVersion = version;
-            waiting = true;
+           
+            if(myVersion==version)
+            {
+                checkChange(cellName, cellcontent);
+            }
+            //waiting = true;
         }
         private void failChange(string name, string message)
         {
@@ -553,30 +558,35 @@ namespace SS
         {
             MessageBox.Show(message, name, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-        private void waitUndo(string name, string version)
+        private void waitUndo(string name, string version, string cellName, string cellcontent)
         {
-            undoWaitName = name;
-            undoWaitVersion = version;
-            undoWaiting = true;
+
+            if (myVersion == version)
+            {
+                checkChange(cellName, cellcontent);
+            }
+            //undoWaitName = name;
+            //undoWaitVersion = version;
+            //undoWaiting = true;
         }
         private void update(string name,string version, string cell, string length, string content)
         {
-            if (waiting)
-            {
-                if (waitVersion == myVersion)
-                {
-                    myModel.Change(waitName, waitVersion, waitCellName, waitLength, waitContent);
-                    waiting = false;
-                }
-            }
-            if (undoWaiting)
-            {
-                if (undoWaitVersion == myVersion)
-                {
-                    myModel.Undo(myName, myVersion);
-                    undoWaiting = false;
-                }
-            }
+            //if (waiting)
+            //{
+            //    if (waitVersion == myVersion)
+            //    {
+            //        myModel.Change(waitName, waitVersion, waitCellName, waitLength, waitContent);
+            //        waiting = false;
+            //    }
+            //}
+            //if (undoWaiting)
+            //{
+            //    if (undoWaitVersion == myVersion)
+            //    {
+            //        myModel.Undo(myName, myVersion);
+            //        undoWaiting = false;
+            //    }
+            //}
             changeCell(name, version, cell, length, content);
         }
         private void successSave(string name)

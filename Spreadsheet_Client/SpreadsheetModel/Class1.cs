@@ -18,17 +18,26 @@ namespace SpreadsheetModel
         public event Action<string,string,string,string,string> JoinOK;
         public event Action<string,string> JoinFail;
         public event Action<string,string> ChangeOk;
-        public event Action<string,string> ChangeWait;
+        public event Action<string,string,string,string> ChangeWait;
         public event Action<string,string> ChangeFail;
         public event Action<string,string,string,string,string> UndoOk;
         public event Action<string, string> UndoEnd;
-        public event Action<string,string> UndoWait;
+        public event Action<string,string,string,string> UndoWait;
         public event Action<string,string> UndoFail;
         public event Action<string,string,string,string,string> Update;
         public event Action<string> SaveOk;
         public event Action<string,string> SaveFail;
         public event Action<string> Error;
         public event Action<string> Test;
+        public event Action<string> noConnection;
+        
+        private string WaitName=null;
+        private string WaitVersion = null;
+        private string waitCell=null;
+        private string WaitLength=null;
+        private string WaitContent=null;
+
+             
 
         public void Connect(string host, int port)
         {
@@ -37,42 +46,59 @@ namespace SpreadsheetModel
                 TcpClient client = new TcpClient(host, port);
                 socket = new StringSocket(client.Client, UTF8Encoding.Default);
             }
-            //string name = "bill";
-            //string password = "bill";
-            //if (socket.Connected)
-            //{
-            //    socket.BeginSend("CREATE\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
-            //}
+           
             socket.BeginReceive(EventRecieved, null);
         }
 
         public void Create(string name, string password)
         {
-            
-            if (socket.Connected)
+            try
             {
-                socket.BeginSend("CREATE\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
-                //socket.BeginSend("CREATE\n", (e, p) => { }, null);
-                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
-                //socket.BeginSend("Password:" + password + "\n", (e, p) => { }, null);
+                if (socket.Connected)
+                {
+                    socket.BeginSend("CREATE\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("CREATE\n", (e, p) => { }, null);
+                    //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("Password:" + password + "\n", (e, p) => { }, null);
+                }
+                socket.BeginReceive(EventRecieved, null);
             }
-            socket.BeginReceive(EventRecieved, null);
+            catch (Exception ex)
+            {
+                if (noConnection != null)
+                {
+                    noConnection(ex.ToString());
+                }
+                return;
+            }
         }
         public void Join(string name, string password)
         {
-            if (socket.Connected)
+            try
             {
-                socket.BeginSend("JOIN\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
-                //socket.BeginSend("JOIN\n", (e, p) => { }, null);
-                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
-                //socket.BeginSend("Password:" + password + "\n", (e, p) => { }, null);
+                if (socket.Connected)
+                {
+                    socket.BeginSend("JOIN\nName:" + name + "\nPassword:" + password + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("JOIN\n", (e, p) => { }, null);
+                    //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("Password:" + password + "\n", (e, p) => { }, null);
+                }
+                socket.BeginReceive(EventRecieved, null);
             }
-            socket.BeginReceive(EventRecieved, null);
+            catch (Exception ex)
+            {
+                noConnection(ex.ToString());
+            }
         }
         public void Change(string name, string version, string cell, string length, string content)
         {
             if (socket.Connected)
             {
+                WaitName = name;
+                WaitVersion = version;
+                waitCell = cell;
+                WaitLength = length;
+                WaitContent = content;
                 socket.BeginSend("CHANGE\nName:" + name + "\nVersion:" + version + "\nCell:" + cell + "\nLength:" + length + "\n"+content+"\n", (e, p) => { }, null);
                 //socket.BeginSend("CHANGE\n", (e, p) => { }, null);
                 //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
@@ -104,11 +130,20 @@ namespace SpreadsheetModel
         }
         public void Leave(string name)
         {
-            if (socket.Connected)
+            try
             {
-                socket.BeginSend("LEAVE\nName:" + name + "\n", (e, p) => { }, null);
-                //socket.BeginSend("LEAVE\n", (e, p) => { }, null);
-                //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+                if (socket.Connected)
+                {
+                    socket.BeginSend("LEAVE\nName:" + name + "\n", (e, p) => { }, null);
+                    //socket.BeginSend("LEAVE\n", (e, p) => { }, null);
+                    //socket.BeginSend("Name:" + name + "\n", (e, p) => { }, null);
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return;
                 
             }
         }
@@ -129,8 +164,8 @@ namespace SpreadsheetModel
                
                
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string password = words[2].TrimStart('P', 'a', 's', 's', 'w', 'o', 'r', 'd', ':');
+                string name = words[1].Split(':')[1];
+                string password = words[2].Split(':')[1];
                
                 //Join(name, password);
 
@@ -139,7 +174,7 @@ namespace SpreadsheetModel
             if (CreateFail != null && s.StartsWith("CREATE FAIL"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
+                string name = words[1].Split(':')[1];
                 string message = words[2];
                 CreateFail(name,message);
                
@@ -147,9 +182,9 @@ namespace SpreadsheetModel
             if (JoinOK != null && s.StartsWith("JOIN OK"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
-                string length = words[3].TrimStart('L', 'e', 'n', 'g', 't', 'h', ':');
+                string name = words[1].Split(':')[1];
+                string version = words[2].Split(':')[1];
+                string length = words[3].Split(':')[1];
 
                 TextWriter tw = new StreamWriter("data.ss");
 
@@ -166,7 +201,7 @@ namespace SpreadsheetModel
             if (JoinFail != null && s.StartsWith("JOIN FAIL"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
+                string name = words[1].Split(':')[1];
                 string message = words[2];
                 JoinFail(name,message);
                 
@@ -174,23 +209,24 @@ namespace SpreadsheetModel
             if (ChangeOk != null && s.StartsWith("CHANGE OK"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
+                string name = words[1].Split(':')[1];
+                string version = words[2].Split(':')[1];
                 ChangeOk(name,version);
                 
             }
             if (ChangeWait != null && s.StartsWith("CHANGE WAIT"))
             {
+                
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
-                ChangeWait(name,version);
+                string name = words[1].Split(':')[1];
+                string version = words[2].Split(':')[1];
+                ChangeWait(name,version,waitCell,WaitContent);
                 
             }
             if (ChangeFail != null && s.StartsWith("CHANGE FAIL"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
+                string name = words[1].Split(':')[1];
                 string message = words[2];
                 ChangeFail(name,message);
                 
@@ -198,10 +234,10 @@ namespace SpreadsheetModel
             if (UndoOk != null && s.StartsWith("UNDO OK"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
-                string cell = words[3].TrimStart('C', 'e', 'l', 'l', ':');
-                string length = words[4].TrimStart('L', 'e', 'n', 'g', 't', 'h', ':');
+                string name = words[1].Split(':')[1];
+                string version = words[2].Split(':')[1];
+                string cell = words[3].Split(':')[1];
+                string length = words[4].Split(':')[1];
                 string content = words[5];
                 UndoOk(name,version,cell,length,content);
                
@@ -209,8 +245,8 @@ namespace SpreadsheetModel
             if (UndoEnd != null && s.StartsWith("UNDO END"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
+                string name = words[1].Split(':')[1];
+                string version = words[2].Split(':')[1];
                
                 UndoEnd(name,version);
                
@@ -218,16 +254,16 @@ namespace SpreadsheetModel
             if (UndoWait != null && s.StartsWith("UNDO WAIT"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
+                string name = words[1].Split(':')[1];
+                string version = words[2].Split(':')[1];
                
-                UndoWait(name,version);
+                UndoWait(name,version,waitCell,WaitContent);
                 
             }
             if (UndoFail != null && s.StartsWith("UNDO FAIL"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
+                string name = words[1].Split(':')[1];
                 string message = words[2];
                 UndoFail(name,message);
                 
@@ -246,14 +282,14 @@ namespace SpreadsheetModel
             if (SaveOk != null && s.StartsWith("SAVE OK"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
+                string name = words[1].Split(':')[1];
                 SaveOk(name);
                
             }
             if (SaveFail != null && s.StartsWith("SAVE FAIL"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
+                string name = words[1].Split(':')[1];
                 string message = words[2];
                 SaveFail(name,message);
                

@@ -235,10 +235,10 @@ namespace SpreadsheetModel
             if (Update != null && s.StartsWith("UPDATE"))
             {
                 string[] words = Regex.Split(s, "\n");
-                string name = words[1].TrimStart('N', 'a', 'm', 'e', ':');
-                string version = words[2].TrimStart('V', 'e', 'r', 's', 'i', 'o', 'n', ':');
+                string name = words[1].Split(':')[1];
+                string version = words[2].Split(':')[1];
                 string cell = words[3].Split(':')[1];
-                string length = words[4].TrimStart('L', 'e', 'n', 'g', 't', 'h', ':');
+                string length = words[4].Split(':')[1];
                 string content = words[5];
                 Update(name,version,cell,length,content);
                 

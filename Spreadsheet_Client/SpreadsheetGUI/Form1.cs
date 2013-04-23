@@ -472,6 +472,7 @@ namespace SS
         private void successJoin(string name,string version,string length, string filename, string xml)
         {
             myVersion = version;
+            this.Invoke(new Action(() => this.Text = this.Text + version));
             myLength = length;
             myName = name;
             
@@ -495,6 +496,7 @@ namespace SS
         {
             myName = name;
             myVersion = version;
+            this.Invoke(new Action(() => this.Text = this.Text + version));
             
         }
         private void waitChange(string name, string version, string cellName, string cellcontent)
@@ -505,7 +507,7 @@ namespace SS
             {
                 checkChange(cellName, cellcontent);
             }
-           
+            this.Invoke(new Action(() => this.Text = this.Text + version));
         }
         private void failChange(string name, string message)
         {
@@ -517,6 +519,7 @@ namespace SS
             myName = name;
             myVersion = version;
             myLength = length;
+            this.Invoke(new Action(()=>this.Text = this.Text + myVersion));
             changeCell(name, version, cell, length, content);
             this.textBox1.Invoke(new Action(()=>textBox1.Clear()));
             
@@ -527,6 +530,7 @@ namespace SS
             MessageBox.Show("Nothing to Undo", name, MessageBoxButtons.OK, MessageBoxIcon.Error);
             myName = name;
             myVersion = version;
+            this.Invoke(new Action(() => this.Text=this.Text + myVersion));
         }
         private void failUndo(string name,string message)
         {
@@ -539,11 +543,12 @@ namespace SS
             {
                 checkChange(cellName, cellcontent);
             }
-           
+            this.Invoke(new Action(() => this.Text = this.Text + version));
         }
         private void update(string name,string version, string cell, string length, string content)
         {
-           
+            myVersion = version;
+            this.Invoke(new Action(() => this.Text = this.Text + version));
             changeCell(name, version, cell, length, content);
         }
         private void successSave(string name)

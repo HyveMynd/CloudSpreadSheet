@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
         port = atoi(argv[1]);
       }
 		 
-		  serverss::begin s(io_service, 1980, my_server);
+		  serverss::begin s(io_service, port, my_server);
 		  //work(io_service.run());
 		  auto_ptr<boost::asio::io_service::work> work(
     			new boost::asio::io_service::work(io_service));

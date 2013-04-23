@@ -138,7 +138,7 @@ namespace serverss{
             log("Removing user pointer from list");
             for(std::list<user*>::iterator itr = users.begin(); itr != users.end();)
             {
-                if ( (*itr)->uid == user_leaving->uid )
+                if ( (*itr)->uid == user_to_update->uid )
                 {
                     log("found user pointer. Removing");
                     itr=users.erase(itr);
@@ -252,6 +252,7 @@ namespace serverss{
         // Save contents
         if (all_gone)
         {
+            std::string fname = "data/" + name;
             // Delete file before saving again
             remove(fname.c_str());
             put_xml(fname, ss_contents);

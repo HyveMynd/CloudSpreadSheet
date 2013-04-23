@@ -558,18 +558,17 @@ namespace SS
 
             if (!mySpreadsheet.ContainsKey(name))
             {
-                throw new FormulaFormatException("Formula Error");
+                mySpreadsheet.Add(name, new Cell(0.0, 0.0));
+                //throw new FormulaFormatException("Formula Error");
             }
             if (mySpreadsheet[name].myValue is double)
             {
-
                 return (double)mySpreadsheet[name].myValue;
             }
 
             else
             {
                 throw new FormulaFormatException("Formula Error");
-                
             }
 
         }

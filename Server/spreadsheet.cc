@@ -52,7 +52,7 @@ namespace serverss{
         if (version == 0)
         {
         	log("Getting xml from file");
-        	result.xml = get_xml(fname);
+        	result.xml = get_xml("data/"+name);
         }
         else
         {

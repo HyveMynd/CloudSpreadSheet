@@ -21,6 +21,9 @@ namespace serverss {
   // returns a hashmap of the spreadsheet
   std::map<std::string,std::string> get_map(std::string fname);
 
+  // get_xml_from_map
+  std::string get_xml_from_map(std::map<std::string, std::string> data);
+
   // returns a xml string of a spreadsheet
   std::string get_xml(std::string fname);
 

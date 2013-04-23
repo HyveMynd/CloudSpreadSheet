@@ -30,6 +30,7 @@ namespace SpreadsheetModel
         public event Action<string> Error;
         public event Action<string> Test;
         public event Action<string> noConnection;
+        public event Action<string> invalidIP;
         
         private string WaitName=null;
         private string WaitVersion = null;
@@ -41,13 +42,25 @@ namespace SpreadsheetModel
 
         public void Connect(string host, int port)
         {
-            if (socket == null)
+            try
             {
-                TcpClient client = new TcpClient(host, port);
-                socket = new StringSocket(client.Client, UTF8Encoding.Default);
+                if (socket == null)
+                {
+                    TcpClient client = new TcpClient(host, port);
+                    socket = new StringSocket(client.Client, UTF8Encoding.Default);
+                }
+
+                socket.BeginReceive(EventRecieved, null);
             }
-           
-            socket.BeginReceive(EventRecieved, null);
+            catch (Exception ex)
+            {
+                if (invalidIP != null)
+                {
+                    invalidIP(ex.ToString());
+                }
+                return;
+
+            }
         }
 
         public void Create(string name, string password)

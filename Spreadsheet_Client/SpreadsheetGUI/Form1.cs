@@ -65,6 +65,7 @@ namespace SS
             myModel.Error += error;
             myModel.Test += tester;
             myModel.noConnection += connectError;
+            myModel.invalidIP += badip;
             tabControl1.Appearance = TabAppearance.Buttons;
             tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.ItemSize = new System.Drawing.Size(0, 1);
@@ -460,6 +461,10 @@ namespace SS
         private void connectError(string error)
         {
             MessageBox.Show("ERROR NOT CONNECTED", error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        private void badip(string error)
+        {
+            MessageBox.Show("INVALID IP ADDRESS", error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         private void ValidSS(string creds)
         {

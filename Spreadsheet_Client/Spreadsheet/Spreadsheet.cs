@@ -61,7 +61,7 @@ namespace SS
                 string myContent = null;
                 while (myReader.Read())
                 {
-                    
+
                     if (myReader.IsStartElement())
                     {
                         switch (myReader.Name)
@@ -135,7 +135,7 @@ namespace SS
 
 
 
-        
+
         }
         /// <summary>
         /// Takes a cell name and a double sets them to a cell and returs dependents also sets value of cell
@@ -149,9 +149,9 @@ namespace SS
             name = Normalize(name);
             HashSet<string> mySet = new HashSet<string>();
             HashSet<string> replaceSet = new HashSet<string>();
-            myCell = new Cell(number,number);
+            myCell = new Cell(number, number);
 
-            if (Object.ReferenceEquals(name,null))
+            if (Object.ReferenceEquals(name, null))
             {
                 throw new InvalidNameException();
             }
@@ -177,7 +177,7 @@ namespace SS
                 }
                 foreach (string s in mySet)
                 {
-                    myCell=new Cell(GetCellContents(s),myEvaluate(s));
+                    myCell = new Cell(GetCellContents(s), myEvaluate(s));
                     mySpreadsheet[s] = myCell;
                 }
                 Changed = true;
@@ -196,9 +196,9 @@ namespace SS
             name = Normalize(name);
             HashSet<string> mySet = new HashSet<string>();
             HashSet<string> replaceSet = new HashSet<string>();
-            myCell = new Cell(text,text);
+            myCell = new Cell(text, text);
 
-            if (Object.ReferenceEquals(text,null))
+            if (Object.ReferenceEquals(text, null))
             {
                 throw new ArgumentNullException();
             }
@@ -221,7 +221,7 @@ namespace SS
             if (mySpreadsheet.ContainsKey(name))
             {
                 mySpreadsheet[name] = myCell;
-               
+
             }
             else
             {
@@ -241,10 +241,10 @@ namespace SS
                 }
                 else
                 {
-                myCell=new Cell(GetCellContents(s),myEvaluate(s));
-                mySpreadsheet[s]=myCell;
+                    myCell = new Cell(GetCellContents(s), myEvaluate(s));
+                    mySpreadsheet[s] = myCell;
                 }
-                
+
             }
             Changed = true;
             return mySet;
@@ -268,7 +268,7 @@ namespace SS
             {
                 throw new ArgumentNullException();
             }
-            if (Object.ReferenceEquals(name,null))
+            if (Object.ReferenceEquals(name, null))
             {
                 throw new InvalidNameException();
             }
@@ -294,7 +294,7 @@ namespace SS
                 throw new CircularException();
             }
             Formula myEvl = new Formula(formula.ToString(), IsValid, Normalize);
-            myCell = new Cell(formula,myEvl.Evaluate(myLookup));
+            myCell = new Cell(formula, myEvl.Evaluate(myLookup));
             if (mySpreadsheet.ContainsKey(name))
             {
                 mySpreadsheet[name] = myCell;
@@ -311,7 +311,7 @@ namespace SS
             foreach (string s in mySet)
             {
                 myCell = new Cell(GetCellContents(s), myEvaluate(s));
-                mySpreadsheet[s]=myCell;
+                mySpreadsheet[s] = myCell;
             }
             Changed = true;
             return mySet;
@@ -400,10 +400,10 @@ namespace SS
             Formula f;
             try
             {
-              /*  if(mySpreadsheet.Count()==0)
-                {
-                    throw new SpreadsheetReadWriteException("Spreadsheet is empty");
-                }*/
+                /*  if(mySpreadsheet.Count()==0)
+                  {
+                      throw new SpreadsheetReadWriteException("Spreadsheet is empty");
+                  }*/
                 using (XmlWriter myWriter = XmlWriter.Create(filename))
                 {
                     myWriter.WriteStartDocument();
@@ -529,7 +529,7 @@ namespace SS
         private object myEvaluate(string name)
         {
             Formula myEval;
-           // GetCellContents(name);
+            // GetCellContents(name);
             if (GetCellContents(name) is double)
             {
                 return (double)mySpreadsheet[name].myValue;
@@ -555,23 +555,27 @@ namespace SS
         /// <returns></returns>
         private double myLookup(string name)
         {
-            if(!mySpreadsheet.ContainsKey(name))
+
+            if (!mySpreadsheet.ContainsKey(name))
             {
-                throw new ArgumentException("Uknown Variable");
+                throw new FormulaFormatException("Formula Error");
             }
             if (mySpreadsheet[name].myValue is double)
             {
-                
+
                 return (double)mySpreadsheet[name].myValue;
             }
+
             else
             {
-                throw new ArgumentException("Unknown variable");
+                throw new FormulaFormatException("Formula Error");
+                
             }
+
         }
-        
+
 
     }
-  
+
 
 }

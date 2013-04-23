@@ -131,7 +131,7 @@ namespace CustomNetworking
             sendRequests = new Queue<SendRequest>();
             receiveRequests = new Queue<ReceiveRequest>();
             incompleteLine = "";
-            receiveBytes = new byte[1024];
+            receiveBytes = new byte[123456789];
             receivedLines = new Queue<string>();
         }
 

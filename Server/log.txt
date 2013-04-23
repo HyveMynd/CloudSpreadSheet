@@ -1,1 +1,1 @@
-after while >> sspwd  put_file_password line:test
+put_xml:<?xml version="1.0" encoding="utf-8"?><spreadsheet/>

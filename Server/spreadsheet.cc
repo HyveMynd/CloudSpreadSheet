@@ -14,6 +14,10 @@ namespace serverss{
     /*--------Constructors----------*/
     spreadsheet::spreadsheet(std::string name, std::string password)
     {
+        log("Getting map from parser");
+        std::string fname = "data/" + name;
+        this->ss_contents = get_map(fname);
+
         this->name = name;
         this->password = password;
         this->version = 0;
@@ -43,12 +47,12 @@ namespace serverss{
         log("Adding user to list");
         users.push_back(new_user);
         
-        log("Getting map from parser");
-        std::string fname = "data/" + name;
-        ss_contents = get_map(fname);
+//        log("Getting xml from file");
+//        result.xml = get_xml(fname);
         
-        log("Getting xml from file");
-        result.xml = get_xml(fname);
+        log("Getting XML from map");
+        result.xml = get_xml_from_map(ss_contents);
+        
         log("XML is: " + result.xml);
         result.length = result.xml.length();
         

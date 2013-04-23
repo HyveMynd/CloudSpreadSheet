@@ -15,7 +15,7 @@ using namespace std;
 
 namespace serverss {
 
-  int debug = 0;
+  int debug = 1;
 
   void log(string s, string msg) {
     ofstream os("log.txt");
@@ -94,17 +94,27 @@ namespace serverss {
     if (debug) cout << "\ns=" << s << endl;
 
     string token = gettoken(s);
+    token = gettoken(s);
     int cnt = 0;
 
     while (s.length() > 0)
     {
 
-      if (cnt++ > 5)
-        return result;
+      cnt++;
       if (token == "")
         return result; 
 
+      if (token == header1)
+      {
+        token = gettoken(s);
+        continue;
+      }
+
       if (token == "<cell>") {
+        token = gettoken(s);
+        continue; 
+      }
+      if (token == "</cell>") {
         token = gettoken(s);
         continue; 
       }

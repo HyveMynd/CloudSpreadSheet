@@ -149,7 +149,12 @@ namespace serverss{
         result.cell_result = undo_cell;
         result.length = undo_cell.contents.length();
         
-        //TODO send updates to users
+        //update all users
+        log("Sending updates to users");
+        for (std::list<user*>::iterator it = users.begin(); it != users.end(); ++it)
+        {
+        	update(result, (*it));
+        }
         
         log("Undo Success");
         return result;

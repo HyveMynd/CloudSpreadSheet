@@ -71,6 +71,7 @@ namespace serverss{
 		spreadsheet* ss = find_ss(name);
         if (ss == NULL)
         {
+            log("SS not in memory. Loading to memory");
             std::string filename = "data/"+name;
             std::string file_password = get_file_password(filename);
             

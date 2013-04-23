@@ -26,20 +26,8 @@ namespace SS
         private string myVersion = null;
         private string myLength = null;
         private string myName = null;
-        //private bool waiting = false;
-        //private string waitVersion = null;
-        //private string waitContent = null;
-        //private string waitCellName = null;
-        //private string waitLength = null;
-        //private string waitName = null;
-        //private bool undoWaiting = false;
-        //private string undoWaitVersion = null;
-        //private string undoWaitName = null;
         private SpreadsheetModel.SSModel myModel;
         private Spreadsheet myopenSheet = null;
-        //private int myRow1 = 0;
-        //private int mycol1 = 0;
-        //private string myval1 = null;
         private int myRow2 = 0;
         private int mycol2 = 0;
         private string myval2 = null;
@@ -353,11 +341,6 @@ namespace SS
                             this.Text = this.Text.TrimEnd('*')));
                         }
                         length = sendContent.Length.ToString();
-                        //waitVersion = myVersion;
-                        //waitLength = length;
-                        //waitName = myName;
-                        //waitCellName = GetCellName(mycol3, myRow3);
-                        //waitContent = sendContent;
                         myModel.Change(myName, myVersion, GetCellName(mycol3, myRow3), length, sendContent);
 
                 }
@@ -440,11 +423,6 @@ namespace SS
                         this.Text = this.Text.TrimEnd('*')));
                     }
                     length = sendContent.Length.ToString();
-                    //waitVersion = myVersion;
-                    //waitLength = length;
-                    //waitName = myName;
-                    //waitCellName = GetCellName(mycol4, myRow4);
-                    //waitContent = sendContent;
                     myModel.Change(myName, myVersion, GetCellName(mycol4, myRow4), length, sendContent);
 
             }
@@ -517,11 +495,7 @@ namespace SS
         {
             myName = name;
             myVersion = version;
-            //waitVersion = null;
-            //waitLength = null;
-            //waitName = null;
-            //waitCellName = null;
-            //waitContent = null;
+            
         }
         private void waitChange(string name, string version, string cellName, string cellcontent)
         {
@@ -531,7 +505,7 @@ namespace SS
             {
                 checkChange(cellName, cellcontent);
             }
-            //waiting = true;
+           
         }
         private void failChange(string name, string message)
         {
@@ -545,7 +519,7 @@ namespace SS
             myLength = length;
             changeCell(name, version, cell, length, content);
             this.textBox1.Invoke(new Action(()=>textBox1.Clear()));
-            //textBox1.Clear();
+            
             
         }
         private void endUndo(string name, string version)
@@ -565,28 +539,11 @@ namespace SS
             {
                 checkChange(cellName, cellcontent);
             }
-            //undoWaitName = name;
-            //undoWaitVersion = version;
-            //undoWaiting = true;
+           
         }
         private void update(string name,string version, string cell, string length, string content)
         {
-            //if (waiting)
-            //{
-            //    if (waitVersion == myVersion)
-            //    {
-            //        myModel.Change(waitName, waitVersion, waitCellName, waitLength, waitContent);
-            //        waiting = false;
-            //    }
-            //}
-            //if (undoWaiting)
-            //{
-            //    if (undoWaitVersion == myVersion)
-            //    {
-            //        myModel.Undo(myName, myVersion);
-            //        undoWaiting = false;
-            //    }
-            //}
+           
             changeCell(name, version, cell, length, content);
         }
         private void successSave(string name)
@@ -600,7 +557,7 @@ namespace SS
         private void error(string error)
         {
             MessageBox.Show(error, error, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //MessageBox.Show("ERROR SENT FROM SERVER", "ERROR FROM SERVER", MessageBoxButtons.OK, MessageBoxIcon.Error);
+           
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -689,38 +646,14 @@ namespace SS
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             closeToolStripMenuItem_Click(sender, e);
-            //Application.Exit();
+            
         }
         private void OpenNew(Spreadsheet openSheet, string filename)
         {
 
-            //InitializeComponent();
-            //myModel = new SpreadsheetModel.SSModel();
-            //myModel.CreateOK += ValidSS;
-            //myModel.CreateFail += InvalidSS;
-            //myModel.JoinOK += successJoin;
-            //myModel.JoinFail += failJoin;
-            //myModel.ChangeOk += successChange;
-            //myModel.ChangeWait += waitChange;
-            //myModel.ChangeFail += failChange;
-            //myModel.UndoOk += successUndo;
-            //myModel.UndoEnd += endUndo;
-            //myModel.UndoWait += waitUndo;
-            //myModel.UndoFail += failUndo;
-            //myModel.Update += update;
-            //myModel.SaveOk += successSave;
-            //myModel.SaveFail += failSave;
-            //myModel.Error += error;
-            //myModel.Test += tester;
-            //numWindows++;
+           
             mySheet = openSheet;
-            //this.tabControl1.Invoke(new Action(() => tabControl1.Appearance = TabAppearance.Buttons));
-            //this.tabControl1.Invoke(new Action(()=>tabControl1.SizeMode = TabSizeMode.Fixed));
-            //this.tabControl1.Invoke(new Action(()=>tabControl1.ItemSize=new System.Drawing.Size(0,1)));
-
-            //tabControl1.Appearance = TabAppearance.Buttons;
-            //tabControl1.SizeMode = TabSizeMode.Fixed;
-            //tabControl1.ItemSize = new System.Drawing.Size(0, 1);
+            
 
 
             foreach (string s in openSheet.GetNamesOfAllNonemptyCells())
@@ -735,13 +668,10 @@ namespace SS
                     spreadsheetPanel1.SetValue(myCol, myRow, mySheet.GetCellValue(s).ToString())));
                 }
             }
-            //int mycol;
-            //int myrow;
+            
             int colLetter;
-            //string myVal;
             object content;
             this.textBox1.Invoke(new Action(() => textBox1.Clear()));
-            //textBox1.Clear();
             this.spreadsheetPanel1.Invoke(new Action(()=>
             spreadsheetPanel1.GetSelection(out mycol5, out myRow5)));
             content = mySheet.GetCellContents(GetCellName(mycol5, myRow5));
@@ -762,7 +692,6 @@ namespace SS
             textBox2.Text = ((char)colLetter).ToString() + (myRow5 + 1).ToString() + "= " + myVal5));
             myFileName = filename;
             this.Invoke(new Action(() => this.Text = filename));
-            //this.Text = filename;
         }
     }
 }

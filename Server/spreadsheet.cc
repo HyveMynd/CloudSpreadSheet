@@ -53,6 +53,7 @@ namespace serverss{
         {
         	log("Getting xml from file");
         	result.xml = get_xml("data/"+name);
+            ss_contents = get_map(fname);
         }
         else
         {

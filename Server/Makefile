@@ -1,4 +1,4 @@
-all: barj_server
+all: barj_server server_stop
 
 barj_server: controller.o parse.o cell.o user.o ss_result.o server.o
 	g++ *.o -lboost_system -lpthread -o barj_server
@@ -8,6 +8,9 @@ controller.o: controller.cc parse.h ss_result.h server.h user.h cell.h
 
 server.o: server.cc enums.h user.o spreadsheet.o ss_result.o cell.o
 	g++ -c server.cc  
+
+server_stop: server_stop.cc
+	g++ server_stop.cc  -o server_stop
 
 parse.o: parse.cc parse.h
 	g++ -c parse.cc 

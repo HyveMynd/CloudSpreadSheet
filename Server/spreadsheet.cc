@@ -131,22 +131,22 @@ namespace serverss{
         result.length = result.cell_result.contents.length();
         
         //remove and ignore users with null sockets
-        if (!user_to_update->valid)
-        {
-            log("Invalid user.");
-            // Delete user and remove pointer from list
-            log("Removing user pointer from list");
-            for(std::list<user*>::iterator itr = users.begin(); itr != users.end();)
-            {
-                if ( (*itr)->uid == user_to_update->uid )
-                {
-                    log("found user pointer. Removing");
-                    itr=users.erase(itr);
-                }
-                else
-                    ++itr;
-            }
-        }
+//        if (!user_to_update->valid)
+//        {
+//            log("Invalid user.");
+//            // Delete user and remove pointer from list
+//            log("Removing user pointer from list");
+//            for(std::list<user*>::iterator itr = users.begin(); itr != users.end();)
+//            {
+//                if ( (*itr)->uid == user_to_update->uid )
+//                {
+//                    log("found user pointer. Removing");
+//                    itr=users.erase(itr);
+//                }
+//                else
+//                    ++itr;
+//            }
+//        }
         
 		sendUpdate(user_to_update->user_socket, result.to_string());
     }

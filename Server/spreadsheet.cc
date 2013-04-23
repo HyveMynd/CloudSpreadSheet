@@ -189,6 +189,9 @@ namespace serverss{
         
         put_xml(fname, ss_contents);
         
+        //clear stack
+        undo_stack = std::stack<cell>();
+        
         result.status = OK;
         log("Save Success");
         return result;

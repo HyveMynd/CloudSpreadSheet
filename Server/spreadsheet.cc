@@ -205,7 +205,6 @@ namespace serverss{
         
         // Delete file before saving again
         remove(fname.c_str());
-        
         put_xml(fname, ss_contents);
         
         //clear stack
@@ -248,7 +247,17 @@ namespace serverss{
         log("Deleting user");
         delete (leave);
     	
-        return (users.size() == 0);
+        bool all_gone = (users.size() == 0);
+        
+        // Save contents
+        if (all_gone)
+        {
+            // Delete file before saving again
+            remove(fname.c_str());
+            put_xml(fname, ss_contents);
+        }
+        
+        return all_gone;
     }
     
     void spreadsheet::log(std::string message)

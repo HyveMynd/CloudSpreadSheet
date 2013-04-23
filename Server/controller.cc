@@ -347,9 +347,9 @@ int main(int argc, char *argv[])
       }
 		 
 		  serverss::begin s(io_service, port, my_server);
-		  work(io_service.run());
+		  //work(io_service.run());
 		  auto_ptr<boost::asio::io_service::work> work(
-    			new boost::asio::io_service::work(io_service));
+    			new boost::asio::io_service::work(io_service).run());
     		while (stop != "stop")
 		{
 			cin >> stop;

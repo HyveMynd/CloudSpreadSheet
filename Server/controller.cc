@@ -77,11 +77,7 @@ namespace serverss
                 // CREATES a file and add a file to the Spreadsheet map
                 // if the file already exists or valid file name (no spaces)
                 // responds with FAIL
-                if (get_word(1,command,'\n').find("shutdown") != std::string::npos)
-                {
-                	my_server->shutdown();
-                }
-                else if(get_word(1,command,'\n').find("CREATE") != std::string::npos)
+                if(get_word(1,command,'\n').find("CREATE") != std::string::npos)
                 {
                     string name = "";
                     string password = "";

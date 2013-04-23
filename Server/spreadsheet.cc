@@ -18,6 +18,10 @@ namespace serverss{
         log("Getting map from parser");
         std::string fname = "data/" + name;
         this->ss_contents = get_map(fname);
+        
+        std::stringstream ss;
+        ss << ss_contents.size();
+        log("size of map in constructor: " + ss.str());
 
         this->name = name;
         this->password = password;

@@ -355,6 +355,13 @@ int main(int argc, char *argv[])
 //			cin >> stop;
 //		}
         
+        
+        if (argc > 1) {
+            port = atoi(argv[1]);
+        }
+        boost::asio::io_service io_service;
+        
+        serverss::begin s(io_service, 1980, my_server);
         io_service.run();
 	
 	//work.reset();

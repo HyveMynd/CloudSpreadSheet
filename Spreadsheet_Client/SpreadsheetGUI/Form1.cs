@@ -121,7 +121,7 @@ namespace SS
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             myModel.Leave(myName);
-            //this.Close();
+            this.Close();
             Application.Exit();
         }
         
@@ -650,8 +650,7 @@ namespace SS
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            myModel.Leave(myName);
-            Application.Exit();
+            closeToolStripMenuItem_Click(sender, e);
             
         }
         private void OpenNew(Spreadsheet openSheet, string filename)

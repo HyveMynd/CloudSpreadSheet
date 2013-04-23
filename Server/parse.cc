@@ -233,7 +233,7 @@ string readfile(string fname)
     bool result = false;
     ofstream ss(fname.c_str());
     //ss.open(fname.c_str(), fstream::out | fstream::app | fstream::trunc);
-    ss << header;
+    ss << header1;
     log("put_xml",header);
     
     // iterate throught the data

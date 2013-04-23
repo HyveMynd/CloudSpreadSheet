@@ -9,6 +9,7 @@ namespace serverss {
 
   // header for all spreadsheets 
   const std::string  header = "<?xml version=\"1.0\" encoding=\"utf-8\"?><spreadsheet/>";
+  const std::string  header1 = "<?xml version=\"1.0\" encoding=\"utf-8\"?><spreadsheet>";
   //const std::string  header = "<?xml version=\"1.0\" encoding=\"utf-8\"?><spreadsheet version=\"ps6\"/>";
   const std::string ssdb = "data/ss.db";
 

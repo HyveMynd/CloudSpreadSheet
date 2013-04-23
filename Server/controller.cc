@@ -60,6 +60,7 @@ namespace serverss
             }
             else
             {
+		newUser->valid = false;
                 delete this;
             }
         }
@@ -71,7 +72,6 @@ namespace serverss
         {
             string command = data_;
 	    cout << command << endl;
-            string msg;
             if (!error)
             {
                 // CREATES a file and add a file to the Spreadsheet map
@@ -82,7 +82,6 @@ namespace serverss
                     string name = "";
                     string password = "";
                     bool sendError = false;
-                    string message = "";
 
 		    
                     if(get_word(2,command,'\n').substr(0,5) == "Name:")
@@ -118,7 +117,6 @@ namespace serverss
                     string name = "";
                     string password = "";
                     bool sendError = false;
-                    string message = "";
                     if(get_word(2,command,'\n').substr(0,5) == "Name:")
                     {
                         name = get_word(2,command,'\n').substr(5,(get_word(2,command,'\n')).size()-5);
@@ -137,13 +135,13 @@ namespace serverss
                         message = "ERROR\n";
                     else
                     {
-                        message_ = (my_server->do_join(name,password, newUser)).to_string();
-                        cout << message_ << endl; 
+                        message = (my_server->do_join(name,password, newUser)).to_string();
+                        cout << message << endl; 
 
                     }
                     
                     boost::asio::async_write(socket_,
-                                             boost::asio::buffer(message_, message_.size()),
+                                             boost::asio::buffer(message, message.size()),
                                              boost::bind(&socketConnection::connectionEstablished, this,
                                                          boost::asio::placeholders::error));
                     
@@ -155,7 +153,6 @@ namespace serverss
                     string cellPos = "";
                     string length = "";
                     string content = "";
-                    string message = "";
                     bool sendError = false;
                     
                     if(get_word(2,command,'\n').substr(0,5) == "Name:")
@@ -204,7 +201,6 @@ namespace serverss
                 {
                     string name = "";
                     string version = "";
-                    string message = "";
                     bool sendError = false;
                     
                     if(get_word(2,command,'\n').substr(0,5) == "Name:")
@@ -238,7 +234,6 @@ namespace serverss
                 {
                     string name = "";
                     bool sendError = false;
-                    string message = "";
                     if(get_word(2,command,'\n').substr(0,5) == "Name:")
                     {
                         name = get_word(2,command,'\n').substr(5,(get_word(2,command,'\n')).size()-5);
@@ -262,7 +257,6 @@ namespace serverss
                 {
                     string name = "";
                     bool sendError = false;
-                    string message = "";
                     if(get_word(2,command,'\n').substr(0,5) == "Name:")
                     {
                         name = get_word(2,command,'\n').substr(5,(get_word(2,command,'\n')).size()-5);
@@ -280,12 +274,13 @@ namespace serverss
             }
             else
             {
+		newUser->valid = false;
                 delete this;
             }
         }
         
 	private:
-	string message_;
+	string message;
         tcp::socket socket_;
         enum { max_length = 123456789 };
         char data_[max_length];
@@ -342,17 +337,27 @@ int main(int argc, char *argv[])
 {
     int port = 1984;
     serverss::server* my_server = new serverss::server();
-
+    string stop = "";
+    boost::asio::io_service io_service;
 
     try
     {
       if (argc > 1) {
         port = atoi(argv[1]);
       }
-		  boost::asio::io_service io_service;
-
+		 
 		  serverss::begin s(io_service, 1980, my_server);
-		  io_service.run();
+		  //work(io_service.run());
+		  auto_ptr<boost::asio::io_service::work> work(
+    			new boost::asio::io_service::work(io_service));
+    		while (stop != "stop")
+		{
+			cin >> stop;
+		}
+	
+	work.reset();
+	//io_service.stop();
+
     }
       catch (std::exception& e)
     {
@@ -360,6 +365,7 @@ int main(int argc, char *argv[])
     }
 
     delete my_server;
+
     return 0;
 }
 
